@@ -1,0 +1,376 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8664419718943486843",
+      "lastPropertyId": "4:8643292553265226198",
+      "name": "Armour",
+      "properties": [
+        {
+          "id": "1:7431753907051835114",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1880272113421351346",
+          "name": "rating",
+          "type": 6
+        },
+        {
+          "id": "3:8342604972678633963",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:8643292553265226198",
+          "name": "note",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:5764273947751663996",
+      "lastPropertyId": "35:8452193898751331593",
+      "name": "Character",
+      "properties": [
+        {
+          "id": "1:7697350618829279040",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4461314148298708079",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2602287250012657045",
+          "name": "heroicCulture",
+          "type": 9
+        },
+        {
+          "id": "4:2288402919474192753",
+          "name": "culturalBlessing",
+          "type": 9
+        },
+        {
+          "id": "5:6266860470803613798",
+          "name": "patron",
+          "type": 9
+        },
+        {
+          "id": "6:7888206921429061495",
+          "name": "calling",
+          "type": 9
+        },
+        {
+          "id": "7:3534671488573680065",
+          "name": "shadowPath",
+          "type": 9
+        },
+        {
+          "id": "8:147279667790388832",
+          "name": "distinctiveFeatures",
+          "type": 9
+        },
+        {
+          "id": "9:1367115741379373834",
+          "name": "flaws",
+          "type": 9
+        },
+        {
+          "id": "10:7236375195856880096",
+          "name": "travellingGear",
+          "type": 9
+        },
+        {
+          "id": "11:1672721990998863827",
+          "name": "age",
+          "type": 6
+        },
+        {
+          "id": "12:4534077730449155618",
+          "name": "treasure",
+          "type": 6
+        },
+        {
+          "id": "13:133351962534624265",
+          "name": "strengthTn",
+          "type": 6
+        },
+        {
+          "id": "14:4282675439098785620",
+          "name": "strengthRating",
+          "type": 6
+        },
+        {
+          "id": "15:1206866237731743842",
+          "name": "endurance",
+          "type": 6
+        },
+        {
+          "id": "16:1856715435206237403",
+          "name": "heartTn",
+          "type": 6
+        },
+        {
+          "id": "17:3571458335139886266",
+          "name": "heartRating",
+          "type": 6
+        },
+        {
+          "id": "18:5764328447489685213",
+          "name": "hope",
+          "type": 6
+        },
+        {
+          "id": "19:9048852488976007770",
+          "name": "witsTn",
+          "type": 6
+        },
+        {
+          "id": "20:8395773936123915561",
+          "name": "witsRating",
+          "type": 6
+        },
+        {
+          "id": "21:1136577535592128408",
+          "name": "parry",
+          "type": 6
+        },
+        {
+          "id": "22:5007831777553948139",
+          "name": "adventurePoint",
+          "type": 6
+        },
+        {
+          "id": "23:3554011561669824215",
+          "name": "skillPoints",
+          "type": 6
+        },
+        {
+          "id": "24:7661912214421215493",
+          "name": "fellowshipScore",
+          "type": 6
+        },
+        {
+          "id": "25:5522440300585792084",
+          "name": "currentEndurance",
+          "type": 6
+        },
+        {
+          "id": "26:6899478257904290656",
+          "name": "load",
+          "type": 6
+        },
+        {
+          "id": "27:4052278961398544630",
+          "name": "fatigue",
+          "type": 6
+        },
+        {
+          "id": "28:8723723598036580349",
+          "name": "currentHope",
+          "type": 6
+        },
+        {
+          "id": "29:3212467213684906235",
+          "name": "shadow",
+          "type": 6
+        },
+        {
+          "id": "30:6791484883980131474",
+          "name": "shadowScars",
+          "type": 6
+        },
+        {
+          "id": "31:8421375951732249701",
+          "name": "valour",
+          "type": 6
+        },
+        {
+          "id": "32:202394291586327546",
+          "name": "wisdom",
+          "type": 6
+        },
+        {
+          "id": "33:1078154795386870187",
+          "name": "weary",
+          "type": 1
+        },
+        {
+          "id": "34:8939461034503792779",
+          "name": "miserable",
+          "type": 1
+        },
+        {
+          "id": "35:8452193898751331593",
+          "name": "wounded",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:481044199291432598",
+      "lastPropertyId": "3:562987166547644492",
+      "name": "CombatProficiencies",
+      "properties": [
+        {
+          "id": "1:4296582310138937315",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:543951516759100031",
+          "name": "proficiency",
+          "type": 6
+        },
+        {
+          "id": "3:562987166547644492",
+          "name": "name",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:4241397220175954720",
+      "lastPropertyId": "5:476372642950773498",
+      "name": "Reward",
+      "properties": [
+        {
+          "id": "1:7573535520432376535",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7972231701556305748",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7066033505606660404",
+          "name": "note",
+          "type": 9
+        },
+        {
+          "id": "4:1197057239372283498",
+          "name": "armourId",
+          "type": 6
+        },
+        {
+          "id": "5:476372642950773498",
+          "name": "weaponId",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:5486256926819336373",
+      "lastPropertyId": "4:8793439803702896348",
+      "name": "Skill",
+      "properties": [
+        {
+          "id": "1:4519096406711325380",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:434892533517214545",
+          "name": "pips",
+          "type": 6
+        },
+        {
+          "id": "3:8719822899400299863",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:8793439803702896348",
+          "name": "isFavored",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:8840369180959170893",
+      "lastPropertyId": "3:7829482298153891110",
+      "name": "Virtue",
+      "properties": [
+        {
+          "id": "1:5363880653634536933",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7751589334314264423",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7829482298153891110",
+          "name": "note",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:194795876836641174",
+      "lastPropertyId": "5:2045895292788964708",
+      "name": "Weapon",
+      "properties": [
+        {
+          "id": "1:7593599520335976578",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4193758242738061898",
+          "name": "damage",
+          "type": 6
+        },
+        {
+          "id": "3:2958137450387762622",
+          "name": "injury",
+          "type": 6
+        },
+        {
+          "id": "4:5789784448918697380",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "5:2045895292788964708",
+          "name": "note",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "7:194795876836641174",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}
