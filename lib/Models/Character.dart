@@ -202,6 +202,7 @@ class Character {
   });
 
   Character copyWith({
+    int? id,
     String? name,
     String? heroicCulture,
     String? culturalBlessing,
@@ -243,6 +244,7 @@ class Character {
     List<Armour>? armour
   }) {
     return Character(
+      id: id ?? this.id,
       name ?? this.name,
       heroicCulture: heroicCulture ?? this.heroicCulture,
       culturalBlessing: culturalBlessing ?? this.culturalBlessing,

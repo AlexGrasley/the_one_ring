@@ -1,4 +1,4 @@
-import 'package:state_notifier/state_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
 import '../Models/Rewards.dart';
@@ -7,7 +7,11 @@ import '../Models/Virtues.dart';
 import '../Models/Weapon.dart';
 
 class CharacterFormNotifier extends StateNotifier<Character> {
-  CharacterFormNotifier() : super(Character(''));
+  CharacterFormNotifier(Character character) : super(character.copyWith());
+
+  void initializeCharacter(Character character) {
+    state = character;
+  }
 
   void updateName(String newName) {
     state = state.copyWith(name: newName);
