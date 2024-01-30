@@ -114,50 +114,19 @@ class Character {
   bool wounded;
 
   @Property()
-  List<Reward>? _rewards;
-
-  List<Reward>? get rewards => _rewards ?? List<Reward>.empty(growable: true);
-
-  set rewards(List<Reward>? value) {
-    _rewards = value;
-  }
+  List<Reward>? rewards;
 
   @Property()
-  List<Virtue>? _virtues;
-
-  List<Virtue>? get virtues => _virtues ?? List<Virtue>.empty(growable: true);
-
-  set virtues(List<Virtue>? value) {
-    _virtues = value;
-  }
+  List<Virtue>? virtues;
 
   @Property()
-  List<Skill>? _skills;
-
-  List<Skill>? get skills => _skills ?? List<Skill>.empty(growable: true);
-
-  set skills(List<Skill>? value) {
-    _skills = value;
-  }
+  List<Skill>? skills;
 
   @Property()
-  List<Weapon>? _weapons;
-
-  List<Weapon>? get weapons => _weapons ?? List<Weapon>.empty(growable: true);
-
-  set weapons(List<Weapon>? value) {
-    _weapons = value;
-  }
+  List<Weapon>? weapons;
 
   @Property()
-  List<Armour>? _armour;
-
-  List<Armour>? get armour => _armour ?? List<Armour>.empty(growable: true);
-
-  set armour(List<Armour>? value) {
-    _armour = value;
-  }
-
+  List<Armour>? armour;
 
   Character(this.name, {
     this.id = 0,
@@ -194,11 +163,12 @@ class Character {
     this.weary = false,
     this.miserable = false,
     this.wounded = false,
-    List<Skill>? skills,
-    List<Reward>? rewards,
-    List<Virtue>? virtues,
-    List<Weapon>? weapons,
-    List<Armour>? armour,
+    this.skills = null,
+    this.armour = null,
+    this.weapons = null,
+    this.virtues = null,
+    this.rewards = null
+
   });
 
   Character copyWith({

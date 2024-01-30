@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
-import 'package:the_one_ring/Screens/UpdateCharacterForm.dart';
+import 'package:the_one_ring/Repositories/SkillsRepository.dart';
+import 'package:the_one_ring/Screens/CharacterFormView.dart';
 
 import 'Models/Character.dart';
+import 'Models/Skills.dart';
 import 'Screens/CharacterSelection.dart';
 
 void main() async {
@@ -14,7 +16,6 @@ void main() async {
 
 class TheOneRing extends StatelessWidget {
   const TheOneRing({super.key});
-
 
   // This widget is the root of your application.
   @override
@@ -28,7 +29,8 @@ class TheOneRing extends StatelessWidget {
       ),
       home: const CharacterList(),
       routes: {
-        '/updateCharacter': (context) => UpdateCharacterForm(ModalRoute.of(context)!.settings.arguments as Character)
+        '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character, isReadOnly: true),
+        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character)
       }
 
     );

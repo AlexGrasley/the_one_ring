@@ -1,4 +1,7 @@
+import 'dart:ffi';
 import 'dart:io';
+import 'package:the_one_ring/Repositories/SkillsRepository.dart';
+
 import '../Models/Character.dart';
 import '../objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,17 +45,25 @@ class CharacterRepository {
 
   // CRUD operations.
 
-  Future<int> addCharacter(Character character) async {
+  Future<Character> addCharacter(Character character) async {
     try {
+      if(character.skills == null || character.skills!.isEmpty){
+        //fill out the characters skills with blank skills so we have them all to modify later
+        SkillsRepository skillsRepository = await SkillsRepository.getInstance();
+        character.skills = skillsRepository.getAllSkills();
+      }
+
       int id = _characterBox.put(character);
       character.id = id;
-      return id;
+
+      return character;
     }
     catch(e){
       await _instance._init();
       int id = _characterBox.put(character);
       character.id = id;
-      return id;
+
+      return character;
     }
   }
 
@@ -88,13 +99,25 @@ class CharacterRepository {
 
   }
 
-  Future<int> updateCharacter(Character character) async {
+  Future<Character> updateCharacter(Character character) async {
     try {
-      return _characterBox.put(character);
+      if(character.skills == null || character.skills!.isEmpty){
+        //fill out the characters skills with blank skills so we have them all to modify later
+        SkillsRepository skillsRepository = await SkillsRepository.getInstance();
+        character.skills = skillsRepository.getAllSkills();
+      }
+      _characterBox.put(character);
+      return character;
     }
     catch(e){
       await _instance._init();
-      return _characterBox.put(character);
+      if(character.skills == null || character.skills!.isEmpty){
+        //fill out the characters skills with blank skills so we have them all to modify later
+        SkillsRepository skillsRepository = await SkillsRepository.getInstance();
+        character.skills = skillsRepository.getAllSkills();
+      }
+      _characterBox.put(character);
+      return character;
     }
   }
 

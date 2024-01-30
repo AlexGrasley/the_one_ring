@@ -35,7 +35,7 @@ class CharacterList extends ConsumerWidget {
                       onTap: () => Navigator
                           .pushNamed(
                             context,
-                            '/updateCharacter',
+                            '/viewCharacter',
                             arguments: characters[index])
                           .then((value) =>
                             ref.refresh(characterRepositoryProvider))
