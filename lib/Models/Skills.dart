@@ -19,11 +19,15 @@ class Skill {
   @Property()
   bool isFavored;
 
+  @Property()
+  SkillClass skillClass;
+
   Skill({
     this.id = 0,
     this.pips = 0,
     this.name = '',
     this.isFavored = false,
+    this.skillClass = SkillClass.strength,
     character,
   }) {
     character = ToOne<Character>();
@@ -44,5 +48,11 @@ class Skill {
         isFavored: isFavored ?? this.isFavored
     );
   }
-
 }
+
+enum SkillClass {
+  strength,
+  heart,
+  wits
+}
+

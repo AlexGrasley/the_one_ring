@@ -14,15 +14,15 @@ final characterFormProvider = StateNotifierProvider.autoDispose.family<Character
 });
 
 class ReadOnlyNotifier extends StateNotifier<bool> {
-  ReadOnlyNotifier() : super(true);
+  ReadOnlyNotifier(bool isReadOnly) : super(isReadOnly);
 
   void toggle() {
     state = !state;
   }
 }
 
-final readOnlyProvider = StateNotifierProvider<ReadOnlyNotifier, bool>((ref) {
-  return ReadOnlyNotifier();
+final readOnlyProvider = StateNotifierProvider.autoDispose.family<ReadOnlyNotifier,bool, bool>((ref, isReadOnly) {
+  return ReadOnlyNotifier(isReadOnly);
 });
 
 class CharacterView extends ConsumerWidget {
@@ -37,7 +37,8 @@ class CharacterView extends ConsumerWidget {
 
     final characterFormNotifier = ref.read(characterFormProvider(_character).notifier);
     final character = ref.watch(characterFormProvider(_character));
-    final isReadOnly = ref.watch(readOnlyProvider); // watching for changes to isReadOnly
+    final readOnlyNotifier = ref.read(readOnlyProvider(this.isReadOnly).notifier);
+    final isReadOnly = ref.watch(readOnlyProvider(this.isReadOnly)); // watching for changes to isReadOnly
 
     return DefaultTabController(
         length: 4,
@@ -75,7 +76,7 @@ class CharacterView extends ConsumerWidget {
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.edit),
             onPressed: () => {
-              ref.read(readOnlyProvider.notifier).toggle()
+              readOnlyNotifier.toggle()
             }
           ),
         ),

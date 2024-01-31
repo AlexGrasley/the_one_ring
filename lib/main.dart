@@ -37,7 +37,7 @@ class TheOneRing extends StatelessWidget {
       home: const CharacterList(),
       routes: {
         '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character, isReadOnly: true),
-        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character)
+        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character, isReadOnly: false)
       }
 
     );
