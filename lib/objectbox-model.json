@@ -214,7 +214,28 @@
           "type": 1
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "1:2106573359653455199",
+          "name": "rewards",
+          "targetId": "4:4241397220175954720"
+        },
+        {
+          "id": "2:4174868222778717780",
+          "name": "virtues",
+          "targetId": "6:8840369180959170893"
+        },
+        {
+          "id": "3:8400452106340809413",
+          "name": "weapons",
+          "targetId": "7:194795876836641174"
+        },
+        {
+          "id": "4:2376674275859451071",
+          "name": "armours",
+          "targetId": "1:8664419718943486843"
+        }
+      ]
     },
     {
       "id": "3:481044199291432598",
@@ -276,7 +297,7 @@
     },
     {
       "id": "5:5486256926819336373",
-      "lastPropertyId": "4:8793439803702896348",
+      "lastPropertyId": "5:2276169506293343640",
       "name": "Skill",
       "properties": [
         {
@@ -299,6 +320,14 @@
           "id": "4:8793439803702896348",
           "name": "isFavored",
           "type": 1
+        },
+        {
+          "id": "5:2276169506293343640",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:8150577807690394722",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
@@ -363,8 +392,8 @@
     }
   ],
   "lastEntityId": "7:194795876836641174",
-  "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastIndexId": "1:8150577807690394722",
+  "lastRelationId": "4:2376674275859451071",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

@@ -1,30 +1,41 @@
 import 'dart:io';
+import 'package:the_one_ring/main.dart';
+
 import '../Models/Weapon.dart';
+import '../ObjectBox.dart';
 import '../objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
-class CombatProficienciesRepository {
+class WeaponRepositoryRepository {
   // Make _singleton private and static
-  static final CombatProficienciesRepository _singleton = CombatProficienciesRepository._internal();
+  static final WeaponRepositoryRepository _instance = WeaponRepositoryRepository._internal();
   late final Store _store;
   late final Box<Weapon> _weaponBox;
+  static bool hasBeenInitialized = false;
 
-  // Use path provider to get app document directory
-  Future<Directory> _getApplicationDocumentsDirectory() async {
-    return getApplicationDocumentsDirectory();
+// In the constructor/init process, set the documents directory:
+  WeaponRepositoryRepository._internal();
+
+  Future<void> _init() async {
+    _weaponBox = objectBox.weaponsBox;
   }
 
 // In the constructor/init process, set the documents directory:
-  CombatProficienciesRepository._internal() {
-    _getApplicationDocumentsDirectory().then((Directory directory) {
-      _store = Store(getObjectBoxModel(), directory: directory.path);
-      _weaponBox = Box<Weapon>(_store);
-    });
+  WeaponRepositoryRepository._privateConstructor();
+
+  // Public factory constructor. Asynchronously creates and initializes an instance.
+  static Future<WeaponRepositoryRepository> getInstance() async {
+    if(!hasBeenInitialized){
+      await _instance._init();
+      hasBeenInitialized = true;
+    }
+
+    return _instance;
   }
 
   // Public factory constructor. Returns the singleton instance.
-  factory CombatProficienciesRepository() {
-    return _singleton;
+  factory WeaponRepositoryRepository() {
+    return _instance;
   }
 
   // CRUD operations.

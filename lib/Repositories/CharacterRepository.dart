@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
+import 'package:the_one_ring/objectbox.dart';
 
 import '../Models/Character.dart';
+import '../Models/Skills.dart';
+import '../main.dart';
 import '../objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -12,7 +16,6 @@ class CharacterRepository {
 
   static bool hasBeenInitialized = false;
 
-  late Store _store;
   late Box<Character> _characterBox;
 
   // Use path provider to get app document directory
@@ -21,13 +24,7 @@ class CharacterRepository {
   }
 
   Future<void> _init() async {
-    if(hasBeenInitialized){
-      return;
-    }
-    final directory = await _getApplicationDocumentsDirectory();
-    _store = Store(getObjectBoxModel(), directory: directory.path);
-    _characterBox = Box<Character>(_store);
-    hasBeenInitialized = true;
+    _characterBox = objectBox.characterBox;
   }
 
 // In the constructor/init process, set the documents directory:
@@ -37,6 +34,7 @@ class CharacterRepository {
   static Future<CharacterRepository> getInstance() async {
     if(!hasBeenInitialized){
       await _instance._init();
+      hasBeenInitialized = true;
     }
 
     return _instance;
@@ -46,35 +44,29 @@ class CharacterRepository {
   // CRUD operations.
 
   Future<Character> addCharacter(Character character) async {
-    try {
-      if(character.skills == null || character.skills!.isEmpty){
+      if(character.skills.isEmpty){
+
         //fill out the characters skills with blank skills so we have them all to modify later
         SkillsRepository skillsRepository = await SkillsRepository.getInstance();
-        character.skills = skillsRepository.getAllSkills();
+
+        for(var skill in skillsRepository.getAllBlankSkills()){
+          character.skills.add(skill);
+        }
+
       }
 
       int id = _characterBox.put(character);
-      character.id = id;
-
       return character;
-    }
-    catch(e){
-      await _instance._init();
-      int id = _characterBox.put(character);
-      character.id = id;
+  }
 
-      return character;
-    }
+  List<Skill>? getCharacterSkills(int id) {
+    var character = _characterBox.get(id);
+    var skills = character?.skills;
+    return skills?.toList();
   }
 
   Future<List<Character>> getAllCharacters() async {
-    try {
-      return _characterBox.getAll();
-    }
-    catch(e){
-      await _instance._init();
-      return _characterBox.getAll();
-    }
+      return _characterBox.getAllAsync();
   }
 
   Future<Character?> getCharacter(int id) async {
@@ -101,24 +93,20 @@ class CharacterRepository {
 
   Future<Character> updateCharacter(Character character) async {
     try {
-      if(character.skills == null || character.skills!.isEmpty){
+      if(character.skills.isEmpty){
         //fill out the characters skills with blank skills so we have them all to modify later
         SkillsRepository skillsRepository = await SkillsRepository.getInstance();
-        character.skills = skillsRepository.getAllSkills();
+        for(var skill in skillsRepository.getAllBlankSkills()){
+          character.skills.add(skill);
+        }
       }
       _characterBox.put(character);
       return character;
+
+    } catch (e) {
+      print('Failed to update character: $e');
     }
-    catch(e){
-      await _instance._init();
-      if(character.skills == null || character.skills!.isEmpty){
-        //fill out the characters skills with blank skills so we have them all to modify later
-        SkillsRepository skillsRepository = await SkillsRepository.getInstance();
-        character.skills = skillsRepository.getAllSkills();
-      }
-      _characterBox.put(character);
-      return character;
-    }
+    return Character();
   }
 
 

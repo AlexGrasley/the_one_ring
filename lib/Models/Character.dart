@@ -11,6 +11,7 @@ import 'Weapon.dart';
 class Character {
   @Id()
   int id;
+
   @Property()
   String name;
 
@@ -112,24 +113,25 @@ class Character {
 
   @Property()
   bool wounded;
+  
+  @Property()
+  var rewards = ToMany<Reward>();
 
   @Property()
-  List<Reward>? rewards;
+  var virtues = ToMany<Virtue>();
+
+  @Backlink('character')
+  var skills = ToMany<Skill>();
 
   @Property()
-  List<Virtue>? virtues;
+  var weapons = ToMany<Weapon>();
 
   @Property()
-  List<Skill>? skills;
+  var armour = ToMany<Armour>();
 
-  @Property()
-  List<Weapon>? weapons;
-
-  @Property()
-  List<Armour>? armour;
-
-  Character(this.name, {
+  Character({
     this.id = 0,
+    this.name = "",
     this.heroicCulture = "",
     this.culturalBlessing = "",
     this.patron = "",
@@ -163,13 +165,19 @@ class Character {
     this.weary = false,
     this.miserable = false,
     this.wounded = false,
-    this.skills = null,
-    this.armour = null,
-    this.weapons = null,
-    this.virtues = null,
-    this.rewards = null
+    ToMany<Skill>? skills,
+    ToMany<Reward>? rewards,
+    ToMany<Armour>? armour,
+    ToMany<Virtue>? virtues,
+    ToMany<Weapon>? weapons
+  }){
+    this.skills = skills ?? ToMany<Skill>();
+    this.rewards = rewards ?? ToMany<Reward>();
+    this.armour = armour ?? ToMany<Armour>();
+    this.virtues = virtues ?? ToMany<Virtue>();
+    this.weapons = weapons ?? ToMany<Weapon>();
+  }
 
-  });
 
   Character copyWith({
     int? id,
@@ -207,15 +215,15 @@ class Character {
     bool? weary,
     bool? miserable,
     bool? wounded,
-    List<Skill>? skills,
-    List<Reward>? rewards,
-    List<Virtue>? virtues,
-    List<Weapon>? weapons,
-    List<Armour>? armour
+    ToMany<Skill>? skills,
+    ToMany<Reward>? rewards,
+    ToMany<Virtue>? virtues,
+    ToMany<Weapon>? weapons,
+    ToMany<Armour>? armour
   }) {
     return Character(
       id: id ?? this.id,
-      name ?? this.name,
+      name: name ?? this.name,
       heroicCulture: heroicCulture ?? this.heroicCulture,
       culturalBlessing: culturalBlessing ?? this.culturalBlessing,
       patron: patron ?? this.patron,

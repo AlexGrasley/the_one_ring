@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:objectbox/objectbox.dart';
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
 import '../Models/Rewards.dart';
@@ -149,23 +150,23 @@ class CharacterFormNotifier extends StateNotifier<Character> {
     state = state.copyWith(wounded: newWounded);
   }
 
-  void updateRewards(List<Reward> newRewards) {
+  void updateRewards(ToMany<Reward> newRewards) {
     state = state.copyWith(rewards: newRewards);
   }
 
-  void updateVirtues(List<Virtue> newVirtues) {
+  void updateVirtues(ToMany<Virtue> newVirtues) {
     state = state.copyWith(virtues: newVirtues);
   }
 
-  void updateSkills(List<Skill> newSkills) {
+  void updateSkills(ToMany<Skill> newSkills) {
     state = state.copyWith(skills: newSkills);
   }
 
-  void updateWeapons(List<Weapon> newWeapons) {
+  void updateWeapons(ToMany<Weapon> newWeapons) {
     state = state.copyWith(weapons: newWeapons);
   }
 
-  void updateArmour(List<Armour> newArmour) {
+  void updateArmour(ToMany<Armour> newArmour) {
     state = state.copyWith(armour: newArmour);
   }
 

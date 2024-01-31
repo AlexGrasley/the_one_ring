@@ -12,6 +12,7 @@ import 'dart:typed_data';
 import 'package:flat_buffers/flat_buffers.dart' as fb;
 import 'package:objectbox/internal.dart'; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart';
+import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'Models/Armour.dart';
 import 'Models/Character.dart';
@@ -235,8 +236,27 @@ final _entities = <ModelEntity>[
             type: 1,
             flags: 0)
       ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(1, 2106573359653455199),
+            name: 'rewards',
+            targetId: const IdUid(4, 4241397220175954720)),
+        ModelRelation(
+            id: const IdUid(2, 4174868222778717780),
+            name: 'virtues',
+            targetId: const IdUid(6, 8840369180959170893)),
+        ModelRelation(
+            id: const IdUid(3, 8400452106340809413),
+            name: 'weapons',
+            targetId: const IdUid(7, 194795876836641174)),
+        ModelRelation(
+            id: const IdUid(4, 2376674275859451071),
+            name: 'armours',
+            targetId: const IdUid(1, 8664419718943486843))
+      ],
+      backlinks: <ModelBacklink>[
+        ModelBacklink(name: 'skills', srcEntity: 'Skill', srcField: 'character')
+      ]),
   ModelEntity(
       id: const IdUid(3, 481044199291432598),
       name: 'CombatProficiencies',
@@ -298,7 +318,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(5, 5486256926819336373),
       name: 'Skill',
-      lastPropertyId: const IdUid(4, 8793439803702896348),
+      lastPropertyId: const IdUid(5, 2276169506293343640),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -320,7 +340,14 @@ final _entities = <ModelEntity>[
             id: const IdUid(4, 8793439803702896348),
             name: 'isFavored',
             type: 1,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 2276169506293343640),
+            name: 'characterId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(1, 8150577807690394722),
+            relationTarget: 'Character')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -391,15 +418,15 @@ final _entities = <ModelEntity>[
 /// Note: for desktop apps it is recommended to specify a unique [directory].
 ///
 /// See [Store.new] for an explanation of all parameters.
-Store openStore(
+Future<Store> openStore(
         {String? directory,
         int? maxDBSizeInKB,
         int? fileMode,
         int? maxReaders,
         bool queriesCaseSensitiveDefault = true,
-        String? macosApplicationGroup}) =>
+        String? macosApplicationGroup}) async =>
     Store(getObjectBoxModel(),
-        directory: directory,
+        directory: directory ?? (await defaultStoreDirectory()).path,
         maxDBSizeInKB: maxDBSizeInKB,
         fileMode: fileMode,
         maxReaders: maxReaders,
@@ -412,8 +439,8 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(7, 194795876836641174),
-      lastIndexId: const IdUid(0, 0),
-      lastRelationId: const IdUid(0, 0),
+      lastIndexId: const IdUid(1, 8150577807690394722),
+      lastRelationId: const IdUid(4, 2376674275859451071),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
@@ -462,7 +489,15 @@ ModelDefinition getObjectBoxModel() {
     Character: EntityDefinition<Character>(
         model: _entities[1],
         toOneRelations: (Character object) => [],
-        toManyRelations: (Character object) => {},
+        toManyRelations: (Character object) => {
+              RelInfo<Character>.toMany(1, object.id): object.rewards,
+              RelInfo<Character>.toMany(2, object.id): object.virtues,
+              RelInfo<Character>.toMany(3, object.id): object.weapons,
+              RelInfo<Character>.toMany(4, object.id): object.armour,
+              RelInfo<Skill>.toOneBacklink(
+                      5, object.id, (Skill srcObject) => srcObject.character):
+                  object.skills
+            },
         getId: (Character object) => object.id,
         setId: (Character object, int id) {
           object.id = id;
@@ -521,116 +556,88 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final heroicCultureParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, '');
-          final culturalBlessingParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 10, '');
-          final patronParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 12, '');
-          final callingParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 14, '');
-          final shadowPathParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 16, '');
-          final distinctiveFeaturesParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 18, '');
-          final flawsParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 20, '');
-          final travellingGearParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 22, '');
-          final ageParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
-          final treasureParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0);
-          final strengthTnParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0);
-          final strengthRatingParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 30, 0);
-          final enduranceParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0);
-          final heartTnParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 34, 0);
-          final heartRatingParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
-          final hopeParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 38, 0);
-          final witsTnParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 40, 0);
-          final witsRatingParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0);
-          final parryParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0);
-          final adventurePointParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 46, 0);
-          final skillPointsParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 48, 0);
-          final fellowshipScoreParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 50, 0);
-          final currentEnduranceParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 52, 0);
-          final loadParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 54, 0);
-          final fatigueParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 56, 0);
-          final currentHopeParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 58, 0);
-          final shadowParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 60, 0);
-          final shadowScarsParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 62, 0);
-          final valourParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 64, 0);
-          final wisdomParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 66, 0);
-          final wearyParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 68, false);
-          final miserableParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 70, false);
-          final woundedParam =
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 72, false);
-          final object = Character(nameParam,
-              id: idParam,
-              heroicCulture: heroicCultureParam,
-              culturalBlessing: culturalBlessingParam,
-              patron: patronParam,
-              calling: callingParam,
-              shadowPath: shadowPathParam,
-              distinctiveFeatures: distinctiveFeaturesParam,
-              flaws: flawsParam,
-              travellingGear: travellingGearParam,
-              age: ageParam,
-              treasure: treasureParam,
-              strengthTn: strengthTnParam,
-              strengthRating: strengthRatingParam,
-              endurance: enduranceParam,
-              heartTn: heartTnParam,
-              heartRating: heartRatingParam,
-              hope: hopeParam,
-              witsTn: witsTnParam,
-              witsRating: witsRatingParam,
-              parry: parryParam,
-              adventurePoint: adventurePointParam,
-              skillPoints: skillPointsParam,
-              fellowshipScore: fellowshipScoreParam,
-              currentEndurance: currentEnduranceParam,
-              load: loadParam,
-              fatigue: fatigueParam,
-              currentHope: currentHopeParam,
-              shadow: shadowParam,
-              shadowScars: shadowScarsParam,
-              valour: valourParam,
-              wisdom: wisdomParam,
-              weary: wearyParam,
-              miserable: miserableParam,
-              wounded: woundedParam);
 
+          final object = Character()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..name = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '')
+            ..heroicCulture = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 8, '')
+            ..culturalBlessing = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 10, '')
+            ..patron = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 12, '')
+            ..calling = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 14, '')
+            ..shadowPath = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 16, '')
+            ..distinctiveFeatures =
+                const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 18, '')
+            ..flaws = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 20, '')
+            ..travellingGear = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 22, '')
+            ..age = const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0)
+            ..treasure =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0)
+            ..strengthTn =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0)
+            ..strengthRating =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 30, 0)
+            ..endurance =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0)
+            ..heartTn =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 34, 0)
+            ..heartRating =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0)
+            ..hope = const fb.Int64Reader().vTableGet(buffer, rootOffset, 38, 0)
+            ..witsTn =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 40, 0)
+            ..witsRating =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0)
+            ..parry =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0)
+            ..adventurePoint =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 46, 0)
+            ..skillPoints =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 48, 0)
+            ..fellowshipScore =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 50, 0)
+            ..currentEndurance =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 52, 0)
+            ..load = const fb.Int64Reader().vTableGet(buffer, rootOffset, 54, 0)
+            ..fatigue =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 56, 0)
+            ..currentHope =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 58, 0)
+            ..shadow =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 60, 0)
+            ..shadowScars =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 62, 0)
+            ..valour =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 64, 0)
+            ..wisdom =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 66, 0)
+            ..weary =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 68, false)
+            ..miserable =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 70, false)
+            ..wounded =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 72, false);
+          InternalToManyAccess.setRelInfo<Character>(
+              object.rewards, store, RelInfo<Character>.toMany(1, object.id));
+          InternalToManyAccess.setRelInfo<Character>(
+              object.virtues, store, RelInfo<Character>.toMany(2, object.id));
+          InternalToManyAccess.setRelInfo<Character>(
+              object.weapons, store, RelInfo<Character>.toMany(3, object.id));
+          InternalToManyAccess.setRelInfo<Character>(
+              object.armour, store, RelInfo<Character>.toMany(4, object.id));
+          InternalToManyAccess.setRelInfo<Character>(
+              object.skills,
+              store,
+              RelInfo<Skill>.toOneBacklink(
+                  5, object.id, (Skill srcObject) => srcObject.character));
           return object;
         }),
     CombatProficiencies: EntityDefinition<CombatProficiencies>(
@@ -708,7 +715,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     Skill: EntityDefinition<Skill>(
         model: _entities[4],
-        toOneRelations: (Skill object) => [],
+        toOneRelations: (Skill object) => [object.character],
         toManyRelations: (Skill object) => {},
         getId: (Skill object) => object.id,
         setId: (Skill object, int id) {
@@ -716,11 +723,12 @@ ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Skill object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          fbb.startTable(5);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.pips);
           fbb.addOffset(2, nameOffset);
           fbb.addBool(3, object.isFavored);
+          fbb.addInt64(4, object.character.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -740,7 +748,9 @@ ModelDefinition getObjectBoxModel() {
               pips: pipsParam,
               name: nameParam,
               isFavored: isFavoredParam);
-
+          object.character.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          object.character.attach(store);
           return object;
         }),
     Virtue: EntityDefinition<Virtue>(
@@ -977,6 +987,22 @@ class Character_ {
   /// see [Character.wounded]
   static final wounded =
       QueryBooleanProperty<Character>(_entities[1].properties[34]);
+
+  /// see [Character.rewards]
+  static final rewards =
+      QueryRelationToMany<Character, Reward>(_entities[1].relations[0]);
+
+  /// see [Character.virtues]
+  static final virtues =
+      QueryRelationToMany<Character, Virtue>(_entities[1].relations[1]);
+
+  /// see [Character.weapons]
+  static final weapons =
+      QueryRelationToMany<Character, Weapon>(_entities[1].relations[2]);
+
+  /// see [Character.armours]
+  static final armours =
+      QueryRelationToMany<Character, Armour>(_entities[1].relations[3]);
 }
 
 /// [CombatProficiencies] entity fields to define ObjectBox queries.
@@ -1028,6 +1054,10 @@ class Skill_ {
   /// see [Skill.isFavored]
   static final isFavored =
       QueryBooleanProperty<Skill>(_entities[4].properties[3]);
+
+  /// see [Skill.character]
+  static final character =
+      QueryRelationToOne<Skill, Character>(_entities[4].properties[4]);
 }
 
 /// [Virtue] entity fields to define ObjectBox queries.

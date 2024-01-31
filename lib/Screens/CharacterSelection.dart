@@ -52,7 +52,7 @@ class CharacterList extends ConsumerWidget {
                     .pushNamed(
                       context,
                       '/updateCharacter',
-                      arguments: Character(""))
+                      arguments: Character())
                     .then((value) =>
                       ref.refresh(characterRepositoryProvider))
               },
@@ -60,7 +60,7 @@ class CharacterList extends ConsumerWidget {
           );
         },
       loading: () => const CircularProgressIndicator(),
-      error: (error, stackTrace) => const Text("something went wrong")
+      error: (error, stackTrace) => Text(error.toString())
     );
   }
 }

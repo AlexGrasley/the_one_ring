@@ -61,8 +61,7 @@ class CharacterView extends ConsumerWidget {
                   formKey: _formKey,
                   characterFormNotifier: characterFormNotifier,
                   character: character),
-              ViewSkillForm(
-                  character: character),
+              ViewSkillsForm(character),
               UpdateCharacterForm(
                   formKey: _formKey,
                   characterFormNotifier: characterFormNotifier,

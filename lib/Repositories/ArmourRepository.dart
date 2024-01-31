@@ -1,30 +1,41 @@
 import 'dart:io';
+import 'package:the_one_ring/main.dart';
+
 import '../Models/Armour.dart';
+import '../ObjectBox.dart';
 import '../objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ArmourRepository {
   // Make _singleton private and static
-  static final ArmourRepository _singleton = ArmourRepository._internal();
+  static final ArmourRepository _instance = ArmourRepository._internal();
   late final Store _store;
   late final Box<Armour> _armourBox;
+  static bool hasBeenInitialized = false;
 
-  // Use path provider to get app document directory
-  Future<Directory> _getApplicationDocumentsDirectory() async {
-    return getApplicationDocumentsDirectory();
+// In the constructor/init process, set the documents directory:
+  ArmourRepository._internal() ;
+
+  Future<void> _init() async {
+    _armourBox = objectBox.armourBox;
   }
 
 // In the constructor/init process, set the documents directory:
-  ArmourRepository._internal() {
-    _getApplicationDocumentsDirectory().then((Directory directory) {
-      _store = Store(getObjectBoxModel(), directory: directory.path);
-      _armourBox = Box<Armour>(_store);
-    });
+  ArmourRepository._privateConstructor();
+
+  // Public factory constructor. Asynchronously creates and initializes an instance.
+  static Future<ArmourRepository> getInstance() async {
+    if(!hasBeenInitialized){
+      await _instance._init();
+      hasBeenInitialized = true;
+    }
+
+    return _instance;
   }
 
   // Public factory constructor. Returns the singleton instance.
   factory ArmourRepository() {
-    return _singleton;
+    return _instance;
   }
 
   // CRUD operations.

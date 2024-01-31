@@ -1,9 +1,14 @@
 import 'package:objectbox/objectbox.dart';
 
+import 'Character.dart';
+
 @Entity()
 class Skill {
   @Id()
   int id;
+
+  @Property()
+  var character = ToOne<Character>();
 
   @Property()
   int pips;
@@ -19,5 +24,25 @@ class Skill {
     this.pips = 0,
     this.name = '',
     this.isFavored = false,
-  });
+    character,
+  }) {
+    character = ToOne<Character>();
+  }
+
+  Skill copyWith({
+    int? id,
+    String? name,
+    ToOne<Character>? character,
+    int? pips,
+    bool? isFavored
+  }) {
+    return Skill(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        character: character ?? this.character,
+        pips: pips ?? this.pips,
+        isFavored: isFavored ?? this.isFavored
+    );
+  }
+
 }

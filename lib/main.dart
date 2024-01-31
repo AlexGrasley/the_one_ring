@@ -6,9 +6,16 @@ import 'package:the_one_ring/Screens/CharacterFormView.dart';
 
 import 'Models/Character.dart';
 import 'Models/Skills.dart';
+import 'ObjectBox.dart';
 import 'Screens/CharacterSelection.dart';
 
+
+late ObjectBox objectBox;
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  objectBox = await ObjectBox.create();
+
   runApp(const ProviderScope(
       child: TheOneRing()));
 }
