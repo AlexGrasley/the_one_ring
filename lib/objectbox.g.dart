@@ -28,7 +28,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
           ModelEntity(
       id: const IdUid(1, 8664419718943486843),
       name: 'Armour',
-      lastPropertyId: const IdUid(4, 8643292553265226198),
+      lastPropertyId: const IdUid(5, 4030243882780861158),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -58,6 +58,13 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       type: 9,
       flags: 0
       
+    )
+    ,    ModelProperty(
+      id: const IdUid(5, 4030243882780861158),
+      name: 'characterId',
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(3, 455561615005557916), relationTarget: 'Character'
     )
     
       ],
@@ -404,7 +411,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelEntity(
       id: const IdUid(4, 4241397220175954720),
       name: 'Reward',
-      lastPropertyId: const IdUid(5, 476372642950773498),
+      lastPropertyId: const IdUid(6, 3447832864526205433),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -431,16 +438,23 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelProperty(
       id: const IdUid(4, 1197057239372283498),
       name: 'armourId',
-      type: 6,
-      flags: 0
-      
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(5, 3057957074003434693), relationTarget: 'Armour'
     )
     ,    ModelProperty(
       id: const IdUid(5, 476372642950773498),
       name: 'weaponId',
-      type: 6,
-      flags: 0
-      
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(6, 6013082632755432446), relationTarget: 'Weapon'
+    )
+    ,    ModelProperty(
+      id: const IdUid(6, 3447832864526205433),
+      name: 'characterId',
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(4, 6999056430147813025), relationTarget: 'Character'
     )
     
       ],
@@ -511,7 +525,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelEntity(
       id: const IdUid(6, 8840369180959170893),
       name: 'Virtue',
-      lastPropertyId: const IdUid(3, 7829482298153891110),
+      lastPropertyId: const IdUid(4, 784232583823594404),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -535,6 +549,13 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       flags: 0
       
     )
+    ,    ModelProperty(
+      id: const IdUid(4, 784232583823594404),
+      name: 'characterId',
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(7, 9082948446824037746), relationTarget: 'Character'
+    )
     
       ],
       relations: <ModelRelation>[
@@ -547,7 +568,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelEntity(
       id: const IdUid(7, 194795876836641174),
       name: 'Weapon',
-      lastPropertyId: const IdUid(5, 2045895292788964708),
+      lastPropertyId: const IdUid(6, 2518040436659924421),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -584,6 +605,13 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       type: 9,
       flags: 0
       
+    )
+    ,    ModelProperty(
+      id: const IdUid(6, 2518040436659924421),
+      name: 'characterId',
+      type: 11,
+      flags: 520
+      , indexId: const IdUid(8, 4134250850814447324), relationTarget: 'Character'
     )
     
       ],
@@ -626,7 +654,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
           final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(7, 194795876836641174),
-      lastIndexId: const IdUid(2, 4945883188977238138),
+      lastIndexId: const IdUid(8, 4134250850814447324),
       lastRelationId: const IdUid(6, 1690858102240495363),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -641,33 +669,35 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       final bindings = <Type, EntityDefinition>{
         Armour:       EntityDefinition<Armour>(
         model: _entities[0],
-        toOneRelations: (Armour object) => [],
+        toOneRelations: (Armour object) => [object.character],
         toManyRelations: (Armour object) => {},
         getId: (Armour object) => object.id,
         setId: (Armour object, int id) {object.id = id;},
         objectToFB: (Armour object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-      fbb.startTable(5);
+      fbb.startTable(6);
       fbb.addInt64(0, object.id);
 fbb.addInt64(1, object.rating);
 fbb.addOffset(2, nameOffset);
 fbb.addOffset(3, noteOffset);
+fbb.addInt64(4, object.character.targetId);
       fbb.finish(fbb.endTable());
       return object.id;
     },
         objectFromFB: (Store store, ByteData fbData) {
       final buffer = fb.BufferContext(fbData);
       final rootOffset = buffer.derefObject(0);
-      final nameParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 8, '');
-final idParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+      final idParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+final nameParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 8, '');
 final ratingParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
 final noteParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 10, '');
-      final object = Armour(nameParam, 
-id: idParam, 
+      final object = Armour(id: idParam, 
+name: nameParam, 
 rating: ratingParam, 
 note: noteParam);
-      
+      object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+object.character.attach(store);
       return object;
     }
       )
@@ -855,19 +885,20 @@ object.character.attach(store);
       ,
 Reward:       EntityDefinition<Reward>(
         model: _entities[3],
-        toOneRelations: (Reward object) => [],
+        toOneRelations: (Reward object) => [object.armour,object.weapon,object.character],
         toManyRelations: (Reward object) => {},
         getId: (Reward object) => object.id,
         setId: (Reward object, int id) {object.id = id;},
         objectToFB: (Reward object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-      fbb.startTable(6);
+      fbb.startTable(7);
       fbb.addInt64(0, object.id);
 fbb.addOffset(1, nameOffset);
 fbb.addOffset(2, noteOffset);
-fbb.addInt64(3, object.armourId);
-fbb.addInt64(4, object.weaponId);
+fbb.addInt64(3, object.armour.targetId);
+fbb.addInt64(4, object.weapon.targetId);
+fbb.addInt64(5, object.character.targetId);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -877,14 +908,15 @@ fbb.addInt64(4, object.weaponId);
       final idParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 final nameParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 6, '');
 final noteParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 8, '');
-final armourIdParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-final weaponIdParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
       final object = Reward(id: idParam, 
 name: nameParam, 
-note: noteParam, 
-armourId: armourIdParam, 
-weaponId: weaponIdParam);
-      
+note: noteParam);
+      object.armour.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+object.armour.attach(store);
+object.weapon.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+object.weapon.attach(store);
+object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+object.character.attach(store);
       return object;
     }
       )
@@ -929,17 +961,18 @@ object.character.attach(store);
       ,
 Virtue:       EntityDefinition<Virtue>(
         model: _entities[5],
-        toOneRelations: (Virtue object) => [],
+        toOneRelations: (Virtue object) => [object.character],
         toManyRelations: (Virtue object) => {},
         getId: (Virtue object) => object.id,
         setId: (Virtue object, int id) {object.id = id;},
         objectToFB: (Virtue object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-      fbb.startTable(4);
+      fbb.startTable(5);
       fbb.addInt64(0, object.id);
 fbb.addOffset(1, nameOffset);
 fbb.addOffset(2, noteOffset);
+fbb.addInt64(3, object.character.targetId);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -952,26 +985,28 @@ final noteParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffe
       final object = Virtue(id: idParam, 
 name: nameParam, 
 note: noteParam);
-      
+      object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+object.character.attach(store);
       return object;
     }
       )
       ,
 Weapon:       EntityDefinition<Weapon>(
         model: _entities[6],
-        toOneRelations: (Weapon object) => [],
+        toOneRelations: (Weapon object) => [object.character],
         toManyRelations: (Weapon object) => {},
         getId: (Weapon object) => object.id,
         setId: (Weapon object, int id) {object.id = id;},
         objectToFB: (Weapon object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-      fbb.startTable(6);
+      fbb.startTable(7);
       fbb.addInt64(0, object.id);
 fbb.addInt64(1, object.damage);
 fbb.addInt64(2, object.injury);
 fbb.addOffset(3, nameOffset);
 fbb.addOffset(4, noteOffset);
+fbb.addInt64(5, object.character.targetId);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -988,7 +1023,8 @@ damage: damageParam,
 injury: injuryParam, 
 name: nameParam, 
 note: noteParam);
-      
+      object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+object.character.attach(store);
       return object;
     }
       )
@@ -1003,7 +1039,8 @@ note: noteParam);
         static final id = QueryIntegerProperty<Armour>(_entities[0].properties[0]);        /// see [Armour.rating]
         static final rating = QueryIntegerProperty<Armour>(_entities[0].properties[1]);        /// see [Armour.name]
         static final name = QueryStringProperty<Armour>(_entities[0].properties[2]);        /// see [Armour.note]
-        static final note = QueryStringProperty<Armour>(_entities[0].properties[3]);}
+        static final note = QueryStringProperty<Armour>(_entities[0].properties[3]);        /// see [Armour.character]
+        static final character = QueryRelationToOne<Armour, Character>(_entities[0].properties[4]);}
     
       /// [Character] entity fields to define ObjectBox queries.
       class Character_ {        /// see [Character.id]
@@ -1059,9 +1096,10 @@ note: noteParam);
       class Reward_ {        /// see [Reward.id]
         static final id = QueryIntegerProperty<Reward>(_entities[3].properties[0]);        /// see [Reward.name]
         static final name = QueryStringProperty<Reward>(_entities[3].properties[1]);        /// see [Reward.note]
-        static final note = QueryStringProperty<Reward>(_entities[3].properties[2]);        /// see [Reward.armourId]
-        static final armourId = QueryIntegerProperty<Reward>(_entities[3].properties[3]);        /// see [Reward.weaponId]
-        static final weaponId = QueryIntegerProperty<Reward>(_entities[3].properties[4]);}
+        static final note = QueryStringProperty<Reward>(_entities[3].properties[2]);        /// see [Reward.armour]
+        static final armour = QueryRelationToOne<Reward, Armour>(_entities[3].properties[3]);        /// see [Reward.weapon]
+        static final weapon = QueryRelationToOne<Reward, Weapon>(_entities[3].properties[4]);        /// see [Reward.character]
+        static final character = QueryRelationToOne<Reward, Character>(_entities[3].properties[5]);}
     
       /// [Skill] entity fields to define ObjectBox queries.
       class Skill_ {        /// see [Skill.id]
@@ -1076,7 +1114,8 @@ note: noteParam);
       class Virtue_ {        /// see [Virtue.id]
         static final id = QueryIntegerProperty<Virtue>(_entities[5].properties[0]);        /// see [Virtue.name]
         static final name = QueryStringProperty<Virtue>(_entities[5].properties[1]);        /// see [Virtue.note]
-        static final note = QueryStringProperty<Virtue>(_entities[5].properties[2]);}
+        static final note = QueryStringProperty<Virtue>(_entities[5].properties[2]);        /// see [Virtue.character]
+        static final character = QueryRelationToOne<Virtue, Character>(_entities[5].properties[3]);}
     
       /// [Weapon] entity fields to define ObjectBox queries.
       class Weapon_ {        /// see [Weapon.id]
@@ -1084,6 +1123,7 @@ note: noteParam);
         static final damage = QueryIntegerProperty<Weapon>(_entities[6].properties[1]);        /// see [Weapon.injury]
         static final injury = QueryIntegerProperty<Weapon>(_entities[6].properties[2]);        /// see [Weapon.name]
         static final name = QueryStringProperty<Weapon>(_entities[6].properties[3]);        /// see [Weapon.note]
-        static final note = QueryStringProperty<Weapon>(_entities[6].properties[4]);}
+        static final note = QueryStringProperty<Weapon>(_entities[6].properties[4]);        /// see [Weapon.character]
+        static final character = QueryRelationToOne<Weapon, Character>(_entities[6].properties[5]);}
     
     

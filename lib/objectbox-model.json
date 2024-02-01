@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8664419718943486843",
-      "lastPropertyId": "4:8643292553265226198",
+      "lastPropertyId": "5:4030243882780861158",
       "name": "Armour",
       "properties": [
         {
@@ -28,6 +28,14 @@
           "id": "4:8643292553265226198",
           "name": "note",
           "type": 9
+        },
+        {
+          "id": "5:4030243882780861158",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:455561615005557916",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
@@ -276,7 +284,7 @@
     },
     {
       "id": "4:4241397220175954720",
-      "lastPropertyId": "5:476372642950773498",
+      "lastPropertyId": "6:3447832864526205433",
       "name": "Reward",
       "properties": [
         {
@@ -298,12 +306,26 @@
         {
           "id": "4:1197057239372283498",
           "name": "armourId",
-          "type": 6
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:3057957074003434693",
+          "relationTarget": "Armour"
         },
         {
           "id": "5:476372642950773498",
           "name": "weaponId",
-          "type": 6
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:6013082632755432446",
+          "relationTarget": "Weapon"
+        },
+        {
+          "id": "6:3447832864526205433",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:6999056430147813025",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
@@ -352,7 +374,7 @@
     },
     {
       "id": "6:8840369180959170893",
-      "lastPropertyId": "3:7829482298153891110",
+      "lastPropertyId": "4:784232583823594404",
       "name": "Virtue",
       "properties": [
         {
@@ -370,13 +392,21 @@
           "id": "3:7829482298153891110",
           "name": "note",
           "type": 9
+        },
+        {
+          "id": "4:784232583823594404",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:9082948446824037746",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
     },
     {
       "id": "7:194795876836641174",
-      "lastPropertyId": "5:2045895292788964708",
+      "lastPropertyId": "6:2518040436659924421",
       "name": "Weapon",
       "properties": [
         {
@@ -404,13 +434,21 @@
           "id": "5:2045895292788964708",
           "name": "note",
           "type": 9
+        },
+        {
+          "id": "6:2518040436659924421",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:4134250850814447324",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "7:194795876836641174",
-  "lastIndexId": "2:4945883188977238138",
+  "lastIndexId": "8:4134250850814447324",
   "lastRelationId": "6:1690858102240495363",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
