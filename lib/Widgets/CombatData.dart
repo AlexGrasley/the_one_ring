@@ -8,11 +8,7 @@ import 'package:the_one_ring/Models/CombatProficiencies.dart';
 import 'package:the_one_ring/Models/Skills.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
-import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
-import 'package:the_one_ring/StateNotifiers/SkillStateNotifier.dart';
-import 'package:the_one_ring/Widgets/LabeledDivider.dart';
-
 
 // Create a provider for SkillsRepository.
 final combatProfRepositoryProvider = Provider((ref) => CombatProficienciesRepository.getInstance());
@@ -29,7 +25,6 @@ final combatProfStateNotifierProviderFamily = FutureProvider.family<CombatProfSt
 final combatProfsStateNotifierProvider = StateNotifierProvider.autoDispose.family<CombatProfStateNotifier, List<CombatProficiencies>, Character>((ref, character) {
   return CombatProfStateNotifier(character.combatProficiencies);
 });
-
 
 class CombatDataForm extends ConsumerWidget {
   final Character character;

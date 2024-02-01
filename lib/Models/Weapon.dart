@@ -1,9 +1,13 @@
 import 'package:objectbox/objectbox.dart';
+import 'package:the_one_ring/Models/Character.dart';
 
 @Entity()
 class Weapon {
   @Id()
   int id;
+
+  @Property()
+  var character = ToOne<Character>();
 
   @Property()
   int damage;
@@ -23,5 +27,8 @@ class Weapon {
     this.injury = 0,
     this.name = '',
     this.note = '',
-  });
+    character,
+  }){
+    character = ToOne<Character>();
+  }
 }
