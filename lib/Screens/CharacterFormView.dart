@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import '../Models/Character.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
+import '../Widgets/CombatData.dart';
 import '../Widgets/TextFormInput.dart';
 import '../Widgets/UpdateCharacterForm.dart';
 import '../Widgets/ViewCharacterForm.dart';
@@ -62,10 +63,7 @@ class CharacterView extends ConsumerWidget {
                   characterFormNotifier: characterFormNotifier,
                   character: character),
               ViewSkillsForm(character),
-              UpdateCharacterForm(
-                  formKey: _formKey,
-                  characterFormNotifier: characterFormNotifier,
-                  character: character),
+              CombatDataForm(character),
               UpdateCharacterForm(
                   formKey: _formKey,
                   characterFormNotifier: characterFormNotifier,

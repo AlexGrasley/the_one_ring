@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:the_one_ring/Models/CombatProficiencies.dart';
+import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/objectbox.dart';
 
@@ -65,6 +67,12 @@ class CharacterRepository {
     return skills?.toList();
   }
 
+  List<CombatProficiencies>? getCharacterCombatProfs(int id) {
+    var character = _characterBox.get(id);
+    var combatProfs = character?.combatProficiencies;
+    return combatProfs?.toList();
+  }
+
   Future<List<Character>> getAllCharacters() async {
       return _characterBox.getAllAsync();
   }
@@ -93,12 +101,6 @@ class CharacterRepository {
 
   Future<Character> updateCharacter(Character character) async {
     try {
-      character.skills.clear();
-      SkillsRepository skillsRepository = await SkillsRepository.getInstance();
-      for(var skill in skillsRepository.getAllBlankSkills()){
-        character.skills.add(skill);
-      }
-
       if(character.skills.isEmpty){
         //fill out the characters skills with blank skills so we have them all to modify later
         SkillsRepository skillsRepository = await SkillsRepository.getInstance();
@@ -106,6 +108,14 @@ class CharacterRepository {
           character.skills.add(skill);
         }
       }
+
+      if(character.combatProficiencies.isEmpty){
+        CombatProficienciesRepository combatRepo = await CombatProficienciesRepository.getInstance();
+        for(var combatProf in combatRepo.getAllBlankCombatProficiencies()){
+          character.combatProficiencies.add(combatProf);
+        }
+      }
+
       _characterBox.put(character);
       return character;
 

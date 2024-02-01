@@ -38,9 +38,32 @@ class CombatProficienciesRepository {
     return _instance;
   }
 
+  List<CombatProficiencies> getAllBlankCombatProficiencies(){
+    List<CombatProficiencies> combatProficiencies = List<CombatProficiencies>.from({
+      CombatProficiencies(
+        name: "Axes",
+        proficiency: 0
+      ),
+      CombatProficiencies(
+          name: "Bows",
+          proficiency: 0
+      ),
+      CombatProficiencies(
+          name: "Spears",
+          proficiency: 0
+      ),
+      CombatProficiencies(
+          name: "Swords",
+          proficiency: 0
+      ),
+    });
+
+    return combatProficiencies;
+  }
+
   // CRUD operations.
 
-  int addArmour(CombatProficiencies combatProficiencies) {
+  int addProficiency(CombatProficiencies combatProficiencies) {
     return _combatProficienciesBox.put(combatProficiencies);
   }
 
@@ -56,7 +79,7 @@ class CombatProficienciesRepository {
     return _combatProficienciesBox.remove(id);
   }
 
-  int updateArmour(CombatProficiencies combatProficiency) {
+  int updateProficiency(CombatProficiencies combatProficiency) {
     return _combatProficienciesBox.put(combatProficiency);
   }
 }

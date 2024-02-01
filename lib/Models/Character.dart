@@ -2,6 +2,7 @@ import 'dart:core';
 import 'package:objectbox/objectbox.dart';
 
 import 'Armour.dart';
+import 'CombatProficiencies.dart';
 import 'Rewards.dart';
 import 'Skills.dart';
 import 'Virtues.dart';
@@ -129,6 +130,9 @@ class Character {
   @Property()
   var armour = ToMany<Armour>();
 
+  @Property()
+  var combatProficiencies = ToMany<CombatProficiencies>();
+
   Character({
     this.id = 0,
     this.name = "",
@@ -169,13 +173,15 @@ class Character {
     ToMany<Reward>? rewards,
     ToMany<Armour>? armour,
     ToMany<Virtue>? virtues,
-    ToMany<Weapon>? weapons
+    ToMany<Weapon>? weapons,
+    ToMany<CombatProficiencies>? combatProficiencies,
   }){
     this.skills = skills ?? ToMany<Skill>();
     this.rewards = rewards ?? ToMany<Reward>();
     this.armour = armour ?? ToMany<Armour>();
     this.virtues = virtues ?? ToMany<Virtue>();
     this.weapons = weapons ?? ToMany<Weapon>();
+    this.combatProficiencies = combatProficiencies ?? ToMany<CombatProficiencies>();
   }
 
 
@@ -219,7 +225,8 @@ class Character {
     ToMany<Reward>? rewards,
     ToMany<Virtue>? virtues,
     ToMany<Weapon>? weapons,
-    ToMany<Armour>? armour
+    ToMany<Armour>? armour,
+    ToMany<CombatProficiencies>? combatProficiencies,
   }) {
     return Character(
       id: id ?? this.id,
@@ -258,7 +265,8 @@ class Character {
       rewards: rewards ?? this.rewards,
       virtues: virtues ?? this.virtues,
       weapons: weapons ?? this.weapons,
-      armour: armour ?? this.armour
+      armour: armour ?? this.armour,
+      combatProficiencies: combatProficiencies ?? this.combatProficiencies
     );
   }
 

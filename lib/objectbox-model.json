@@ -234,12 +234,17 @@
           "id": "5:4578893645621621554",
           "name": "armour",
           "targetId": "1:8664419718943486843"
+        },
+        {
+          "id": "6:1690858102240495363",
+          "name": "combatProficiencies",
+          "targetId": "3:481044199291432598"
         }
       ]
     },
     {
       "id": "3:481044199291432598",
-      "lastPropertyId": "3:562987166547644492",
+      "lastPropertyId": "4:1830284473786916616",
       "name": "CombatProficiencies",
       "properties": [
         {
@@ -257,6 +262,14 @@
           "id": "3:562987166547644492",
           "name": "name",
           "type": 9
+        },
+        {
+          "id": "4:1830284473786916616",
+          "name": "characterId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:4945883188977238138",
+          "relationTarget": "Character"
         }
       ],
       "relations": []
@@ -397,8 +410,8 @@
     }
   ],
   "lastEntityId": "7:194795876836641174",
-  "lastIndexId": "1:8150577807690394722",
-  "lastRelationId": "5:4578893645621621554",
+  "lastIndexId": "2:4945883188977238138",
+  "lastRelationId": "6:1690858102240495363",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

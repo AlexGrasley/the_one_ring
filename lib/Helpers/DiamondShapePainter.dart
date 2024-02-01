@@ -1,47 +1,83 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+
+enum LabelPosition {
+  topRight,
+  bottomLeft,
+  bottomRight
+}
 
 class DiamondShapePainter extends CustomPainter {
   String? innerLabel;
   String? outerLabel;
-  bool? isLabelTopRight;
+  LabelPosition? labelPosition;
   bool drawSecondLine;
+  var random = Random();
+  ui.Picture? picture;
+  Size size;
 
   DiamondShapePainter({
     this.innerLabel,
     this.outerLabel,
-    this.isLabelTopRight,
+    this.labelPosition = LabelPosition.topRight,
     this.drawSecondLine = true,
-  });
+    required this.size,
+  }){
+    picture = _drawElements(size);
+  }
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // Draw a diamond
-    var path = Path()
-      ..moveTo(size.width / 2, 0)
-      ..lineTo(size.width, size.height / 2)
-      ..lineTo(size.width / 2, size.height)
-      ..lineTo(0, size.height / 2)
-      ..close();
+  void paint(Canvas canvas, Size size){
+    canvas.drawPicture(picture!);
+  }
 
-    var paint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+  ui.Picture _drawElements(Size size) {
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(recorder);
 
-    canvas.drawPath(path, paint); // Original diamond
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width / 2, 0),
+      Offset(size.width, size.height / 2),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width, size.height / 2),
+      Offset(size.width / 2, size.height),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width / 2, size.height),
+      Offset(0, size.height / 2),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(0, size.height / 2),
+      Offset(size.width / 2, 0),
+    );
 
     // Draw a second diamond slightly larger to create a double-line effect
-    if(drawSecondLine){
-      path.reset();
-      path
-        ..moveTo(size.width / 2, 0 - 5)
-        ..lineTo(size.width + 5, size.height / 2)
-        ..lineTo(size.width / 2, size.height + 5)
-        ..lineTo(0 - 5, size.height / 2)
-        ..close();
-      canvas.drawPath(path, paint);
-    }
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width / 2, -5),
+      Offset(size.width + 5, size.height / 2),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width + 5, size.height / 2),
+      Offset(size.width / 2, size.height + 5),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(size.width / 2, size.height + 5),
+      Offset(-5, size.height / 2),
+    );
+    _drawSegmentedLine(
+      canvas,
+      Offset(-5, size.height / 2),
+      Offset(size.width / 2, -5),
+    );
 
 
     var textStyle = ui.TextStyle(
@@ -74,10 +110,43 @@ class DiamondShapePainter extends CustomPainter {
         ..addText(outerLabel!);
       var paragraph = paragraphBuilder.build()
         ..layout(ui.ParagraphConstraints(width: size.width));
-      var offset = isLabelTopRight!
-          ? Offset(size.width - 10, 0)
-          : Offset(paragraph.width - size.width, size.height - paragraph.height);
+
+      ui.Offset offset;
+
+      switch(labelPosition){
+        case LabelPosition.topRight:
+          offset = Offset(size.width - 7, 0);
+          break;
+        case LabelPosition.bottomRight:
+          offset = Offset(size.width - 7, size.height - paragraph.height);
+          break;
+        case LabelPosition.bottomLeft:
+          offset = Offset(paragraph.width - size.width, size.height - paragraph.height);
+          break;
+        case null:
+          offset = Offset(size.width - 10, 0);
+          break;
+      }
+
       canvas.drawParagraph(paragraph, offset);
+    }
+
+    return recorder.endRecording();
+  }
+
+  void _drawSegmentedLine(Canvas canvas, Offset p1, Offset p2) {
+    var count = 50; // Number of segments - increase for smoother gradient
+    var stepX = (p2.dx - p1.dx) / count;
+    var stepY = (p2.dy - p1.dy) / count;
+    for (var i = 0; i < count; i++) {
+      var start = Offset(p1.dx + stepX * i, p1.dy + stepY * i);
+      var end = Offset(p1.dx + stepX * (i + 1), p1.dy + stepY * (i + 1));
+      var paint = Paint()
+        ..color = Colors.red
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = random.nextDouble() * 2; // Thickness randomly varies from 1.0 to 5.0
+      canvas.drawLine(start, end, paint);
     }
   }
 
