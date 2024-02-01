@@ -20,14 +20,14 @@ class Skill {
   bool isFavored;
 
   @Property()
-  SkillClass skillClass;
+  String skillClass;
 
   Skill({
     this.id = 0,
     this.pips = 0,
     this.name = '',
     this.isFavored = false,
-    this.skillClass = SkillClass.strength,
+    this.skillClass = "",
     character,
   }) {
     character = ToOne<Character>();
@@ -38,14 +38,16 @@ class Skill {
     String? name,
     ToOne<Character>? character,
     int? pips,
-    bool? isFavored
+    bool? isFavored,
+    String? skillClass,
   }) {
     return Skill(
         id: id ?? this.id,
         name: name ?? this.name,
         character: character ?? this.character,
         pips: pips ?? this.pips,
-        isFavored: isFavored ?? this.isFavored
+        isFavored: isFavored ?? this.isFavored,
+        skillClass: skillClass ?? this.skillClass
     );
   }
 }

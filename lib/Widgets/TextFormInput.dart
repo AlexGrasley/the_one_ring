@@ -15,10 +15,16 @@ class TextFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlign: TextAlign.center,
       initialValue: initialValue,
       decoration: InputDecoration(
-          labelText: labelText,
-          border: const OutlineInputBorder(),
+        labelText: labelText,
+        labelStyle: TextStyle(
+          backgroundColor: Theme.of(context).canvasColor,
+        ),
+        border: const UnderlineInputBorder(),
+        alignLabelWithHint: true,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
       onChanged: onChanged,
     );

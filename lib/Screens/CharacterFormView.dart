@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import '../Models/Character.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
@@ -46,9 +47,9 @@ class CharacterView extends ConsumerWidget {
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.home)),
-                Tab(icon: Icon(Icons.account_circle)),
-                Tab(icon: Icon(Icons.shield)),
+                Tab(icon: Icon(Icons.view_array_outlined)),
+                Tab(icon: Icon(FontAwesomeIcons.diceD20)),
+                Tab(icon: Icon(FontAwesomeIcons.shield)),
                 Tab(icon: Icon(Icons.note_alt_outlined))
               ],
             ),
@@ -56,8 +57,6 @@ class CharacterView extends ConsumerWidget {
           ),
           body: TabBarView(
             children: [
-              isReadOnly?
-              ViewCharacteForm(character: character,) :
               UpdateCharacterForm(
                   formKey: _formKey,
                   characterFormNotifier: characterFormNotifier,
@@ -72,12 +71,6 @@ class CharacterView extends ConsumerWidget {
                   characterFormNotifier: characterFormNotifier,
                   character: character),
             ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.edit),
-            onPressed: () => {
-              readOnlyNotifier.toggle()
-            }
           ),
         ),
       );

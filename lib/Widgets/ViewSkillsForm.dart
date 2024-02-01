@@ -2,11 +2,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:the_one_ring/Helpers/Utilities.dart';
 import 'package:the_one_ring/Models/Character.dart';
 import 'package:the_one_ring/Models/Skills.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/StateNotifiers/SkillStateNotifier.dart';
+import 'package:the_one_ring/Widgets/LabeledDivider.dart';
 
 
 // Create a provider for SkillsRepository.
@@ -29,6 +31,7 @@ final skillStateNotifierProvider = StateNotifierProvider.autoDispose.family<Skil
 class ViewSkillsForm extends ConsumerWidget {
   final Character character;
   late Future<List<Skill>?> skills;
+  SkillClass? currentSkillClass;
 
   ViewSkillsForm(this.character, {super.key});
 
@@ -36,107 +39,154 @@ class ViewSkillsForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     // Have the repository provided here.
-    final skillFormProvider = ref.read(skillStateNotifierProvider(character).notifier);
     final skills = ref.watch(skillStateNotifierProvider(character));
 
-    return ListView.builder(
-      itemCount: skills.length,
-      itemBuilder: (context, index) {
-        final skill = skills[index];
-        return Container(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              InkWell(
-                  onTap: () async {
-                    skillFormProvider.updateFavored(skill.id, !skill.isFavored);
-                    var repo = await ref.watch(skillsRepositoryProvider);
-                    repo.updateSkill(skill);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(1),
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red),
-                    ),
-                    child: Container(
-                        width: 15,
-                        height: 15,
-                        decoration: BoxDecoration(
-                          color: skill.isFavored ? Colors.black : Colors.transparent,
-                          border: Border.all(color: skill.isFavored? Colors.black : Colors.red),
-                          borderRadius: BorderRadius.circular(skill.isFavored? 10 : 0)
-                        ),
-                    ),
+    return SingleChildScrollView(
+        child: Column(
+          children: skills.asMap().entries.map<Widget>((entry) {
+
+            int index = entry.key;
+            Skill skill = entry.value;
+            String skillClassName;
+            int targetNumber;
+
+            final skillFormProvider = ref.read(skillStateNotifierProvider(character).notifier);
+
+            if(currentSkillClass == null || Utilities.enumFromString<SkillClass>(SkillClass.values, skill.skillClass) != currentSkillClass){
+              currentSkillClass = Utilities.enumFromString<SkillClass>(SkillClass.values, skill.skillClass);
+
+              switch (currentSkillClass){
+                case SkillClass.strength:
+                  skillClassName = "Strength";
+                  targetNumber = character.strengthTn;
+                  break;
+                case SkillClass.heart:
+                  skillClassName = "Heart";
+                  targetNumber = character.heartTn;
+                  break;
+                case SkillClass.wits:
+                  skillClassName = "Wits";
+                  targetNumber = character.witsTn;
+                  break;
+                case null:
+                  skillClassName = "";
+                  targetNumber = 0;
+              }
+
+              return Column(
+                children: [
+                  LabeledDivider(
+                    label: skillClassName ,
+                    value: targetNumber.toString(),
                   ),
-                ),
-              const SizedBox(width: 5),
-              Expanded( // Add Expanded widget here
-                  child: Column(
-                    children: [
-                      Text(
-                        skill.name, // use TextDecoration.underline to underline the text
-                      ),
-                      const Divider(
-                        color: Colors.redAccent,
-                        thickness: 1,
-                      )
-                    ],
-                  )
-              ),
-              const SizedBox(width: 5),
-              InkWell(
-                  onTap: () {
-                    var results = rollDice(skill);
-                    showDiceResults(context, results, character, skill);
-                  },
-                  child: const Icon(FontAwesomeIcons.diceD20,)
-              ),
-              const SizedBox(width: 5),
-              Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start, // Align boxes to the right
-                  children: List.generate(6, (pipIndex) {
-                    return Transform.rotate( // add Transform.rotate widget
-                      angle: pi / 4, // rotate 45 degrees
-                      child: InkWell(
-                        onTap: () async {
-                          skillFormProvider.updatePips(skill.id, pipIndex + 1);
-                          var repo = await ref.watch(characterRepositoryProvider);
-                          character.skills.insert(index, skill);
-                          repo.updateCharacter(character);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.all(2),
-                          width: 15,
-                          height: 15,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.red), // add color red to borders
-                          ),
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: pipIndex < skill.pips ? Colors.redAccent : Colors.transparent,
-                              border: Border.all(color: Colors.red), // add color red to borders
-                              borderRadius: pipIndex < skill.pips ? BorderRadius.circular(10) : BorderRadius.circular(0)
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+                  _buildRow(context, ref, index, skill, skillFormProvider),
+                ],
+              );
+            }
+
+            return _buildRow(context, ref, index, skill, skillFormProvider);
+          }).toList(),
+      )
     );
   }
+
+  Widget _buildRow(BuildContext context, WidgetRef ref,int index, Skill skill, SkillStateNotifier skillFormProvider){
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () async {
+              skillFormProvider.updateFavored(skill.id, !skill.isFavored);
+              var repo = await ref.watch(skillsRepositoryProvider);
+              repo.updateSkill(skill);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.red),
+              ),
+              child: Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                    color: skill.isFavored ? Colors.black : Colors.transparent,
+                    border: Border.all(color: skill.isFavored? Colors.black : Colors.red),
+                    borderRadius: BorderRadius.circular(skill.isFavored? 10 : 0)
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 5),
+          Expanded( // Add Expanded widget here
+              child: Column(
+                children: [
+                  Text(
+                    skill.name, // use TextDecoration.underline to underline the text
+                  ),
+                  const Divider(
+                    color: Colors.redAccent,
+                    thickness: 1,
+                  )
+                ],
+              )
+          ),
+          const SizedBox(width: 5),
+          InkWell(
+              onTap: () {
+                var results = rollDice(skill);
+                showDiceResults(context, results, character, skill);
+              },
+              child: const Icon(FontAwesomeIcons.diceD20,)
+          ),
+          const SizedBox(width: 5),
+          Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start, // Align boxes to the right
+              children: List.generate(6, (pipIndex) {
+                return Transform.rotate( // add Transform.rotate widget
+                  angle: pi / 4, // rotate 45 degrees
+                  child: InkWell(
+                    onTap: () async {
+                      skillFormProvider.updatePips(skill.id, pipIndex + 1);
+                      var repo = await ref.watch(skillsRepositoryProvider);
+                      repo.updateSkill(skill);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      padding: const EdgeInsets.all(2),
+                      width: 15,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.red), // add color red to borders
+                      ),
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: pipIndex < skill.pips ? Colors.redAccent : Colors.transparent,
+                            border: Border.all(color: Colors.red), // add color red to borders
+                            borderRadius: pipIndex < skill.pips ? BorderRadius.circular(10) : BorderRadius.circular(0)
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
+
+
+
+
 
 Map<String, int> rollDice(Skill skill) {
   var rng = Random();
@@ -225,7 +275,7 @@ void showDiceResults(BuildContext context, Map<String, int> results, Character c
 }
 
 TargetNumber getTargetNumber(Character character, Skill skill){
-  switch (skill.skillClass){
+  switch (Utilities.enumFromString(SkillClass.values, skill.skillClass)){
     case SkillClass.strength:
       return TargetNumber("Strength", character.strengthTn);
     case SkillClass.heart:

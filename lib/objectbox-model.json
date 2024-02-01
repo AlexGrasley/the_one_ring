@@ -231,8 +231,8 @@
           "targetId": "7:194795876836641174"
         },
         {
-          "id": "4:2376674275859451071",
-          "name": "armours",
+          "id": "5:4578893645621621554",
+          "name": "armour",
           "targetId": "1:8664419718943486843"
         }
       ]
@@ -297,7 +297,7 @@
     },
     {
       "id": "5:5486256926819336373",
-      "lastPropertyId": "5:2276169506293343640",
+      "lastPropertyId": "6:1744921040346236002",
       "name": "Skill",
       "properties": [
         {
@@ -328,6 +328,11 @@
           "flags": 520,
           "indexId": "1:8150577807690394722",
           "relationTarget": "Character"
+        },
+        {
+          "id": "6:1744921040346236002",
+          "name": "skillClass",
+          "type": 9
         }
       ],
       "relations": []
@@ -393,13 +398,15 @@
   ],
   "lastEntityId": "7:194795876836641174",
   "lastIndexId": "1:8150577807690394722",
-  "lastRelationId": "4:2376674275859451071",
+  "lastRelationId": "5:4578893645621621554",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    2376674275859451071
+  ],
   "version": 1
 }

@@ -49,93 +49,92 @@ class SkillsRepository {
           isFavored: false,
           pips: 0,
           name: "Awe",
-          skillClass: SkillClass.strength
-      ),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Athletics",
-          skillClass: SkillClass.strength),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Awareness",
-          skillClass: SkillClass.strength),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Hunting",
-          skillClass: SkillClass.strength),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Song",
-          skillClass: SkillClass.strength),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Craft",
-          skillClass: SkillClass.strength),
+          skillClass: SkillClass.strength.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Enhearten",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Travel",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Insight",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Healing",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Courtesy",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Battle",
-          skillClass: SkillClass.heart),
+          skillClass: SkillClass.heart.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Pursuade",
-          skillClass: SkillClass.wits),
+          skillClass: SkillClass.wits.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Stealth",
-          skillClass: SkillClass.wits),
+          skillClass: SkillClass.wits.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Scan",
-          skillClass: SkillClass.wits),
+          skillClass: SkillClass.wits.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Explore",
-          skillClass: SkillClass.wits),
+          skillClass: SkillClass.wits.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Riddle",
-          skillClass: SkillClass.wits),
+          skillClass: SkillClass.wits.name),
       Skill(
           isFavored: false,
           pips: 0,
           name: "Lore",
-          skillClass: SkillClass.wits)
+          skillClass: SkillClass.wits.name)
     });
 
     return skills;
