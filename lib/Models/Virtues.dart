@@ -25,4 +25,18 @@ class Virtue {
     character = ToOne<Character>();
   }
 
+  Virtue copyWith({
+    int? id,
+    String? name,
+    ToOne<Character>? character,
+    String? note,
+  }) {
+    return Virtue(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        character: character ?? this.character,
+        note: note ?? this.note
+    );
+  }
+
 }

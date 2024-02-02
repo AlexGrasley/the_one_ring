@@ -20,10 +20,13 @@ class TextFormInput extends StatelessWidget {
       keyboardType: isNumberEntry? TextInputType.number : TextInputType.text,
       textAlign: TextAlign.center,
       initialValue: initialValue,
-      style: const TextStyle(backgroundColor: Colors.transparent),
+      style: const TextStyle(
+          color: Colors.white,
+          backgroundColor: Colors.transparent),
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(
+          color: Colors.red,
           backgroundColor: Colors.transparent,
         ),
         border: const UnderlineInputBorder(),

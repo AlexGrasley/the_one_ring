@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_one_ring/Helpers/HandDrawnDivider.dart';
 
 class LabeledDivider extends StatelessWidget {
   final String label;
@@ -14,29 +15,30 @@ class LabeledDivider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Expanded(
-              child: Divider(
-                color: Colors.black,
+              child: HandDrawnDivider(
+                color: Colors.blueGrey,
                 thickness: 3,
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                label,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                "$label${value.isEmpty? "" : ":"}",
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey),
               ),
             ),
+            Text(
+                "$value${value.isEmpty? "" : " "}",
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey)
+            ),
             const Expanded(
-              child: Divider(
-                color: Colors.black,
+              child: HandDrawnDivider(
+                color: Colors.blueGrey,
                 thickness: 3,
               ),
             )
           ],
         ),
-        Text(
-            "~ $value ~",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28))
       ],
     );
   }

@@ -3,17 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_one_ring/Helpers/Utilities.dart';
+import 'package:the_one_ring/Models/Armour.dart';
 import 'package:the_one_ring/Models/Character.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
 import 'package:the_one_ring/Models/Skills.dart';
+import 'package:the_one_ring/Repositories/ArmourRepository.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
+import 'package:the_one_ring/Repositories/WeaponRepository.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
+import 'package:the_one_ring/Widgets/LabeledDivider.dart';
+import 'package:the_one_ring/Widgets/TextFormInput.dart';
+
+import '../Models/Weapon.dart';
+import '../StateNotifiers/ArmourStateNotifier.dart';
+import '../StateNotifiers/WeaponStateNotifier.dart';
 
 // Create a provider for SkillsRepository.
 final combatProfRepositoryProvider = Provider((ref) => CombatProficienciesRepository.getInstance());
 // Create a provider for CharacterRepository.
 final characterRepositoryProvider = Provider((ref) => CharacterRepository.getInstance());
+
+final armourRepositoryProvider = Provider((ref) => ArmourRepository.getInstance());
+
+final weaponRepositoryProvider = Provider((ref) => WeaponRepository.getInstance());
 
 final combatProfStateNotifierProviderFamily = FutureProvider.family<CombatProfStateNotifier, int>((ref, characterId) async {
   final characterRepository = await ref.watch(characterRepositoryProvider);
@@ -22,8 +35,30 @@ final combatProfStateNotifierProviderFamily = FutureProvider.family<CombatProfSt
   return CombatProfStateNotifier(combatProfs ?? []);
 });
 
+final weaponsStateNotifierProviderFamily = FutureProvider.family<WeaponStateNotifier, int>((ref, characterId) async {
+  final characterRepository = await ref.watch(characterRepositoryProvider);
+  final weapons = characterRepository.getCharacterWeapons(characterId);
+
+  return WeaponStateNotifier(weapons ?? []);
+});
+
+final armourStateNotifierProviderFamily = FutureProvider.family<ArmourStateNotifier, int>((ref, characterId) async {
+  final characterRepository = await ref.watch(characterRepositoryProvider);
+  final armour = characterRepository.getCharacterArmour(characterId);
+
+  return ArmourStateNotifier(armour ?? []);
+});
+
 final combatProfsStateNotifierProvider = StateNotifierProvider.autoDispose.family<CombatProfStateNotifier, List<CombatProficiencies>, Character>((ref, character) {
   return CombatProfStateNotifier(character.combatProficiencies);
+});
+
+final weaponsStateNotifierProvider = StateNotifierProvider.autoDispose.family<WeaponStateNotifier, List<Weapon>, Character>((ref, character) {
+  return WeaponStateNotifier(character.weapons);
+});
+
+final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<ArmourStateNotifier, List<Armour>, Character>((ref, character) {
+  return ArmourStateNotifier(character.armour);
 });
 
 class CombatDataForm extends ConsumerWidget {
@@ -40,18 +75,63 @@ class CombatDataForm extends ConsumerWidget {
     final combatProfs = ref.watch(combatProfsStateNotifierProvider(character));
     final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(character).notifier);
 
+    final weapons = ref.watch(weaponsStateNotifierProvider(character));
+    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(character).notifier);
+
+    final armour = ref.watch(armourStateNotifierProvider(character));
+    final armourFormProvider = ref.read(armourStateNotifierProvider(character).notifier);
+
     return SingleChildScrollView(
         child: Column(
-          children: combatProfs.asMap().entries.map<Widget>((entry) {
+          children: [
+            const LabeledDivider(
+              label: "Combat Proficiency",
+              value: '',
+            ),
+            Column(
+              children: combatProfs.asMap().entries.map<Widget>((entry) {
 
-            int index = entry.key;
-            CombatProficiencies combatProf = entry.value;
+                int index = entry.key;
+                CombatProficiencies combatProf = entry.value;
 
-            return _buildRow(context, ref, index, combatProf, combatProfFormProvider);
-          }).toList(),
-        )
-    );
-  }
+                return _buildRow(context, ref, index, combatProf, combatProfFormProvider);
+
+              }).toList(),
+            ),
+            const LabeledDivider(
+                label: "Weapons",
+                value: ""
+            ),
+            Column(
+              children:
+              weapons.asMap().entries.map<Widget>((entry) {
+
+                int index = entry.key;
+                Weapon weapon = entry.value;
+
+                return _buildWeaponRow(context, ref, index, weapon, weaponsFormProvider);
+
+              }).toList(),
+            ),
+            const LabeledDivider(
+                label: "Armour",
+                value: ""
+            ),
+            Column(
+              children:
+                armour.asMap().entries.map<Widget>((entry) {
+
+                  int index = entry.key;
+                  Armour armour = entry.value;
+
+                  return _buildArmourRow(context, ref, index, armour, armourFormProvider);
+
+                }).toList(),
+              )
+            ],
+          )
+        );
+    }
 
   Widget _buildRow(BuildContext context, WidgetRef ref,int index, CombatProficiencies combatProf, CombatProfStateNotifier combatProfFormProvider){
     return Container(
@@ -62,7 +142,8 @@ class CombatDataForm extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(
-                    combatProf.name, // use TextDecoration.underline to underline the text
+                    combatProf.name,
+                    style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
                   ),
                   const Divider(
                     color: Colors.redAccent,
@@ -77,7 +158,7 @@ class CombatDataForm extends ConsumerWidget {
                 var results = rollDice(combatProf);
                 showDiceResults(context, results, character, combatProf);
               },
-              child: const Icon(FontAwesomeIcons.diceD20,)
+              child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey)
           ),
           const SizedBox(width: 5),
           Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
@@ -88,7 +169,12 @@ class CombatDataForm extends ConsumerWidget {
                   angle: pi / 4, // rotate 45 degrees
                   child: InkWell(
                     onTap: () async {
-                      combatProfFormProvider.updateProficiency(combatProf.id, combatProfIndex + 1);
+                      combatProfFormProvider.updateProficiency(
+                          combatProf.id,
+                          combatProf.proficiency == 1 &&
+                              combatProfIndex == 0 ?
+                              0 :
+                              combatProfIndex + 1);
                       var repo = await ref.watch(combatProfRepositoryProvider);
                       repo.updateProficiency(combatProf);
                     },
@@ -120,6 +206,66 @@ class CombatDataForm extends ConsumerWidget {
     );
   }
 
+}
+
+Widget _buildWeaponRow(BuildContext context, WidgetRef ref, int index, Weapon weapon, WeaponStateNotifier weaponsFormProvider) {
+  return Row(
+    children: [
+      Text(weapon.name),
+      Text(weapon.damage.toString()),
+      Text(weapon.injury.toString()),
+      Text(weapon.load.toString()),
+      Text(weapon.note),
+    ],
+  );
+}
+
+Widget _buildArmourRow(BuildContext context, WidgetRef ref, int index, Armour armour, ArmourStateNotifier armourFormProvider) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Material(
+      borderRadius: BorderRadius.circular(10.0),
+      elevation: 3.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildPropertyColumn(
+                armour.armourType.toString(),
+                armour.name,
+            ),
+            buildPropertyColumn(
+              armour.armourType == ArmourType.shield.toString() ? 'Parry' : 'Protection',
+              armour.armourType == ArmourType.shield.toString() ? armour.parry.toString() : armour.protection.toString(),
+            ),
+            buildPropertyColumn(
+              'Load',
+              armour.load.toString(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buildPropertyColumn(String header, String content) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        header,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+      Text(
+        content,
+      ),
+    ],
+  );
 }
 
 Map<String, int> rollDice(CombatProficiencies combatProficiencies) {

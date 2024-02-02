@@ -41,6 +41,9 @@ class Character {
   String travellingGear;
 
   @Property()
+  String injury;
+
+  @Property()
   int age;
 
   @Property()
@@ -144,6 +147,7 @@ class Character {
     this.distinctiveFeatures = "",
     this.flaws = "",
     this.travellingGear = "",
+    this.injury = "",
     this.age = 0,
     this.treasure = 0,
     this.strengthTn = 0,
@@ -196,6 +200,7 @@ class Character {
     String? distinctiveFeatures,
     String? flaws,
     String? travellingGear,
+    String? injury,
     int? age,
     int? treasure,
     int? strengthTn,
@@ -239,6 +244,7 @@ class Character {
       distinctiveFeatures: distinctiveFeatures ?? this.distinctiveFeatures,
       flaws: flaws ?? this.flaws,
       travellingGear: travellingGear ?? this.travellingGear,
+      injury: injury ?? this.injury,
       age: age ?? this.age,
       treasure: treasure ?? this.treasure,
       strengthTn: strengthTn ?? this.strengthTn,
@@ -261,6 +267,9 @@ class Character {
       shadowScars: shadowScars ?? this.shadowScars,
       valour: valour ?? this.valour,
       wisdom: wisdom ?? this.wisdom,
+      weary: weary ?? this.weary,
+      miserable: miserable ?? this.miserable,
+      wounded: wounded ?? this.wounded,
       skills: skills ?? this.skills,
       rewards: rewards ?? this.rewards,
       virtues: virtues ?? this.virtues,

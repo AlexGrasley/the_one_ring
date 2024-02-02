@@ -6,25 +6,25 @@ import '../ObjectBox.dart';
 import '../objectbox.g.dart';
 import 'package:path_provider/path_provider.dart';
 
-class WeaponRepositoryRepository {
+class WeaponRepository {
   // Make _singleton private and static
-  static final WeaponRepositoryRepository _instance = WeaponRepositoryRepository._internal();
+  static final WeaponRepository _instance = WeaponRepository._internal();
   late final Store _store;
   late final Box<Weapon> _weaponBox;
   static bool hasBeenInitialized = false;
 
 // In the constructor/init process, set the documents directory:
-  WeaponRepositoryRepository._internal();
+  WeaponRepository._internal();
 
   Future<void> _init() async {
     _weaponBox = objectBox.weaponsBox;
   }
 
 // In the constructor/init process, set the documents directory:
-  WeaponRepositoryRepository._privateConstructor();
+  WeaponRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
-  static Future<WeaponRepositoryRepository> getInstance() async {
+  static Future<WeaponRepository> getInstance() async {
     if(!hasBeenInitialized){
       await _instance._init();
       hasBeenInitialized = true;
@@ -34,7 +34,7 @@ class WeaponRepositoryRepository {
   }
 
   // Public factory constructor. Returns the singleton instance.
-  factory WeaponRepositoryRepository() {
+  factory WeaponRepository() {
     return _instance;
   }
 

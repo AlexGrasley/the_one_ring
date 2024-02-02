@@ -50,6 +50,10 @@ class CharacterFormNotifier extends StateNotifier<Character> {
     state = state.copyWith(travellingGear: newTravellingGear);
   }
 
+  void updateInjury(String newInjury) {
+    state = state.copyWith(injury: newInjury);
+  }
+
   void updateAge(int newAge) {
     state = state.copyWith(age: newAge);
   }

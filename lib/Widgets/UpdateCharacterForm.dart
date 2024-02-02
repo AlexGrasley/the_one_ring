@@ -15,14 +15,13 @@ class UpdateCharacterForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final CharacterFormNotifier characterFormNotifier;
   final Character character;
-  bool isNewCharacter = false;
 
-  UpdateCharacterForm({
-    Key? key,
+  const UpdateCharacterForm({
+    super.key,
     required this.formKey,
     required this.characterFormNotifier,
     required this.character,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +30,184 @@ class UpdateCharacterForm extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(children: [
           Card(
-            color: Theme.of(context).cardColor,
-              child: basicFields(character, characterFormNotifier)
+              shadowColor: Colors.blueGrey,
+              color: Colors.transparent,
+              child: basicFields(context, character, characterFormNotifier)
           ),
           Card(
-              color: Theme.of(context).cardColor,
+              shadowColor: Colors.blueGrey,
+              color: Colors.transparent,
               child: experienceBoxes(context, character, characterFormNotifier)
           ),
           statBoxes(context, character, characterFormNotifier),
+          Card(
+            shadowColor: Colors.blueGrey,
+            color: Colors.transparent,
+            child: conditionsBoxes(context, character, characterFormNotifier)
+          ),
           ratingBoxes(context, character, characterFormNotifier),
           ElevatedButton(
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+              foregroundColor: MaterialStatePropertyAll(Colors.white)
+            ),
             onPressed: () async {
               await saveCharacter(character);
-              if (context.mounted){
-                Navigator.of(context).pop();
+              if(context.mounted){
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Character Saved!",
+                              style: TextStyle(color: Colors.white, fontSize: 26),
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("Close")
+                          )
+                        ],
+                      );
+                    }
+                );
               }
             },
             child: const Text('Save Character'),
           )
         ]),
       ),
+    );
+  }
+
+  Widget conditionsBoxes(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier){
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          characterFormNotifier.updateWeary(!character.weary);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(1),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                          ),
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                                color: character.weary ? Colors.red : Colors.transparent,
+                                border: Border.all(color: Colors.red),
+                                borderRadius: BorderRadius.circular(character.weary? 10 : 0)
+                            ),
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(
+                        width: 10,
+                      ),
+                      const Text("Weary", style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          characterFormNotifier.updateMiserable(!character.miserable);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(1),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                          ),
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                                color: character.miserable ? Colors.red : Colors.transparent,
+                                border: Border.all(color: Colors.red),
+                                borderRadius: BorderRadius.circular(character.miserable? 10 : 0)
+                            ),
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(
+                        width: 10,
+                      ),
+                      const Text("Miserable",style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          characterFormNotifier.updateWounded(!character.wounded);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(1),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                          ),
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                                color: character.wounded ? Colors.red : Colors.transparent,
+                                border: Border.all(color: Colors.red),
+                                borderRadius: BorderRadius.circular(character.wounded? 10 : 0)
+                            ),
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(
+                        width: 10,
+                      ),
+                      const Text("Wounded",style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormInput(
+                initialValue: character.injury,
+                labelText: "Injury",
+                onChanged: characterFormNotifier.updateInjury),
+          ),
+        )
+      ],
     );
   }
 
@@ -77,8 +234,8 @@ class UpdateCharacterForm extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  const Text("Adventure", style: TextStyle(fontSize: 18)),
-                  const Text("Points", style: TextStyle(fontSize: 18)),
+                  const Text("Adventure", style: TextStyle(fontSize: 18, color: Colors.red)),
+                  const Text("Points", style: TextStyle(fontSize: 18, color: Colors.red)),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                       child:
@@ -90,8 +247,8 @@ class UpdateCharacterForm extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  const Text("Skill", style: TextStyle(fontSize: 18)),
-                  const Text("Points", style: TextStyle(fontSize: 18)),
+                  const Text("Skill", style: TextStyle(fontSize: 18, color: Colors.red)),
+                  const Text("Points", style: TextStyle(fontSize: 18, color: Colors.red)),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                       child:
@@ -103,8 +260,8 @@ class UpdateCharacterForm extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  const Text("Fellowship", style: TextStyle(fontSize: 18)),
-                  const Text("Score", style: TextStyle(fontSize: 18)),
+                  const Text("Fellowship", style: TextStyle(fontSize: 18, color: Colors.red)),
+                  const Text("Score", style: TextStyle(fontSize: 18, color: Colors.red)),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                       child:
@@ -141,13 +298,12 @@ class UpdateCharacterForm extends StatelessWidget {
                         characterFormNotifier.updateFatigue
                     ),
                 child: Card(
-                    shadowColor: Colors.grey,
-                    color: Theme.of(context).cardColor,
+                    shadowColor: Colors.blueGrey,
+                    color: Colors.transparent,
                     child:
                     Column(
                       children: [
-                        const Text("Current", style: TextStyle(color: Colors.red, fontSize: 14),),
-                        const Text("Endurance", style: TextStyle(color: Colors.red, fontSize: 14),),
+                        const Text("Endurance", style: TextStyle(color: Colors.red, fontSize: 18),),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(3,3,25,3),
                           child: CurrentEnduranceRatingBoxes(character),
@@ -176,11 +332,11 @@ class UpdateCharacterForm extends StatelessWidget {
                         characterFormNotifier.updateShadowScars
                     ),
                 child: Card(
-                  shadowColor: Colors.grey,
-                  color: Theme.of(context).cardColor,
+                  shadowColor: Colors.blueGrey,
+                  color: Colors.transparent,
                   child: Column(
                     children: [
-                      const Text("heart", style: TextStyle(color: Colors.red, fontSize: 24),),
+                      const Text("Heart", style: TextStyle(color: Colors.red, fontSize: 18),),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(3,3,25,3),
                         child: CurrentHopeRatingBoxes(character),
@@ -218,12 +374,12 @@ class UpdateCharacterForm extends StatelessWidget {
                       characterFormNotifier.updateEndurance
                   ),
                   child: Card(
-                    shadowColor: Colors.grey,
-                    color: Theme.of(context).cardColor,
+                      shadowColor: Colors.blueGrey,
+                      color: Colors.transparent,
                     child:
                         Column(
                           children: [
-                            const Text("strength", style: TextStyle(color: Colors.red, fontSize: 24),),
+                            const Text("strength", style: TextStyle(color: Colors.red, fontSize: 18),),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(3,3,25,3),
                               child: StrengthRatingBoxes(character),
@@ -252,11 +408,11 @@ class UpdateCharacterForm extends StatelessWidget {
                     characterFormNotifier.updateHope
                   ),
                 child: Card(
-                  shadowColor: Colors.grey,
-                  color: Theme.of(context).cardColor,
+                  shadowColor: Colors.blueGrey,
+                  color: Colors.transparent,
                   child: Column(
                     children: [
-                      const Text("heart", style: TextStyle(color: Colors.red, fontSize: 24),),
+                      const Text("heart", style: TextStyle(color: Colors.red, fontSize: 18),),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(3,3,25,3),
                         child: HeartRatingBoxes(character),
@@ -287,11 +443,11 @@ class UpdateCharacterForm extends StatelessWidget {
           child: SizedBox(
             width: 225,
             child: Card(
-              shadowColor: Colors.grey,
-              color: Theme.of(context).cardColor,
+              shadowColor: Colors.blueGrey,
+              color: Colors.transparent,
               child: Column(
                 children: [
-                  const Text("wits", style: TextStyle(color: Colors.red, fontSize: 24),),
+                  const Text("wits", style: TextStyle(color: Colors.red, fontSize: 18),),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(3,3,25,3),
                     child: WitsRatingBoxes(character),
@@ -305,122 +461,122 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget basicFields(Character character, CharacterFormNotifier characterFormNotifier) {
+  Widget basicFields(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier) {
     return Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.name,
-                    labelText: 'Name',
-                    onChanged: (value) {
-                      characterFormNotifier.updateName(value);
-                    },
-                  ),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.name,
+                  labelText: 'Name',
+                  onChanged: (value) {
+                    characterFormNotifier.updateName(value);
+                  },
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.heroicCulture,
-                    labelText: 'Heroic Culture',
-                    onChanged: (value) {
-                      characterFormNotifier.updateHeroicCulture(value);
-                    },
-                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.heroicCulture,
+                  labelText: 'Heroic Culture',
+                  onChanged: (value) {
+                    characterFormNotifier.updateHeroicCulture(value);
+                  },
                 ),
               ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.culturalBlessing,
-                    labelText: 'Cultural Blessing',
-                    onChanged: (value) {
-                      characterFormNotifier.updateCulturalBlessing(value);
-                    },
-                  ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.culturalBlessing,
+                  labelText: 'Cultural Blessing',
+                  onChanged: (value) {
+                    characterFormNotifier.updateCulturalBlessing(value);
+                  },
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.patron,
-                    labelText: 'Patron',
-                    onChanged: (value) {
-                      characterFormNotifier.updatePatron(value);
-                    },
-                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.patron,
+                  labelText: 'Patron',
+                  onChanged: (value) {
+                    characterFormNotifier.updatePatron(value);
+                  },
                 ),
               ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.calling,
-                    labelText: 'Calling',
-                    onChanged: (value) {
-                      characterFormNotifier.updateCalling(value);
-                    },
-                  ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.calling,
+                  labelText: 'Calling',
+                  onChanged: (value) {
+                    characterFormNotifier.updateCalling(value);
+                  },
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.shadowPath,
-                    labelText: 'Shadow Path',
-                    onChanged: (value) {
-                      characterFormNotifier.updateShadowPath(value);
-                    },
-                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.shadowPath,
+                  labelText: 'Shadow Path',
+                  onChanged: (value) {
+                    characterFormNotifier.updateShadowPath(value);
+                  },
                 ),
               ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.distinctiveFeatures,
-                    labelText: 'Distinctive Features',
-                    onChanged: (value) {
-                      characterFormNotifier.updateDistinctiveFeatures(value);
-                    },
-                  ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.distinctiveFeatures,
+                  labelText: 'Distinctive Features',
+                  onChanged: (value) {
+                    characterFormNotifier.updateDistinctiveFeatures(value);
+                  },
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormInput(
-                    initialValue: character.flaws,
-                    labelText: 'Flaws',
-                    onChanged: (value) {
-                      characterFormNotifier.updateFlaws(value);
-                    },
-                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormInput(
+                  initialValue: character.flaws,
+                  labelText: 'Flaws',
+                  onChanged: (value) {
+                    characterFormNotifier.updateFlaws(value);
+                  },
                 ),
               ),
-            ],
-          )
-        ]);
+            ),
+          ],
+        )
+      ]);
   }
 
   Future<void> _showStatUpdateDialog(
@@ -440,7 +596,7 @@ class UpdateCharacterForm extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: Text(title),
+            title: Text(title, style: const TextStyle(color: Colors.white)),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
@@ -492,12 +648,7 @@ class UpdateCharacterForm extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       final repository = await CharacterRepository.getInstance();
 
-      if (isNewCharacter){
-        character = await repository.addCharacter(character);
-      }
-      else {
-        character = await repository.updateCharacter(character);
-      }
+      character = await repository.updateCharacter(character);
     }
   }
 

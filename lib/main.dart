@@ -32,13 +32,16 @@ class TheOneRing extends StatelessWidget {
     return MaterialApp(
       title: 'The One Ring',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black, background: Colors.black),
         useMaterial3: true,
+        primaryColorDark: Colors.black,
+        primaryColor: Colors.black,
+        cardColor: Colors.black12
       ),
       home: const CharacterList(),
       routes: {
-        '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character, isReadOnly: true),
-        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character, isReadOnly: false)
+        '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character),
+        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character)
       }
 
     );

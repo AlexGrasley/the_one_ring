@@ -112,8 +112,8 @@ class ViewSkillsForm extends ConsumerWidget {
                 width: 15,
                 height: 15,
                 decoration: BoxDecoration(
-                    color: skill.isFavored ? Colors.black : Colors.transparent,
-                    border: Border.all(color: skill.isFavored? Colors.black : Colors.red),
+                    color: skill.isFavored ? Colors.red : Colors.transparent,
+                    border: Border.all(color: Colors.red),
                     borderRadius: BorderRadius.circular(skill.isFavored? 10 : 0)
                 ),
               ),
@@ -124,7 +124,8 @@ class ViewSkillsForm extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(
-                    skill.name, // use TextDecoration.underline to underline the text
+                    skill.name,
+                    style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
                   ),
                   const Divider(
                     color: Colors.redAccent,
@@ -139,7 +140,7 @@ class ViewSkillsForm extends ConsumerWidget {
                 var results = rollDice(skill);
                 showDiceResults(context, results, character, skill);
               },
-              child: const Icon(FontAwesomeIcons.diceD20,)
+              child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey,)
           ),
           const SizedBox(width: 5),
           Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
@@ -150,7 +151,13 @@ class ViewSkillsForm extends ConsumerWidget {
                   angle: pi / 4, // rotate 45 degrees
                   child: InkWell(
                     onTap: () async {
-                      skillFormProvider.updatePips(skill.id, pipIndex + 1);
+                      skillFormProvider.updatePips(
+                          skill.id,
+                          skill.pips == 1 &&
+                              pipIndex == 0 ?
+                              0 :
+                              pipIndex + 1
+                      );
                       var repo = await ref.watch(skillsRepositoryProvider);
                       repo.updateSkill(skill);
                     },

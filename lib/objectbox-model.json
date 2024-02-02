@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8664419718943486843",
-      "lastPropertyId": "5:4030243882780861158",
+      "lastPropertyId": "9:2723315880627360339",
       "name": "Armour",
       "properties": [
         {
@@ -13,11 +13,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:1880272113421351346",
-          "name": "rating",
-          "type": 6
         },
         {
           "id": "3:8342604972678633963",
@@ -36,13 +31,33 @@
           "flags": 520,
           "indexId": "3:455561615005557916",
           "relationTarget": "Character"
+        },
+        {
+          "id": "6:6549533066525924425",
+          "name": "protection",
+          "type": 6
+        },
+        {
+          "id": "7:3039184566827612719",
+          "name": "load",
+          "type": 6
+        },
+        {
+          "id": "8:6176643985485234548",
+          "name": "parry",
+          "type": 6
+        },
+        {
+          "id": "9:2723315880627360339",
+          "name": "armourType",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "2:5764273947751663996",
-      "lastPropertyId": "35:8452193898751331593",
+      "lastPropertyId": "36:5245730456348368459",
       "name": "Character",
       "properties": [
         {
@@ -220,6 +235,11 @@
           "id": "35:8452193898751331593",
           "name": "wounded",
           "type": 1
+        },
+        {
+          "id": "36:5245730456348368459",
+          "name": "injury",
+          "type": 9
         }
       ],
       "relations": [
@@ -406,7 +426,7 @@
     },
     {
       "id": "7:194795876836641174",
-      "lastPropertyId": "6:2518040436659924421",
+      "lastPropertyId": "7:5658422883936095147",
       "name": "Weapon",
       "properties": [
         {
@@ -442,6 +462,11 @@
           "flags": 520,
           "indexId": "8:4134250850814447324",
           "relationTarget": "Character"
+        },
+        {
+          "id": "7:5658422883936095147",
+          "name": "load",
+          "type": 6
         }
       ],
       "relations": []
@@ -455,7 +480,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    1880272113421351346
+  ],
   "retiredRelationUids": [
     2376674275859451071
   ],

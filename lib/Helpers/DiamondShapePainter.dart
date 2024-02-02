@@ -81,7 +81,7 @@ class DiamondShapePainter extends CustomPainter {
 
 
     var textStyle = ui.TextStyle(
-      color: Colors.black,
+      color: Colors.white,
       fontSize: 26,
     );// Slightly larger diamond for double-line effect
 
@@ -98,7 +98,7 @@ class DiamondShapePainter extends CustomPainter {
     }
 
     textStyle = ui.TextStyle(
-      color: Colors.black,
+      color: Colors.white,
       fontSize: 10,
     );
 

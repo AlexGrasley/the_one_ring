@@ -15,63 +15,84 @@ final characterFormProvider = StateNotifierProvider.autoDispose.family<Character
   return CharacterFormNotifier(character);
 });
 
-class ReadOnlyNotifier extends StateNotifier<bool> {
-  ReadOnlyNotifier(bool isReadOnly) : super(isReadOnly);
-
-  void toggle() {
-    state = !state;
-  }
-}
-
-final readOnlyProvider = StateNotifierProvider.autoDispose.family<ReadOnlyNotifier,bool, bool>((ref, isReadOnly) {
-  return ReadOnlyNotifier(isReadOnly);
-});
-
-class CharacterView extends ConsumerWidget {
-  final _formKey = GlobalKey<FormState>();
-  late final Character _character;
-  bool isReadOnly;
-
-  CharacterView(this._character, {super.key, this.isReadOnly = false});
+class CharacterView extends ConsumerStatefulWidget {
+  final Character _character;
+  CharacterView(this._character, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _CharacterViewState createState() => _CharacterViewState();
+}
 
-    final characterFormNotifier = ref.read(characterFormProvider(_character).notifier);
-    final character = ref.watch(characterFormProvider(_character));
-    final readOnlyNotifier = ref.read(readOnlyProvider(this.isReadOnly).notifier);
-    final isReadOnly = ref.watch(readOnlyProvider(this.isReadOnly)); // watching for changes to isReadOnly
+class _CharacterViewState extends ConsumerState<CharacterView> with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+  final _formKey = GlobalKey<FormState>();
+  late String _title = widget._character.name;
 
-    return DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.view_array_outlined)),
-                Tab(icon: Icon(FontAwesomeIcons.diceD20)),
-                Tab(icon: Icon(FontAwesomeIcons.shield)),
-                Tab(icon: Icon(Icons.note_alt_outlined))
-              ],
-            ),
-            title: Text(character.name),
-          ),
-          body: TabBarView(
-            children: [
-              UpdateCharacterForm(
-                  formKey: _formKey,
-                  characterFormNotifier: characterFormNotifier,
-                  character: character),
-              ViewSkillsForm(character),
-              CombatDataForm(character),
-              UpdateCharacterForm(
-                  formKey: _formKey,
-                  characterFormNotifier: characterFormNotifier,
-                  character: character),
-            ],
-          ),
-        ),
-      );
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabIndex);
   }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabIndex() {
+    setState(() {
+      switch (_tabController.index) {
+        case 0:
+          _title = widget._character.name;
+          break;
+        case 1:
+          _title = 'Skills';
+          break;
+        case 2:
+          _title = 'Combat Proficiencies';
+          break;
+        default:
+          _title = widget._character.name;
+          break;
+      };
+
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final characterFormNotifier = ref.watch(characterFormProvider(widget._character).notifier);
+    final character = ref.watch(characterFormProvider(widget._character));
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColorDark,
+        title: Text(_title, style: const TextStyle(color: Colors.white),),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          UpdateCharacterForm(
+              formKey: _formKey,
+              characterFormNotifier: characterFormNotifier,
+              character: character),
+          ViewSkillsForm(character),
+          CombatDataForm(character),
+        ],
+      ),
+      bottomNavigationBar: Material( //This is optional - you can remove this if not required
+        color: Theme.of(context).primaryColorDark, // You can set the color according to your requirement
+        child: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(icon: Icon(Icons.view_array_outlined, color: Colors.red)),
+            Tab(icon: Icon(FontAwesomeIcons.diceD20, color: Colors.red)),
+            Tab(icon: Icon(FontAwesomeIcons.shield, color: Colors.red))
+          ],
+        ),
+      ),
+    );
+  }
 }

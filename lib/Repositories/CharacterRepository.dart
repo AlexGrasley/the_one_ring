@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
+import 'package:the_one_ring/Models/Weapon.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/objectbox.dart';
 
+import '../Models/Armour.dart';
 import '../Models/Character.dart';
 import '../Models/Skills.dart';
 import '../main.dart';
@@ -71,6 +73,18 @@ class CharacterRepository {
     var character = _characterBox.get(id);
     var combatProfs = character?.combatProficiencies;
     return combatProfs?.toList();
+  }
+
+  List<Weapon>? getCharacterWeapons(int id) {
+    var character = _characterBox.get(id);
+    var weapons = character?.weapons;
+    return weapons?.toList();
+  }
+
+  List<Armour>? getCharacterArmour(int id) {
+    var character = _characterBox.get(id);
+    var armour = character?.armour;
+    return armour?.toList();
   }
 
   Future<List<Character>> getAllCharacters() async {

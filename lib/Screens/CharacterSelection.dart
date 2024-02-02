@@ -20,8 +20,10 @@ class CharacterList extends ConsumerWidget {
     return asyncCharacters.when(
         data: (characters) {
           return Scaffold(
+            backgroundColor: Theme.of(context).primaryColorDark,
             appBar: AppBar(
-              title: const Text("Character Selection"),
+              backgroundColor: Theme.of(context).primaryColorDark,
+              title: const Text("Character Selection", style: TextStyle(color: Colors.blueGrey)),
             ),
             body: RefreshIndicator(
               onRefresh: () async {
@@ -30,17 +32,27 @@ class CharacterList extends ConsumerWidget {
               child: ListView.builder(
                 itemCount: characters.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                      title: Text(characters[index].name),
-                      onTap: () => Navigator
-                          .pushNamed(
-                            context,
-                            '/viewCharacter',
-                            arguments: characters[index])
-                          .then((value) =>
-                            ref.refresh(characterRepositoryProvider))
-                    // Other properties of your character
-                    // e.g., subtitle: Text(characters[index].powerLevel),
+                  return Card(
+                    color: Colors.transparent,
+                    shadowColor: Colors.blueGrey,
+                    child: ListTile(
+                        title: Text(
+                          characters[index].name,
+                          style: const TextStyle(color: Colors.white)),
+                        subtitle: Text(
+                          "${characters[index].heroicCulture} - ${characters[index].calling}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        onTap: () => Navigator
+                            .pushNamed(
+                              context,
+                              '/viewCharacter',
+                              arguments: characters[index])
+                            .then((value) =>
+                              ref.refresh(characterRepositoryProvider))
+                      // Other properties of your character
+                      // e.g., subtitle: Text(characters[index].powerLevel),
+                    ),
                   );
                 },
               ),
