@@ -38,6 +38,29 @@ class WeaponRepository {
     return _instance;
   }
 
+  List<Weapon> getMasterWeaponsList(){
+    return List<Weapon>.from({
+      Weapon(
+        name: "sword",
+        damage: 14,
+        injury: 4,
+        load: 2
+      ),
+      Weapon(
+          name: "dagger",
+          damage: 7,
+          injury: 2,
+          load: 1
+      ),
+      Weapon(
+          name: "great bow",
+          damage: 14,
+          injury: 4,
+          load: 4
+      ),
+    });
+  }
+
   // CRUD operations.
 
   int addArmour(Weapon weapon) {

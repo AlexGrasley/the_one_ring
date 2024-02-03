@@ -45,6 +45,17 @@ class _HandDrawnPainter extends CustomPainter {
     for (var i = 0.0; i < size.width; i += step) {
       paint.strokeWidth = _random.nextDouble() * thickness + 2;
 
+      if(step % 2 == 0){
+        final path = Path()
+          ..moveTo(size.width / 2, 0)
+          ..cubicTo(3 * size.width / 4, size.height / 4, 3 * size.width / 4,
+              3 * size.height / 4, size.width / 2, size.height)
+          ..cubicTo(size.width / 4, 3 * size.height / 4, size.width / 4,
+              size.height / 4, size.width / 2, 0);
+
+        canvas.drawPath(path, paint);
+      }
+
       final startPoint = Offset(i, size.height / 2);
       final endPoint = Offset(i + step, size.height / 2);
 

@@ -71,7 +71,6 @@ class CombatDataForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    // Have the repository provided here.
     final combatProfs = ref.watch(combatProfsStateNotifierProvider(character));
     final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(character).notifier);
 
@@ -112,6 +111,15 @@ class CombatDataForm extends ConsumerWidget {
                 return _buildWeaponRow(context, ref, index, weapon, weaponsFormProvider);
 
               }).toList(),
+            ),
+            ElevatedButton(
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
+                ),
+                onPressed: () => {
+                  _showAddWeaponAlert(context, ref, character, weaponRepositoryProvider, weaponsFormProvider)
+                },
+                child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
             ),
             const LabeledDivider(
                 label: "Armour",
@@ -207,6 +215,67 @@ class CombatDataForm extends ConsumerWidget {
   }
 
 }
+
+final selectedWeaponProvider = StateProvider<Weapon>((ref) => Weapon());
+
+Future<void> _showAddWeaponAlert(BuildContext context, WidgetRef ref, Character character, Provider<Future<WeaponRepository>> weaponRepositoryProvider, WeaponStateNotifier weaponStateNotifier) async {
+  var repo = await ref.watch(weaponRepositoryProvider);
+  List<Weapon> masterWeaponsList = repo.getMasterWeaponsList();
+  Weapon? selectedWeapon;
+
+  if(context.mounted) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add a weapon', style: TextStyle(color: Colors.white)),
+          content: Consumer(
+            builder: (context, watch, child) {
+              final selectedWeapon = watch(selectedWeaponProvider).state;
+              return DropdownButton<String>(
+                hint: const Text('Select a weapon'),
+                value: selectedWeapon.isEmpty ? null : selectedWeapon,
+                items: masterWeaponsList.map((Weapon weapon) {
+                  return DropdownMenuItem<String>(
+                    value: weapon.name,
+                    child: Text(weapon.name),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  context.read(selectedWeaponProvider).state = newValue!;
+                },
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () async {
+                if (selectedWeapon != null) {
+                  character.weapons.add(selectedWeapon!);
+                  ref.
+                  var repo = await ref.watch(characterRepositoryProvider);
+                  repo.updateCharacter(character);
+                }
+                if(context.mounted){
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+}
+
 
 Widget _buildWeaponRow(BuildContext context, WidgetRef ref, int index, Weapon weapon, WeaponStateNotifier weaponsFormProvider) {
   return Row(
