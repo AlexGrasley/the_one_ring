@@ -13,7 +13,6 @@ import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
 import 'package:the_one_ring/Repositories/WeaponRepository.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
-import 'package:the_one_ring/Widgets/TextFormInput.dart';
 
 import '../Models/Weapon.dart';
 import '../StateNotifiers/ArmourStateNotifier.dart';
@@ -61,24 +60,32 @@ final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<Arm
   return ArmourStateNotifier(character.armour);
 });
 
-class CombatDataForm extends ConsumerWidget {
+class CombatDataForm extends ConsumerStatefulWidget {
+
+  CombatDataForm(this.character, {Key? key}) : super(key: key);
+
   final Character character;
+
+  @override
+  _CombatDataFormState createState() => _CombatDataFormState();
+}
+
+
+class _CombatDataFormState extends ConsumerState<CombatDataForm> {
   late Future<List<Skill>?> skills;
   SkillClass? currentSkillClass;
 
-  CombatDataForm(this.character, {super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
 
-    final combatProfs = ref.watch(combatProfsStateNotifierProvider(character));
-    final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(character).notifier);
+    final combatProfs = ref.watch(combatProfsStateNotifierProvider(widget.character));
+    final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(widget.character).notifier);
 
-    final weapons = ref.watch(weaponsStateNotifierProvider(character));
-    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(character).notifier);
+    final weapons = ref.watch(weaponsStateNotifierProvider(widget.character));
+    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(widget.character).notifier);
 
-    final armour = ref.watch(armourStateNotifierProvider(character));
-    final armourFormProvider = ref.read(armourStateNotifierProvider(character).notifier);
+    final armour = ref.watch(armourStateNotifierProvider(widget.character));
+    final armourFormProvider = ref.read(armourStateNotifierProvider(widget.character).notifier);
 
     return SingleChildScrollView(
         child: Column(
@@ -117,7 +124,7 @@ class CombatDataForm extends ConsumerWidget {
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
                 ),
                 onPressed: () => {
-                  _showAddWeaponAlert(context, ref, character, weaponRepositoryProvider, weaponsFormProvider)
+                  _showAddWeaponAlert(context, ref, widget.character, weaponRepositoryProvider, weaponsFormProvider)
                 },
                 child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
             ),
@@ -132,10 +139,19 @@ class CombatDataForm extends ConsumerWidget {
                   int index = entry.key;
                   Armour armour = entry.value;
 
-                  return _buildArmourRow(context, ref, index, armour, armourFormProvider);
+                  return _buildArmourRow(context, ref, index, armour);
 
                 }).toList(),
-              )
+              ),
+            ElevatedButton(
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
+                ),
+                onPressed: () => {
+                  _showAddArmourAlert(context, ref, widget.character, armourRepositoryProvider, armourFormProvider)
+                },
+                child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
+            ),
             ],
           )
         );
@@ -164,7 +180,7 @@ class CombatDataForm extends ConsumerWidget {
           InkWell(
               onTap: () {
                 var results = rollDice(combatProf);
-                showDiceResults(context, results, character, combatProf);
+                showDiceResults(context, results, widget.character, combatProf);
               },
               child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey)
           ),
@@ -214,82 +230,185 @@ class CombatDataForm extends ConsumerWidget {
     );
   }
 
-}
+  Future<void> _showAddWeaponAlert(
+      BuildContext context,
+      WidgetRef ref,
+      Character character,
+      Provider<Future<WeaponRepository>> weaponRepositoryProvider,
+      WeaponStateNotifier weaponStateNotifier) async {
 
-final selectedWeaponProvider = StateProvider<Weapon>((ref) => Weapon());
+    var repo = await ref.watch(weaponRepositoryProvider);
+    List<Weapon> masterWeaponsList = repo.getMasterWeaponsList();
 
-Future<void> _showAddWeaponAlert(BuildContext context, WidgetRef ref, Character character, Provider<Future<WeaponRepository>> weaponRepositoryProvider, WeaponStateNotifier weaponStateNotifier) async {
-  var repo = await ref.watch(weaponRepositoryProvider);
-  List<Weapon> masterWeaponsList = repo.getMasterWeaponsList();
-  Weapon? selectedWeapon;
+    if(context.mounted) {
+      Weapon? selectedWeapon;
 
-  if(context.mounted) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Add a weapon', style: TextStyle(color: Colors.white)),
-          content: Consumer(
-            builder: (context, watch, child) {
-              final selectedWeapon = watch(selectedWeaponProvider).state;
-              return DropdownButton<String>(
-                hint: const Text('Select a weapon'),
-                value: selectedWeapon.isEmpty ? null : selectedWeapon,
-                items: masterWeaponsList.map((Weapon weapon) {
-                  return DropdownMenuItem<String>(
-                    value: weapon.name,
-                    child: Text(weapon.name),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  context.read(selectedWeaponProvider).state = newValue!;
-                },
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(  // adding StatefulBuilder
+            builder: (BuildContext context, StateSetter setState) {
+              return AlertDialog(
+                title: const Text('Add a weapon', style: TextStyle(color: Colors.blueGrey)),
+                content: DropdownButton<Weapon>(
+                  hint: const Text('Select a weapon', style: TextStyle(color: Colors.blueGrey)),
+                  value: selectedWeapon,
+                  onChanged: (Weapon? value) {
+                    setState(() {  // It will now work
+                      selectedWeapon = value;
+                    });
+                  },
+                  items: masterWeaponsList.map((Weapon weapon) {
+                    return DropdownMenuItem<Weapon>(
+                      value: weapon,
+                      child: Text(weapon.name, style: const TextStyle(color: Colors.blueGrey)),
+                    );
+                  }).toList(),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Cancel', style: TextStyle(color: Colors.blueGrey)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: const Text('OK', style: TextStyle(color: Colors.red)),
+                    onPressed: () async {
+                      if (selectedWeapon != null) {
+                        character.weapons.add(selectedWeapon!);
+                        var repo = await ref.watch(characterRepositoryProvider);
+                        repo.updateCharacter(character);
+                        weaponStateNotifier.updateWeapons(character.weapons);
+                      }
+                      if(context.mounted){
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ),
+                ],
               );
             },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () async {
-                if (selectedWeapon != null) {
-                  character.weapons.add(selectedWeapon!);
-                  ref.
-                  var repo = await ref.watch(characterRepositoryProvider);
-                  repo.updateCharacter(character);
-                }
-                if(context.mounted){
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _showAddArmourAlert(
+      BuildContext context,
+      WidgetRef ref,
+      Character character,
+      Provider<Future<ArmourRepository>> armourRepositoryProvider,
+      ArmourStateNotifier armourStateNotifier) async {
+
+    var repo = await ref.watch(armourRepositoryProvider);
+    List<Armour> masterArmourList = repo.getMasterArmourList();
+
+    if(context.mounted) {
+      Armour? selectedArmour;
+
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(  // adding StatefulBuilder
+            builder: (BuildContext context, StateSetter setState) {
+              return AlertDialog(
+                title: const Text('Add armour', style: TextStyle(color: Colors.blueGrey)),
+                content: DropdownButton<Armour>(
+                  hint: const Text('Select armour', style: TextStyle(color: Colors.blueGrey)),
+                  value: selectedArmour,
+                  onChanged: (Armour? value) {
+                    setState(() {  // It will now work
+                      selectedArmour = value;
+                    });
+                  },
+                  items: masterArmourList.map((Armour armour) {
+                    return DropdownMenuItem<Armour>(
+                      value: armour,
+                      child: Text(armour.name, style: const TextStyle(color: Colors.blueGrey)),
+                    );
+                  }).toList(),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Cancel', style: TextStyle(color: Colors.blueGrey)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: const Text('OK', style: TextStyle(color: Colors.red)),
+                    onPressed: () async {
+                      if (selectedArmour != null) {
+                        character.armour.add(selectedArmour!);
+                        var repo = await ref.watch(characterRepositoryProvider);
+                        repo.updateCharacter(character);
+                        armourStateNotifier.updateWeapons(character.armour);
+                      }
+                      if(context.mounted){
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    }
   }
 
 }
 
 
 Widget _buildWeaponRow(BuildContext context, WidgetRef ref, int index, Weapon weapon, WeaponStateNotifier weaponsFormProvider) {
-  return Row(
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Material(
+      borderRadius: BorderRadius.circular(10.0),
+      elevation: 3.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildPropertyColumn(
+              "",
+              weapon.name,
+            ),
+            buildPropertyColumn(
+              'Damage',
+              weapon.damage.toString(),
+            ),
+            buildPropertyColumn(
+              'Injury',
+              weapon.injury.toString(),
+            ),
+            buildPropertyColumn(
+              'Load',
+              weapon.load.toString(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+
+    Row(
     children: [
-      Text(weapon.name),
-      Text(weapon.damage.toString()),
-      Text(weapon.injury.toString()),
-      Text(weapon.load.toString()),
-      Text(weapon.note),
+      Text(weapon.name, style: const TextStyle(color: Colors.blueGrey)),
+      Text(weapon.damage.toString(), style: const TextStyle(color: Colors.blueGrey)),
+      Text(weapon.injury.toString(), style: const TextStyle(color: Colors.blueGrey)),
+      Text(weapon.load.toString(), style: const TextStyle(color: Colors.blueGrey)),
+      Text(weapon.note, style: const TextStyle(color: Colors.blueGrey)),
     ],
   );
 }
 
-Widget _buildArmourRow(BuildContext context, WidgetRef ref, int index, Armour armour, ArmourStateNotifier armourFormProvider) {
+Widget _buildArmourRow(BuildContext context, WidgetRef ref, int index, Armour armour) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Material(
@@ -328,10 +447,12 @@ Widget buildPropertyColumn(String header, String content) {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           decoration: TextDecoration.underline,
+          color: Colors.blueGrey
         ),
       ),
       Text(
         content,
+        style: const TextStyle(color: Colors.blueGrey),
       ),
     ],
   );

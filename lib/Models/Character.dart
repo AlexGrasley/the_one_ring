@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:flutter/cupertino.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'Armour.dart';
@@ -9,7 +10,7 @@ import 'Virtues.dart';
 import 'Weapon.dart';
 
 @Entity()
-class Character {
+class Character{
   @Id()
   int id;
 

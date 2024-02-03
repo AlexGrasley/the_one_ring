@@ -1,9 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import '../Models/Rewards.dart';
-import '../Models/Skills.dart';
 import '../Models/Weapon.dart';
-import '../Repositories/SkillsRepository.dart';
 
 class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
   WeaponStateNotifier(super.weapons);

@@ -4,7 +4,6 @@ import 'package:the_one_ring/Widgets/CurrentHopeBoxes.dart';
 import 'package:the_one_ring/Widgets/HeartRatingBoxes.dart';
 import 'package:the_one_ring/Widgets/StrenghtRatingBoxes.dart';
 import 'package:the_one_ring/Widgets/WitsRatingBoxes.dart';
-import '../Helpers/DiamondShapePainter.dart';
 import '../Repositories/CharacterRepository.dart';
 import '../Widgets/TextFormInput.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';

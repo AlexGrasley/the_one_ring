@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import '../Models/Skills.dart';
-import '../Repositories/SkillsRepository.dart';
 
 class SkillStateNotifier extends StateNotifier<List<Skill>> {
   SkillStateNotifier(super.skills);

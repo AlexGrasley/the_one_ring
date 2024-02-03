@@ -1,13 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import '../Models/Character.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
-import '../Widgets/CombatData.dart';
-import '../Widgets/TextFormInput.dart';
+import '../Widgets/CombatDataForm.dart';
 import '../Widgets/UpdateCharacterForm.dart';
-import '../Widgets/ViewCharacterForm.dart';
 import '../Widgets/ViewSkillsForm.dart';
 
 
@@ -17,7 +14,7 @@ final characterFormProvider = StateNotifierProvider.autoDispose.family<Character
 
 class CharacterView extends ConsumerStatefulWidget {
   final Character _character;
-  CharacterView(this._character, {Key? key}) : super(key: key);
+  const CharacterView(this._character, {super.key});
 
   @override
   _CharacterViewState createState() => _CharacterViewState();
@@ -56,7 +53,7 @@ class _CharacterViewState extends ConsumerState<CharacterView> with SingleTicker
         default:
           _title = widget._character.name;
           break;
-      };
+      }
 
     });
   }
@@ -79,7 +76,10 @@ class _CharacterViewState extends ConsumerState<CharacterView> with SingleTicker
               characterFormNotifier: characterFormNotifier,
               character: character),
           ViewSkillsForm(character),
-          CombatDataForm(character),
+          CombatDataForm(
+            character,
+            key: ValueKey(character.weapons.length + character.armour.length)
+          ),
         ],
       ),
       bottomNavigationBar: Material( //This is optional - you can remove this if not required
