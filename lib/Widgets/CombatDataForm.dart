@@ -11,6 +11,7 @@ import 'package:the_one_ring/Repositories/ArmourRepository.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
 import 'package:the_one_ring/Repositories/WeaponRepository.dart';
+import 'package:the_one_ring/StateNotifiers/CharacterStateNotifier.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
 
@@ -62,9 +63,9 @@ final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<Arm
 
 class CombatDataForm extends ConsumerStatefulWidget {
 
-  CombatDataForm(this.character, {Key? key}) : super(key: key);
+  CombatDataForm(this._character, {Key? key}) : super(key: key);
 
-  final Character character;
+  final Character _character;
 
   @override
   _CombatDataFormState createState() => _CombatDataFormState();
@@ -78,14 +79,17 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
   @override
   Widget build(BuildContext context) {
 
-    final combatProfs = ref.watch(combatProfsStateNotifierProvider(widget.character));
-    final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(widget.character).notifier);
+    final combatProfs = ref.watch(combatProfsStateNotifierProvider(widget._character));
+    final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(widget._character).notifier);
 
-    final weapons = ref.watch(weaponsStateNotifierProvider(widget.character));
-    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(widget.character).notifier);
+    final character = ref.watch(characterStateProvider(widget._character));
+    final characterFormNotifier = ref.watch(characterStateProvider(widget._character).notifier);
 
-    final armour = ref.watch(armourStateNotifierProvider(widget.character));
-    final armourFormProvider = ref.read(armourStateNotifierProvider(widget.character).notifier);
+    final weapons = character.weapons;
+    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(widget._character).notifier);
+
+    final armour = character.armour;
+    final armourFormProvider = ref.read(armourStateNotifierProvider(widget._character).notifier);
 
     return SingleChildScrollView(
         child: Column(
@@ -124,7 +128,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
                 ),
                 onPressed: () => {
-                  _showAddWeaponAlert(context, ref, widget.character, weaponRepositoryProvider, weaponsFormProvider)
+                  _showAddWeaponAlert(context, ref, widget._character, weaponRepositoryProvider,characterFormNotifier)
                 },
                 child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
             ),
@@ -148,7 +152,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                     backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
                 ),
                 onPressed: () => {
-                  _showAddArmourAlert(context, ref, widget.character, armourRepositoryProvider, armourFormProvider)
+                  _showAddArmourAlert(context, ref, widget._character, armourRepositoryProvider,characterFormNotifier)
                 },
                 child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
             ),
@@ -180,7 +184,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
           InkWell(
               onTap: () {
                 var results = rollDice(combatProf);
-                showDiceResults(context, results, widget.character, combatProf);
+                showDiceResults(context, results, widget._character, combatProf);
               },
               child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey)
           ),
@@ -235,7 +239,8 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
       WidgetRef ref,
       Character character,
       Provider<Future<WeaponRepository>> weaponRepositoryProvider,
-      WeaponStateNotifier weaponStateNotifier) async {
+      CharacterStateNotifier characterStateNotifier) async
+  {
 
     var repo = await ref.watch(weaponRepositoryProvider);
     List<Weapon> masterWeaponsList = repo.getMasterWeaponsList();
@@ -279,7 +284,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                         character.weapons.add(selectedWeapon!);
                         var repo = await ref.watch(characterRepositoryProvider);
                         repo.updateCharacter(character);
-                        weaponStateNotifier.updateWeapons(character.weapons);
+                        characterStateNotifier.updateWeapons(character.weapons);
                       }
                       if(context.mounted){
                         Navigator.of(context).pop();
@@ -300,7 +305,8 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
       WidgetRef ref,
       Character character,
       Provider<Future<ArmourRepository>> armourRepositoryProvider,
-      ArmourStateNotifier armourStateNotifier) async {
+      CharacterStateNotifier characterStateNotifier) async
+  {
 
     var repo = await ref.watch(armourRepositoryProvider);
     List<Armour> masterArmourList = repo.getMasterArmourList();
@@ -344,7 +350,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                         character.armour.add(selectedArmour!);
                         var repo = await ref.watch(characterRepositoryProvider);
                         repo.updateCharacter(character);
-                        armourStateNotifier.updateWeapons(character.armour);
+                        characterStateNotifier.updateArmour(character.armour);
                       }
                       if(context.mounted){
                         Navigator.of(context).pop();

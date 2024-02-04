@@ -8,10 +8,6 @@ import '../Widgets/UpdateCharacterForm.dart';
 import '../Widgets/ViewSkillsForm.dart';
 
 
-final characterFormProvider = StateNotifierProvider.autoDispose.family<CharacterFormNotifier, Character, Character>((ref, character) {
-  return CharacterFormNotifier(character);
-});
-
 class CharacterView extends ConsumerStatefulWidget {
   final Character _character;
   const CharacterView(this._character, {super.key});
@@ -60,8 +56,8 @@ class _CharacterViewState extends ConsumerState<CharacterView> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    final characterFormNotifier = ref.watch(characterFormProvider(widget._character).notifier);
-    final character = ref.watch(characterFormProvider(widget._character));
+    final characterFormNotifier = ref.watch(characterStateProvider(widget._character).notifier);
+    final character = ref.watch(characterStateProvider(widget._character));
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +83,7 @@ class _CharacterViewState extends ConsumerState<CharacterView> with SingleTicker
         child: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(icon: Icon(Icons.view_array_outlined, color: Colors.red)),
+            Tab(icon: Icon(FontAwesomeIcons.solidAddressCard, color: Colors.red)),
             Tab(icon: Icon(FontAwesomeIcons.diceD20, color: Colors.red)),
             Tab(icon: Icon(FontAwesomeIcons.shield, color: Colors.red))
           ],
