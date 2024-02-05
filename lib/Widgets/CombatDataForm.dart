@@ -64,7 +64,7 @@ final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<Arm
 
 class CombatDataForm extends ConsumerStatefulWidget {
 
-  CombatDataForm(this._character, {Key? key}) : super(key: key);
+  const CombatDataForm(this._character, {Key? key}) : super(key: key);
 
   final Character _character;
 
@@ -76,8 +76,6 @@ class CombatDataForm extends ConsumerStatefulWidget {
 class _CombatDataFormState extends ConsumerState<CombatDataForm> {
   late Future<List<Skill>?> skills;
   SkillClass? currentSkillClass;
-
-  CombatDataForm(this.character, {super.key});
 
   @override
   Widget build(BuildContext context) {
