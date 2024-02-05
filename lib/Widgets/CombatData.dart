@@ -260,7 +260,7 @@ Future<void> _showAddWeaponAlert(BuildContext context, WidgetRef ref, Character 
                 if (selectedWeapon != null) {
                   character.weapons.add(selectedWeapon!);
                   ref.
-                  var repo = await ref.watch(characterRepositoryProvider);
+                  CharacterRepository repo = await ref.watch(characterRepositoryProvider);
                   repo.updateCharacter(character);
                 }
                 if(context.mounted){
