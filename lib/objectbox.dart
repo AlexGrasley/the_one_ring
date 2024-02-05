@@ -1,4 +1,3 @@
-import 'package:objectbox/objectbox.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
@@ -9,7 +8,6 @@ import 'Models/Character.dart';
 import 'Models/Skills.dart';
 import 'Models/Virtues.dart';
 import 'objectbox.g.dart';
-import 'package:synchronized/synchronized.dart';
 
 class ObjectBox {
   /// The Store of this app.

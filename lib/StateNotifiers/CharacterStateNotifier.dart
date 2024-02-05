@@ -7,8 +7,8 @@ import '../Models/Skills.dart';
 import '../Models/Virtues.dart';
 import '../Models/Weapon.dart';
 
-class CharacterFormNotifier extends StateNotifier<Character> {
-  CharacterFormNotifier(Character character) : super(character.copyWith());
+class CharacterStateNotifier extends StateNotifier<Character> {
+  CharacterStateNotifier(Character character) : super(character.copyWith());
 
   void initializeCharacter(Character character) {
     state = character;
@@ -175,3 +175,7 @@ class CharacterFormNotifier extends StateNotifier<Character> {
   }
 
 }
+
+final characterStateProvider = StateNotifierProvider.autoDispose.family<CharacterStateNotifier, Character, Character>((ref, character) {
+  return CharacterStateNotifier(character);
+});

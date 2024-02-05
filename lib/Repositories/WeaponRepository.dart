@@ -1,10 +1,7 @@
-import 'dart:io';
 import 'package:the_one_ring/main.dart';
 
 import '../Models/Weapon.dart';
-import '../ObjectBox.dart';
 import '../objectbox.g.dart';
-import 'package:path_provider/path_provider.dart';
 
 class WeaponRepository {
   // Make _singleton private and static
@@ -42,20 +39,20 @@ class WeaponRepository {
     return List<Weapon>.from({
       Weapon(
         name: "sword",
-        damage: 14,
-        injury: 4,
+        damage: 4,
+        injury: 16,
         load: 2
       ),
       Weapon(
           name: "dagger",
-          damage: 7,
-          injury: 2,
-          load: 1
+          damage: 2,
+          injury: 14,
+          load: 0
       ),
       Weapon(
           name: "great bow",
-          damage: 14,
-          injury: 4,
+          damage: 4,
+          injury: 16,
           load: 4
       ),
     });

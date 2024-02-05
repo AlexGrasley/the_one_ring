@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
 import 'package:the_one_ring/Models/Weapon.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
-import 'package:the_one_ring/objectbox.dart';
 
 import '../Models/Armour.dart';
 import '../Models/Character.dart';

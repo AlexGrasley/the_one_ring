@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:the_one_ring/Helpers/DiamondShapePainter.dart';
-import 'package:the_one_ring/Repositories/CharacterRepository.dart';
-import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/Screens/CharacterFormView.dart';
 
 import 'Models/Character.dart';
-import 'Models/Skills.dart';
 import 'ObjectBox.dart';
 import 'Screens/CharacterSelection.dart';
 

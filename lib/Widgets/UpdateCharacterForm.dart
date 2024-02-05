@@ -4,7 +4,6 @@ import 'package:the_one_ring/Widgets/CurrentHopeBoxes.dart';
 import 'package:the_one_ring/Widgets/HeartRatingBoxes.dart';
 import 'package:the_one_ring/Widgets/StrenghtRatingBoxes.dart';
 import 'package:the_one_ring/Widgets/WitsRatingBoxes.dart';
-import '../Helpers/DiamondShapePainter.dart';
 import '../Repositories/CharacterRepository.dart';
 import '../Widgets/TextFormInput.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
@@ -13,7 +12,7 @@ import 'DiamondShape.dart';
 
 class UpdateCharacterForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final CharacterFormNotifier characterFormNotifier;
+  final CharacterStateNotifier characterFormNotifier;
   final Character character;
 
   const UpdateCharacterForm({
@@ -87,7 +86,7 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget conditionsBoxes(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier){
+  Widget conditionsBoxes(BuildContext context, Character character, CharacterStateNotifier characterFormNotifier){
     return Row(
       children: [
         Expanded(
@@ -211,7 +210,7 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget experienceBoxes(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier){
+  Widget experienceBoxes(BuildContext context, Character character, CharacterStateNotifier characterFormNotifier){
     return
       InkWell(
         onTap: () => _showStatUpdateDialog(
@@ -275,7 +274,7 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget statBoxes(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier){
+  Widget statBoxes(BuildContext context, Character character, CharacterStateNotifier characterFormNotifier){
     return
         Row(
           children: [
@@ -350,7 +349,7 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget ratingBoxes(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier){
+  Widget ratingBoxes(BuildContext context, Character character, CharacterStateNotifier characterFormNotifier){
     return Column(
       children: [
         Row(
@@ -461,7 +460,7 @@ class UpdateCharacterForm extends StatelessWidget {
     );
   }
 
-  Widget basicFields(BuildContext context, Character character, CharacterFormNotifier characterFormNotifier) {
+  Widget basicFields(BuildContext context, Character character, CharacterStateNotifier characterFormNotifier) {
     return Column(
       children: [
         Row(
