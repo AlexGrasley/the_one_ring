@@ -8,6 +8,7 @@ import 'package:the_one_ring/Models/Skills.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/StateNotifiers/SkillStateNotifier.dart';
+import 'package:the_one_ring/Widgets/DiamondShape.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
 
 
@@ -195,21 +196,38 @@ class ViewSkillsForm extends ConsumerWidget {
 
 
 
-Map<String, int> rollDice(Skill skill) {
+Map<String, dynamic> rollDice(Skill skill) {
   var rng = Random();
   int d12Result = skill.isFavored ? max(rng.nextInt(12) + 1, rng.nextInt(12) + 1)  : rng.nextInt(12) + 1;
-  int d6Result = skill.pips * (rng.nextInt(6) + 1);
+  int d6Result = 0;
+  bool greatSuccess = false;
 
-  return {"D12 Result": d12Result, "D6 Result": d6Result};
+  for(var i = 0; i < skill.pips; i++){
+    var result = rng.nextInt(6) + 1;
+    if (result == 6){
+      greatSuccess = true;
+    }
+    d6Result += result;
+  }
+
+  return {"D12 Result": d12Result, "D6 Result": d6Result, "GreatSuccess": greatSuccess};
 }
 
-void showDiceResults(BuildContext context, Map<String, int> results, Character character, Skill skill) {
+void showDiceResults(BuildContext context, Map<String, dynamic> results, Character character, Skill skill) {
 
   var targetNumber = getTargetNumber(character, skill);
-  var passed =
-    results.values.reduce((value1, value2) => value1 + value2) >= targetNumber.targetNumber ?
-      true :
-      false;
+  var passed = false;
+  var total = 0;
+  var greatSuccess = results["GreatSuccess"] as bool;
+
+  for(var result in results.values){
+    if(result is int){
+      total += result;
+    }
+  }
+
+  passed = total >= targetNumber.targetNumber;
+
 
   showDialog(
     context: context,
@@ -218,40 +236,25 @@ void showDiceResults(BuildContext context, Map<String, int> results, Character c
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.55), // Or any other value according to preference
             child: AlertDialog(
-              title: const Center(child: Text('Results')),
+              title: const Center(child: Text('Results', style: TextStyle(color: Colors.white))),
               content:
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         targetNumber.name,
-                        style: const TextStyle(fontSize: 36, fontFamily: 'TimesNewRoman'),
+                        style: const TextStyle(fontSize: 36, color: Colors.white),
                       ),
-                      Transform.rotate(
-                        angle: pi / 4,
-                        child: Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.all(10),
-                              width: 45,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.red,  width: 3), // add color red to borders
-                              ),
-                            child: Center(
-                              child: Transform.rotate(
-                                angle: -(pi / 4),
-                                  child:
-                                      Text(
-                                          targetNumber.targetNumber.toString(),
-                                          style: const TextStyle(fontSize: 36, fontFamily: 'TimesNewRoman'),
-                                      ),
-                              ),
-                            ),
-                        ),
-                      ),
+                      DiamondShape(targetNumber.targetNumber.toString(),"", size: 75),
                       const SizedBox(height: 10),
                       Column(
-                        children: results.entries.map((e) => Text('${e.key}: ${e.value}')).toList(),
+                        children: results.entries
+                            .where((element) => element.key != "GreatSuccess")
+                            .map((e) =>
+                            Text('${e.key}: ${e.value}',
+                                style: const TextStyle(color: Colors.white)
+                            ))
+                            .toList(),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -261,7 +264,7 @@ void showDiceResults(BuildContext context, Map<String, int> results, Character c
                           borderRadius: const BorderRadius.all(Radius.circular(10))
                         ),
                         child: passed?
-                          const Text("Passed!", style: TextStyle(fontSize: 26, color: Colors.white)) :
+                          Text((greatSuccess? "Great Success!" : "Success"), style: const TextStyle(fontSize: 26, color: Colors.white)) :
                           const Text("Failed!", style: TextStyle(fontSize: 26, color: Colors.black))
                       )
                     ],

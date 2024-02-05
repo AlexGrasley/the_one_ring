@@ -32,7 +32,8 @@ class TheOneRing extends StatelessWidget {
         useMaterial3: true,
         primaryColorDark: Colors.black,
         primaryColor: Colors.black,
-        cardColor: Colors.black12
+        cardColor: Colors.black12,
+        fontFamily: "MiddleEarth"
       ),
       home: const CharacterList(),
       routes: {
