@@ -1,4 +1,4 @@
-package com.example.TheOneRing.the_one_ring
+package com.TheOneRing.CharacterSheet
 
 import io.flutter.embedding.android.FlutterActivity
 
