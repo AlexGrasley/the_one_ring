@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.TheOneRing.CharacterSheet"
+    namespace "com.example.TheOneRing.the_one_ring"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
