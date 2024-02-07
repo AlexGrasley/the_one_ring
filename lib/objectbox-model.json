@@ -426,7 +426,7 @@
     },
     {
       "id": "7:194795876836641174",
-      "lastPropertyId": "7:5658422883936095147",
+      "lastPropertyId": "15:4009573847069943986",
       "name": "Weapon",
       "properties": [
         {
@@ -467,6 +467,46 @@
           "id": "7:5658422883936095147",
           "name": "load",
           "type": 6
+        },
+        {
+          "id": "8:3809961577402906258",
+          "name": "parry",
+          "type": 6
+        },
+        {
+          "id": "9:3441224511770237827",
+          "name": "twoHandedInjuryModifier",
+          "type": 6
+        },
+        {
+          "id": "10:8603606673991153719",
+          "name": "handedness",
+          "type": 9
+        },
+        {
+          "id": "11:7257414732886485177",
+          "name": "canPierce",
+          "type": 1
+        },
+        {
+          "id": "12:2003239901180866145",
+          "name": "isUsableByNaugrim",
+          "type": 1
+        },
+        {
+          "id": "13:4858835195708531242",
+          "name": "isUsableByHalfling",
+          "type": 1
+        },
+        {
+          "id": "14:8074461505861714988",
+          "name": "proficiencyType",
+          "type": 9
+        },
+        {
+          "id": "15:4009573847069943986",
+          "name": "weaponType",
+          "type": 9
         }
       ],
       "relations": []

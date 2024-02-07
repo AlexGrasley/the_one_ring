@@ -3,9 +3,9 @@ import 'package:the_one_ring/Helpers/HandDrawnDivider.dart';
 
 class LabeledDivider extends StatelessWidget {
   final String label;
-  final String value;
+  final Widget afterTextWidget;
 
-  const LabeledDivider({super.key, required this.label, required this.value});
+  const LabeledDivider({super.key, required this.label, required this.afterTextWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +23,11 @@ class LabeledDivider extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                "$label${value.isEmpty? "" : ":"}",
+                label,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey),
               ),
             ),
-            Text(
-                "$value${value.isEmpty? "" : " "}",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey)
-            ),
+            afterTextWidget,
             const Expanded(
               child: HandDrawnDivider(
                 color: Colors.blueGrey,

@@ -131,7 +131,7 @@ class CharacterRepository {
       return character;
 
     } catch (e) {
-      print('Failed to update character: $e');
+      //TODO: figure out something to do with this error.
     }
     return Character();
   }

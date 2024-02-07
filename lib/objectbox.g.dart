@@ -601,7 +601,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelEntity(
       id: const IdUid(7, 194795876836641174),
       name: 'Weapon',
-      lastPropertyId: const IdUid(7, 5658422883936095147),
+      lastPropertyId: const IdUid(15, 4009573847069943986),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -650,6 +650,62 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       id: const IdUid(7, 5658422883936095147),
       name: 'load',
       type: 6,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(8, 3809961577402906258),
+      name: 'parry',
+      type: 6,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(9, 3441224511770237827),
+      name: 'twoHandedInjuryModifier',
+      type: 6,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(10, 8603606673991153719),
+      name: 'handedness',
+      type: 9,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(11, 7257414732886485177),
+      name: 'canPierce',
+      type: 1,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(12, 2003239901180866145),
+      name: 'isUsableByNaugrim',
+      type: 1,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(13, 4858835195708531242),
+      name: 'isUsableByHalfling',
+      type: 1,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(14, 8074461505861714988),
+      name: 'proficiencyType',
+      type: 9,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(15, 4009573847069943986),
+      name: 'weaponType',
+      type: 9,
       flags: 0
       
     )
@@ -1060,7 +1116,10 @@ Weapon:       EntityDefinition<Weapon>(
         objectToFB: (Weapon object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-      fbb.startTable(8);
+final handednessOffset =  fbb.writeString(object.handedness);
+final proficiencyTypeOffset =  fbb.writeString(object.proficiencyType);
+final weaponTypeOffset =  fbb.writeString(object.weaponType);
+      fbb.startTable(16);
       fbb.addInt64(0, object.id);
 fbb.addInt64(1, object.damage);
 fbb.addInt64(2, object.injury);
@@ -1068,6 +1127,14 @@ fbb.addOffset(3, nameOffset);
 fbb.addOffset(4, noteOffset);
 fbb.addInt64(5, object.character.targetId);
 fbb.addInt64(6, object.load);
+fbb.addInt64(7, object.parry);
+fbb.addInt64(8, object.twoHandedInjuryModifier);
+fbb.addOffset(9, handednessOffset);
+fbb.addBool(10, object.canPierce);
+fbb.addBool(11, object.isUsableByNaugrim);
+fbb.addBool(12, object.isUsableByHalfling);
+fbb.addOffset(13, proficiencyTypeOffset);
+fbb.addOffset(14, weaponTypeOffset);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -1080,12 +1147,28 @@ final injuryParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
 final nameParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 10, '');
 final noteParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 12, '');
 final loadParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+final parryParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
+final twoHandedInjuryModifierParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+final handednessParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 22, '');
+final canPierceParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 24, false);
+final isUsableByHalflingParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 28, false);
+final isUsableByNaugrimParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false);
+final proficiencyTypeParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 30, '');
+final weaponTypeParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 32, '');
       final object = Weapon(id: idParam, 
 damage: damageParam, 
 injury: injuryParam, 
 name: nameParam, 
 note: noteParam, 
-load: loadParam);
+load: loadParam, 
+parry: parryParam, 
+twoHandedInjuryModifier: twoHandedInjuryModifierParam, 
+handedness: handednessParam, 
+canPierce: canPierceParam, 
+isUsableByHalfling: isUsableByHalflingParam, 
+isUsableByNaugrim: isUsableByNaugrimParam, 
+proficiencyType: proficiencyTypeParam, 
+weaponType: weaponTypeParam);
       object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
 object.character.attach(store);
 InternalToManyAccess.setRelInfo<Weapon>(object.rewards, store, RelInfo<Reward>.toOneBacklink(5, object.id, (Reward srcObject) => srcObject.weapon));
@@ -1193,6 +1276,14 @@ InternalToManyAccess.setRelInfo<Weapon>(object.rewards, store, RelInfo<Reward>.t
         static final name = QueryStringProperty<Weapon>(_entities[6].properties[3]);        /// see [Weapon.note]
         static final note = QueryStringProperty<Weapon>(_entities[6].properties[4]);        /// see [Weapon.character]
         static final character = QueryRelationToOne<Weapon, Character>(_entities[6].properties[5]);        /// see [Weapon.load]
-        static final load = QueryIntegerProperty<Weapon>(_entities[6].properties[6]);}
+        static final load = QueryIntegerProperty<Weapon>(_entities[6].properties[6]);        /// see [Weapon.parry]
+        static final parry = QueryIntegerProperty<Weapon>(_entities[6].properties[7]);        /// see [Weapon.twoHandedInjuryModifier]
+        static final twoHandedInjuryModifier = QueryIntegerProperty<Weapon>(_entities[6].properties[8]);        /// see [Weapon.handedness]
+        static final handedness = QueryStringProperty<Weapon>(_entities[6].properties[9]);        /// see [Weapon.canPierce]
+        static final canPierce = QueryBooleanProperty<Weapon>(_entities[6].properties[10]);        /// see [Weapon.isUsableByNaugrim]
+        static final isUsableByNaugrim = QueryBooleanProperty<Weapon>(_entities[6].properties[11]);        /// see [Weapon.isUsableByHalfling]
+        static final isUsableByHalfling = QueryBooleanProperty<Weapon>(_entities[6].properties[12]);        /// see [Weapon.proficiencyType]
+        static final proficiencyType = QueryStringProperty<Weapon>(_entities[6].properties[13]);        /// see [Weapon.weaponType]
+        static final weaponType = QueryStringProperty<Weapon>(_entities[6].properties[14]);}
     
     

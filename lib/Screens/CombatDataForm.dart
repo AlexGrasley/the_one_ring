@@ -1,8 +1,8 @@
 import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:the_one_ring/Helpers/Utilities.dart';
 import 'package:the_one_ring/Models/Armour.dart';
 import 'package:the_one_ring/Models/Character.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
@@ -14,7 +14,7 @@ import 'package:the_one_ring/Repositories/WeaponRepository.dart';
 import 'package:the_one_ring/StateNotifiers/CharacterStateNotifier.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
-import 'package:the_one_ring/Widgets/TextFormInput.dart';
+import 'package:the_one_ring/Widgets/WeaponCard.dart';
 
 import '../Models/Weapon.dart';
 import '../StateNotifiers/ArmourStateNotifier.dart';
@@ -64,12 +64,12 @@ final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<Arm
 
 class CombatDataForm extends ConsumerStatefulWidget {
 
-  const CombatDataForm(this._character, {Key? key}) : super(key: key);
+  const CombatDataForm(this._character, {super.key});
 
   final Character _character;
 
   @override
-  _CombatDataFormState createState() => _CombatDataFormState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CombatDataFormState();
 }
 
 
@@ -95,9 +95,9 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
     return SingleChildScrollView(
         child: Column(
           children: [
-            const LabeledDivider(
+            LabeledDivider(
               label: "Combat Proficiency",
-              value: '',
+              afterTextWidget: Container()
             ),
             Column(
               children: combatProfs.asMap().entries.map<Widget>((entry) {
@@ -109,33 +109,40 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
 
               }).toList(),
             ),
-            const LabeledDivider(
+            LabeledDivider(
                 label: "Weapons",
-                value: ""
+              afterTextWidget: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                    onTap: () =>  _showAddWeaponAlert(context, ref, widget._character, weaponRepositoryProvider,characterFormNotifier),
+                    child: const Icon(FontAwesomeIcons.plus, color: Colors.blueGrey)
+                ),
+              ),
             ),
-            Column(
-              children:
-              weapons.asMap().entries.map<Widget>((entry) {
-
-                int index = entry.key;
-                Weapon weapon = entry.value;
-
-                return _buildWeaponRow(context, ref, index, weapon, weaponsFormProvider);
-
+            CarouselSlider(
+              options:  CarouselOptions(
+                autoPlay: false,
+                height: 300,
+                viewportFraction: 0.55,
+                enableInfiniteScroll: false,
+                enlargeCenterPage: true,
+                enlargeFactor: 0.2,
+              ),
+              items: weapons.map((entry) {
+                return Builder(builder: (BuildContext context){
+                  return WeaponCard(weapon: entry);
+                });
               }).toList(),
             ),
-            ElevatedButton(
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
-                ),
-                onPressed: () => {
-                  _showAddWeaponAlert(context, ref, widget._character, weaponRepositoryProvider,characterFormNotifier)
-                },
-                child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
-            ),
-            const LabeledDivider(
+            LabeledDivider(
                 label: "Armour",
-                value: ""
+                afterTextWidget: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                      onTap: () =>  _showAddArmourAlert(context, ref, widget._character, armourRepositoryProvider,characterFormNotifier),
+                      child: const Icon(FontAwesomeIcons.plus, color: Colors.blueGrey)
+                  ),
+                ),
             ),
             Column(
               children:
@@ -148,15 +155,6 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
 
                 }).toList(),
               ),
-            ElevatedButton(
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.blueGrey)
-                ),
-                onPressed: () => {
-                  _showAddArmourAlert(context, ref, widget._character, armourRepositoryProvider,characterFormNotifier)
-                },
-                child: const Icon(FontAwesomeIcons.circlePlus, color: Colors.white)
-            ),
             ],
           )
         );
@@ -166,33 +164,31 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
     return Container(
       padding: const EdgeInsets.all(8),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
            Expanded( // Add Expanded widget here
-              child: Column(
-                children: [
-                  Text(
-                    combatProf.name,
-                    style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
-                  ),
-                  const Divider(
-                    color: Colors.redAccent,
-                    thickness: 1,
-                  )
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      combatProf.name,
+                      style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
+                    ),
+                    const Divider(
+                      color: Colors.redAccent,
+                      thickness: 1,
+                    )
+                  ],
+                ),
               )
           ),
-          const SizedBox(width: 5),
-          InkWell(
-              onTap: () {
-                var results = rollDice(combatProf);
-                showDiceResults(context, results, widget._character, combatProf);
-              },
-              child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey)
-          ),
-          const SizedBox(width: 5),
           Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start, // Align boxes to the right
+              mainAxisAlignment: MainAxisAlignment.center, // Align boxes to the right
               children: List.generate(6, (combatProfIndex) {
                 return Transform.rotate( // add Transform.rotate widget
                   angle: pi / 4, // rotate 45 degrees
@@ -516,22 +512,4 @@ void showDiceResults(BuildContext context, Map<String, int> results, Character c
       );
     },
   );
-}
-
-TargetNumber getTargetNumber(Character character, Skill skill){
-  switch (Utilities.enumFromString(SkillClass.values, skill.skillClass)){
-    case SkillClass.strength:
-      return TargetNumber("Strength", character.strengthTn);
-    case SkillClass.heart:
-      return TargetNumber("Heart", character.heartTn);
-    case SkillClass.wits:
-      return TargetNumber("Wits", character.witsTn);
-  }
-}
-
-class TargetNumber {
-  final String name;
-  final int targetNumber;
-
-  TargetNumber(this.name, this.targetNumber);
 }

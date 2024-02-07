@@ -8,8 +8,9 @@ import 'package:the_one_ring/Models/Skills.dart';
 import 'package:the_one_ring/Repositories/CharacterRepository.dart';
 import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/StateNotifiers/SkillStateNotifier.dart';
-import 'package:the_one_ring/Widgets/DiamondShape.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
+
+import '../Helpers/Dice.dart';
 
 
 // Create a provider for SkillsRepository.
@@ -78,7 +79,10 @@ class ViewSkillsForm extends ConsumerWidget {
                 children: [
                   LabeledDivider(
                     label: skillClassName ,
-                    value: targetNumber.toString(),
+                    afterTextWidget: Text(
+                        "$targetNumber${targetNumber.toString().isEmpty? "" : " "}",
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey)
+                    ),
                   ),
                   _buildRow(context, ref, index, skill, skillFormProvider),
                 ],
@@ -138,8 +142,9 @@ class ViewSkillsForm extends ConsumerWidget {
           const SizedBox(width: 5),
           InkWell(
               onTap: () {
-                var results = rollDice(skill);
-                showDiceResults(context, results, character, skill);
+                DiceResult results = Dice.getDiceResultsSkill(skill, character);
+
+                Dice.showDiceResultsSKill(context, results, character, skill);
               },
               child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey,)
           ),
@@ -190,114 +195,9 @@ class ViewSkillsForm extends ConsumerWidget {
     );
   }
 
+
+
 }
 
 
 
-
-
-Map<String, dynamic> rollDice(Skill skill) {
-  var rng = Random();
-  int d12Result = skill.isFavored ? max(rng.nextInt(12) + 1, rng.nextInt(12) + 1)  : rng.nextInt(12) + 1;
-  int d6Result = 0;
-  bool greatSuccess = false;
-
-  for(var i = 0; i < skill.pips; i++){
-    var result = rng.nextInt(6) + 1;
-    if (result == 6){
-      greatSuccess = true;
-    }
-    d6Result += result;
-  }
-
-  return {"D12 Result": d12Result, "D6 Result": d6Result, "GreatSuccess": greatSuccess};
-}
-
-void showDiceResults(BuildContext context, Map<String, dynamic> results, Character character, Skill skill) {
-
-  var targetNumber = getTargetNumber(character, skill);
-  var passed = false;
-  var total = 0;
-  var greatSuccess = results["GreatSuccess"] as bool;
-
-  for(var result in results.values){
-    if(result is int){
-      total += result;
-    }
-  }
-
-  passed = total >= targetNumber.targetNumber;
-
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.55), // Or any other value according to preference
-            child: AlertDialog(
-              title: const Center(child: Text('Results', style: TextStyle(color: Colors.white))),
-              content:
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        targetNumber.name,
-                        style: const TextStyle(fontSize: 36, color: Colors.white),
-                      ),
-                      DiamondShape(targetNumber.targetNumber.toString(),"", size: 75),
-                      const SizedBox(height: 10),
-                      Column(
-                        children: results.entries
-                            .where((element) => element.key != "GreatSuccess")
-                            .map((e) =>
-                            Text('${e.key}: ${e.value}',
-                                style: const TextStyle(color: Colors.white)
-                            ))
-                            .toList(),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: passed? Colors.green : Colors.red,
-                          borderRadius: const BorderRadius.all(Radius.circular(10))
-                        ),
-                        child: passed?
-                          Text((greatSuccess? "Great Success!" : "Success"), style: const TextStyle(fontSize: 26, color: Colors.white)) :
-                          const Text("Failed!", style: TextStyle(fontSize: 26, color: Colors.black))
-                      )
-                    ],
-                  ),
-              actions: [
-                ElevatedButton(
-                  child: const Text('Close'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          )
-      );
-    },
-  );
-}
-
-TargetNumber getTargetNumber(Character character, Skill skill){
-  switch (Utilities.enumFromString(SkillClass.values, skill.skillClass)){
-    case SkillClass.strength:
-      return TargetNumber("Strength", character.strengthTn);
-    case SkillClass.heart:
-      return TargetNumber("Heart", character.heartTn);
-    case SkillClass.wits:
-      return TargetNumber("Wits", character.witsTn);
-  }
-}
-
-class TargetNumber {
-  final String name;
-  final int targetNumber;
-
-  TargetNumber(this.name, this.targetNumber);
-}

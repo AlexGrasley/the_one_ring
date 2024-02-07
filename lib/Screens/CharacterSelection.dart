@@ -44,7 +44,7 @@ class CharacterList extends ConsumerWidget {
                           style: const TextStyle(color: Colors.white),
                         ),
                         onTap: () => Navigator
-                            .pushNamed(
+                            .popAndPushNamed(
                               context,
                               '/viewCharacter',
                               arguments: characters[index])
@@ -58,16 +58,18 @@ class CharacterList extends ConsumerWidget {
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.add),
+              backgroundColor: Colors.blueGrey,
+              foregroundColor: Colors.white,
               onPressed: () => {
                 Navigator
-                    .pushNamed(
+                    .popAndPushNamed(
                       context,
                       '/updateCharacter',
                       arguments: Character())
                     .then((value) =>
                       ref.refresh(characterRepositoryProvider))
               },
+              child: const Text("+", style: TextStyle(fontSize: 38)),
             ),
           );
         },

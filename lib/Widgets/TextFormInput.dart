@@ -33,7 +33,7 @@ class TextFormInput extends StatelessWidget {
         alignLabelWithHint: true,
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
-      onChanged: onChanged,
+      onChanged: onChanged
     );
   }
 }

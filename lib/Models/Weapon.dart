@@ -26,6 +26,30 @@ class Weapon {
   @Property()
   int load;
 
+  @Property()
+  int parry;
+
+  @Property()
+  int twoHandedInjuryModifier;
+
+  @Property()
+  String handedness;
+
+  @Property()
+  bool canPierce;
+
+  @Property()
+  bool isUsableByNaugrim;
+
+  @Property()
+  bool isUsableByHalfling;
+
+  @Property()
+  String proficiencyType;
+
+  @Property()
+  String weaponType;
+
   @Backlink('weapon')
   var rewards = ToMany<Reward>();
 
@@ -36,6 +60,14 @@ class Weapon {
     this.name = '',
     this.note = '',
     this.load = 0,
+    this.parry = 0,
+    this.twoHandedInjuryModifier = 0,
+    this.handedness = "",
+    this.canPierce = false,
+    this.isUsableByHalfling = true,
+    this.isUsableByNaugrim = true,
+    this.proficiencyType = "",
+    this.weaponType = "",
     character,
     rewards,
   }){
@@ -51,16 +83,52 @@ class Weapon {
     int? injury,
     String? note,
     int? load,
+    int? parry,
+    int? twoHandedInjuryModifier,
+    String? handedness,
+    bool? canPierce,
+    bool? isUsableByNaugrim,
+    bool? isUsableByHalfling,
+    String? proficiencyType,
+    String? weaponType,
   }) {
     return Weapon(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        character: character ?? this.character,
-        damage: damage ?? this.damage,
-        injury: injury ?? this.injury,
-        note: note ?? this.note,
-        load: load ?? this.load,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      character: character ?? this.character,
+      damage: damage ?? this.damage,
+      injury: injury ?? this.injury,
+      note: note ?? this.note,
+      load: load ?? this.load,
+      parry: parry ?? this.parry,
+      twoHandedInjuryModifier: twoHandedInjuryModifier ?? this.twoHandedInjuryModifier,
+      handedness: handedness ?? this.handedness,
+      canPierce: canPierce ?? this.canPierce,
+      isUsableByHalfling: isUsableByHalfling ?? this.isUsableByHalfling,
+      isUsableByNaugrim: isUsableByNaugrim ?? this.isUsableByNaugrim,
+      proficiencyType: proficiencyType ?? this.proficiencyType,
+      weaponType: weaponType ?? this.weaponType
     );
   }
 
+}
+
+enum WeaponProficiencyType{
+  brawling,
+  swords,
+  spears,
+  axes,
+  bows
+}
+
+enum WeaponType {
+  melee,
+  ranged,
+  meleeAndRanged,
+}
+
+enum Handedness {
+  oneHanded,
+  twoHanded,
+  both,
 }
