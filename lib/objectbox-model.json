@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8664419718943486843",
-      "lastPropertyId": "9:2723315880627360339",
+      "lastPropertyId": "13:8058258964167446502",
       "name": "Armour",
       "properties": [
         {
@@ -48,8 +48,23 @@
           "type": 6
         },
         {
-          "id": "9:2723315880627360339",
-          "name": "armourType",
+          "id": "10:5214007997672785430",
+          "name": "armourClass",
+          "type": 9
+        },
+        {
+          "id": "11:9003915536324928794",
+          "name": "isUsableByNaugrim",
+          "type": 1
+        },
+        {
+          "id": "12:7938232428423786516",
+          "name": "isUsableByHalfling",
+          "type": 1
+        },
+        {
+          "id": "13:8058258964167446502",
+          "name": "image",
           "type": 9
         }
       ],
@@ -426,7 +441,7 @@
     },
     {
       "id": "7:194795876836641174",
-      "lastPropertyId": "15:4009573847069943986",
+      "lastPropertyId": "16:6111410858906944404",
       "name": "Weapon",
       "properties": [
         {
@@ -507,6 +522,11 @@
           "id": "15:4009573847069943986",
           "name": "weaponType",
           "type": 9
+        },
+        {
+          "id": "16:6111410858906944404",
+          "name": "image",
+          "type": 9
         }
       ],
       "relations": []
@@ -521,7 +541,8 @@
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    1880272113421351346
+    1880272113421351346,
+    2723315880627360339
   ],
   "retiredRelationUids": [
     2376674275859451071

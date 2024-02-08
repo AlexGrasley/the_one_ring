@@ -28,7 +28,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
           ModelEntity(
       id: const IdUid(1, 8664419718943486843),
       name: 'Armour',
-      lastPropertyId: const IdUid(9, 2723315880627360339),
+      lastPropertyId: const IdUid(13, 8058258964167446502),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -81,8 +81,29 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       
     )
     ,    ModelProperty(
-      id: const IdUid(9, 2723315880627360339),
-      name: 'armourType',
+      id: const IdUid(10, 5214007997672785430),
+      name: 'armourClass',
+      type: 9,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(11, 9003915536324928794),
+      name: 'isUsableByNaugrim',
+      type: 1,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(12, 7938232428423786516),
+      name: 'isUsableByHalfling',
+      type: 1,
+      flags: 0
+      
+    )
+    ,    ModelProperty(
+      id: const IdUid(13, 8058258964167446502),
+      name: 'image',
       type: 9,
       flags: 0
       
@@ -601,7 +622,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
     ,    ModelEntity(
       id: const IdUid(7, 194795876836641174),
       name: 'Weapon',
-      lastPropertyId: const IdUid(15, 4009573847069943986),
+      lastPropertyId: const IdUid(16, 6111410858906944404),
       flags: 0,
       properties: <ModelProperty>[
             ModelProperty(
@@ -709,6 +730,13 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       flags: 0
       
     )
+    ,    ModelProperty(
+      id: const IdUid(16, 6111410858906944404),
+      name: 'image',
+      type: 9,
+      flags: 0
+      
+    )
     
       ],
       relations: <ModelRelation>[
@@ -760,7 +788,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [1880272113421351346],
+      retiredPropertyUids: const [1880272113421351346, 2723315880627360339],
       retiredRelationUids: const [2376674275859451071],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -777,8 +805,9 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
         objectToFB: (Armour object, fb.Builder fbb) {
       final nameOffset =  fbb.writeString(object.name);
 final noteOffset =  fbb.writeString(object.note);
-final armourTypeOffset =  fbb.writeString(object.armourType);
-      fbb.startTable(10);
+final armourClassOffset =  fbb.writeString(object.armourClass);
+final imageOffset =  fbb.writeString(object.image);
+      fbb.startTable(14);
       fbb.addInt64(0, object.id);
 fbb.addOffset(2, nameOffset);
 fbb.addOffset(3, noteOffset);
@@ -786,7 +815,10 @@ fbb.addInt64(4, object.character.targetId);
 fbb.addInt64(5, object.protection);
 fbb.addInt64(6, object.load);
 fbb.addInt64(7, object.parry);
-fbb.addOffset(8, armourTypeOffset);
+fbb.addOffset(9, armourClassOffset);
+fbb.addBool(10, object.isUsableByNaugrim);
+fbb.addBool(11, object.isUsableByHalfling);
+fbb.addOffset(12, imageOffset);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -799,14 +831,20 @@ final protectionParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 14,
 final loadParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
 final parryParam = const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
 final noteParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 10, '');
-final armourTypeParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 20, '');
+final armourClassParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 22, '');
+final imageParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 28, '');
+final isUsableByNaugrimParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 24, false);
+final isUsableByHalflingParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false);
       final object = Armour(id: idParam, 
 name: nameParam, 
 protection: protectionParam, 
 load: loadParam, 
 parry: parryParam, 
 note: noteParam, 
-armourType: armourTypeParam);
+armourClass: armourClassParam, 
+image: imageParam, 
+isUsableByNaugrim: isUsableByNaugrimParam, 
+isUsableByHalfling: isUsableByHalflingParam);
       object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
 object.character.attach(store);
 InternalToManyAccess.setRelInfo<Armour>(object.rewards, store, RelInfo<Reward>.toOneBacklink(4, object.id, (Reward srcObject) => srcObject.armour));
@@ -1119,7 +1157,8 @@ final noteOffset =  fbb.writeString(object.note);
 final handednessOffset =  fbb.writeString(object.handedness);
 final proficiencyTypeOffset =  fbb.writeString(object.proficiencyType);
 final weaponTypeOffset =  fbb.writeString(object.weaponType);
-      fbb.startTable(16);
+final imageOffset =  fbb.writeString(object.image);
+      fbb.startTable(17);
       fbb.addInt64(0, object.id);
 fbb.addInt64(1, object.damage);
 fbb.addInt64(2, object.injury);
@@ -1135,6 +1174,7 @@ fbb.addBool(11, object.isUsableByNaugrim);
 fbb.addBool(12, object.isUsableByHalfling);
 fbb.addOffset(13, proficiencyTypeOffset);
 fbb.addOffset(14, weaponTypeOffset);
+fbb.addOffset(15, imageOffset);
       fbb.finish(fbb.endTable());
       return object.id;
     },
@@ -1155,6 +1195,7 @@ final isUsableByHalflingParam = const fb.BoolReader().vTableGet(buffer, rootOffs
 final isUsableByNaugrimParam = const fb.BoolReader().vTableGet(buffer, rootOffset, 26, false);
 final proficiencyTypeParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 30, '');
 final weaponTypeParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 32, '');
+final imageParam = const fb.StringReader(asciiOptimization: true).vTableGet(buffer, rootOffset, 34, '');
       final object = Weapon(id: idParam, 
 damage: damageParam, 
 injury: injuryParam, 
@@ -1168,7 +1209,8 @@ canPierce: canPierceParam,
 isUsableByHalfling: isUsableByHalflingParam, 
 isUsableByNaugrim: isUsableByNaugrimParam, 
 proficiencyType: proficiencyTypeParam, 
-weaponType: weaponTypeParam);
+weaponType: weaponTypeParam, 
+image: imageParam);
       object.character.targetId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
 object.character.attach(store);
 InternalToManyAccess.setRelInfo<Weapon>(object.rewards, store, RelInfo<Reward>.toOneBacklink(5, object.id, (Reward srcObject) => srcObject.weapon));
@@ -1189,8 +1231,11 @@ InternalToManyAccess.setRelInfo<Weapon>(object.rewards, store, RelInfo<Reward>.t
         static final character = QueryRelationToOne<Armour, Character>(_entities[0].properties[3]);        /// see [Armour.protection]
         static final protection = QueryIntegerProperty<Armour>(_entities[0].properties[4]);        /// see [Armour.load]
         static final load = QueryIntegerProperty<Armour>(_entities[0].properties[5]);        /// see [Armour.parry]
-        static final parry = QueryIntegerProperty<Armour>(_entities[0].properties[6]);        /// see [Armour.armourType]
-        static final armourType = QueryStringProperty<Armour>(_entities[0].properties[7]);}
+        static final parry = QueryIntegerProperty<Armour>(_entities[0].properties[6]);        /// see [Armour.armourClass]
+        static final armourClass = QueryStringProperty<Armour>(_entities[0].properties[7]);        /// see [Armour.isUsableByNaugrim]
+        static final isUsableByNaugrim = QueryBooleanProperty<Armour>(_entities[0].properties[8]);        /// see [Armour.isUsableByHalfling]
+        static final isUsableByHalfling = QueryBooleanProperty<Armour>(_entities[0].properties[9]);        /// see [Armour.image]
+        static final image = QueryStringProperty<Armour>(_entities[0].properties[10]);}
     
       /// [Character] entity fields to define ObjectBox queries.
       class Character_ {        /// see [Character.id]
@@ -1284,6 +1329,7 @@ InternalToManyAccess.setRelInfo<Weapon>(object.rewards, store, RelInfo<Reward>.t
         static final isUsableByNaugrim = QueryBooleanProperty<Weapon>(_entities[6].properties[11]);        /// see [Weapon.isUsableByHalfling]
         static final isUsableByHalfling = QueryBooleanProperty<Weapon>(_entities[6].properties[12]);        /// see [Weapon.proficiencyType]
         static final proficiencyType = QueryStringProperty<Weapon>(_entities[6].properties[13]);        /// see [Weapon.weaponType]
-        static final weaponType = QueryStringProperty<Weapon>(_entities[6].properties[14]);}
+        static final weaponType = QueryStringProperty<Weapon>(_entities[6].properties[14]);        /// see [Weapon.image]
+        static final image = QueryStringProperty<Weapon>(_entities[6].properties[15]);}
     
     

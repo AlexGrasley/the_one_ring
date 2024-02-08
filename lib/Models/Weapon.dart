@@ -50,6 +50,9 @@ class Weapon {
   @Property()
   String weaponType;
 
+  @Property()
+  String image;
+
   @Backlink('weapon')
   var rewards = ToMany<Reward>();
 
@@ -68,6 +71,7 @@ class Weapon {
     this.isUsableByNaugrim = true,
     this.proficiencyType = "",
     this.weaponType = "",
+    this.image = "",
     character,
     rewards,
   }){
@@ -91,6 +95,7 @@ class Weapon {
     bool? isUsableByHalfling,
     String? proficiencyType,
     String? weaponType,
+    String? image,
   }) {
     return Weapon(
       id: id ?? this.id,
@@ -107,7 +112,8 @@ class Weapon {
       isUsableByHalfling: isUsableByHalfling ?? this.isUsableByHalfling,
       isUsableByNaugrim: isUsableByNaugrim ?? this.isUsableByNaugrim,
       proficiencyType: proficiencyType ?? this.proficiencyType,
-      weaponType: weaponType ?? this.weaponType
+      weaponType: weaponType ?? this.weaponType,
+      image: image ?? this.image
     );
   }
 

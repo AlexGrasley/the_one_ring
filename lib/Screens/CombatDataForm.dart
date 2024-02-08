@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:objectbox/src/relations/to_many.dart';
 import 'package:the_one_ring/Models/Armour.dart';
 import 'package:the_one_ring/Models/Character.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
@@ -19,6 +20,10 @@ import 'package:the_one_ring/Widgets/WeaponCard.dart';
 import '../Models/Weapon.dart';
 import '../StateNotifiers/ArmourStateNotifier.dart';
 import '../StateNotifiers/WeaponStateNotifier.dart';
+import '../Widgets/ArmourCard.dart';
+import '../Widgets/ArmourCarousel.dart';
+import '../Widgets/CombatProficiencyRow.dart';
+import '../Widgets/WeaponCarousel.dart';
 
 // Create a provider for SkillsRepository.
 final combatProfRepositoryProvider = Provider((ref) => CombatProficienciesRepository.getInstance());
@@ -105,7 +110,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                 int index = entry.key;
                 CombatProficiencies combatProf = entry.value;
 
-                return _buildRow(context, ref, index, combatProf, combatProfFormProvider);
+                return CombatProficiencyRow(context: context, ref: ref, index: index, combatProf: combatProf, combatProfFormProvider: combatProfFormProvider);
 
               }).toList(),
             ),
@@ -119,21 +124,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                 ),
               ),
             ),
-            CarouselSlider(
-              options:  CarouselOptions(
-                autoPlay: false,
-                height: 300,
-                viewportFraction: 0.55,
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-                enlargeFactor: 0.2,
-              ),
-              items: weapons.map((entry) {
-                return Builder(builder: (BuildContext context){
-                  return WeaponCard(weapon: entry);
-                });
-              }).toList(),
-            ),
+            WeaponCarousel(weapons: weapons),
             LabeledDivider(
                 label: "Armour",
                 afterTextWidget: Padding(
@@ -144,92 +135,11 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                   ),
                 ),
             ),
-            Column(
-              children:
-                armour.asMap().entries.map<Widget>((entry) {
-
-                  int index = entry.key;
-                  Armour armour = entry.value;
-
-                  return _buildArmourRow(context, ref, index, armour);
-
-                }).toList(),
-              ),
+            ArmourCarousel(armour: armour),
             ],
           )
         );
     }
-
-  Widget _buildRow(BuildContext context, WidgetRef ref,int index, CombatProficiencies combatProf, CombatProfStateNotifier combatProfFormProvider){
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-           Expanded( // Add Expanded widget here
-              child: Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      combatProf.name,
-                      style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
-                    ),
-                    const Divider(
-                      color: Colors.redAccent,
-                      thickness: 1,
-                    )
-                  ],
-                ),
-              )
-          ),
-          Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Align boxes to the right
-              children: List.generate(6, (combatProfIndex) {
-                return Transform.rotate( // add Transform.rotate widget
-                  angle: pi / 4, // rotate 45 degrees
-                  child: InkWell(
-                    onTap: () async {
-                      combatProfFormProvider.updateProficiency(
-                          combatProf.id,
-                          combatProf.proficiency == 1 &&
-                              combatProfIndex == 0 ?
-                              0 :
-                              combatProfIndex + 1);
-                      var repo = await ref.watch(combatProfRepositoryProvider);
-                      repo.updateProficiency(combatProf);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      padding: const EdgeInsets.all(2),
-                      width: 15,
-                      height: 15,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.red), // add color red to borders
-                      ),
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                            color: combatProfIndex < combatProf.proficiency ? Colors.redAccent : Colors.transparent,
-                            border: Border.all(color: Colors.red), // add color red to borders
-                            borderRadius: combatProfIndex < combatProf.proficiency ? BorderRadius.circular(10) : BorderRadius.circular(0)
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Future<void> _showAddWeaponAlert(
       BuildContext context,
@@ -366,108 +276,6 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
 }
 
 
-Widget _buildWeaponRow(BuildContext context, WidgetRef ref, int index, Weapon weapon, WeaponStateNotifier weaponsFormProvider) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Material(
-      borderRadius: BorderRadius.circular(10.0),
-      elevation: 3.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildPropertyColumn(
-              "",
-              weapon.name,
-            ),
-            buildPropertyColumn(
-              'Damage',
-              weapon.damage.toString(),
-            ),
-            buildPropertyColumn(
-              'Injury',
-              weapon.injury.toString(),
-            ),
-            buildPropertyColumn(
-              'Load',
-              weapon.load.toString(),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-
-
-    Row(
-    children: [
-      Text(weapon.name, style: const TextStyle(color: Colors.blueGrey)),
-      Text(weapon.damage.toString(), style: const TextStyle(color: Colors.blueGrey)),
-      Text(weapon.injury.toString(), style: const TextStyle(color: Colors.blueGrey)),
-      Text(weapon.load.toString(), style: const TextStyle(color: Colors.blueGrey)),
-      Text(weapon.note, style: const TextStyle(color: Colors.blueGrey)),
-    ],
-  );
-}
-
-Widget _buildArmourRow(BuildContext context, WidgetRef ref, int index, Armour armour) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Material(
-      borderRadius: BorderRadius.circular(10.0),
-      elevation: 3.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildPropertyColumn(
-                armour.armourType.toString(),
-                armour.name,
-            ),
-            buildPropertyColumn(
-              armour.armourType == ArmourType.shield.toString() ? 'Parry' : 'Protection',
-              armour.armourType == ArmourType.shield.toString() ? armour.parry.toString() : armour.protection.toString(),
-            ),
-            buildPropertyColumn(
-              'Load',
-              armour.load.toString(),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Widget buildPropertyColumn(String header, String content) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        header,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          decoration: TextDecoration.underline,
-          color: Colors.blueGrey
-        ),
-      ),
-      Text(
-        content,
-        style: const TextStyle(color: Colors.blueGrey),
-      ),
-    ],
-  );
-}
-
-Map<String, int> rollDice(CombatProficiencies combatProficiencies) {
-  var rng = Random();
-  int d12Result = rng.nextInt(12) + 1;
-  int d6Result = combatProficiencies.proficiency * (rng.nextInt(6) + 1);
-
-  return {"D12 Result": d12Result, "D6 Result": d6Result};
-}
 
 void showDiceResults(BuildContext context, Map<String, int> results, Character character, CombatProficiencies combatProf) {
 
