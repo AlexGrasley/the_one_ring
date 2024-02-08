@@ -13,13 +13,18 @@ import '../Models/Character.dart';
 import '../Models/Weapon.dart';
 
 class ArmourCard extends ConsumerStatefulWidget{
-  ArmourCard({required this.armour, this.showDice = true, this.rollDice, super.key}){
-    rollDice = (d,c) => {};
+  ArmourCard({required this.armour, required this.character, this.showDice = true, this.rollDice, this.addArmour, this.removeArmour, super.key}){
+    rollDice ??= (Armour a, Character c) {};
+    addArmour ??= (Armour a, Character c) {};
+    removeArmour ??= (Armour a, Character c) {};
   }
 
   final Armour armour;
+  final Character character;
   final bool showDice;
   Function(Armour, Character)? rollDice;
+  Function(Armour, Character)? addArmour;
+  Function(Armour, Character)? removeArmour;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _WeaponCardState();
@@ -75,22 +80,7 @@ class _WeaponCardState extends ConsumerState<ArmourCard> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
 
-    String armourClass = "";
-
-    switch(Utilities.enumFromString(ArmourClass.values, widget.armour.armourClass)){
-      case ArmourClass.leather:
-        armourClass = "Leather Armour";
-        break;
-      case ArmourClass.mail:
-        armourClass = "Mail Armour";
-        break;
-      case ArmourClass.headgear:
-        armourClass = "Helm";
-        break;
-      case ArmourClass.shield:
-        armourClass = "Shield";
-        break;
-    }
+    String armourClass = getArmourClassString();
 
     return Card(
       color: Colors.blueGrey,
@@ -103,9 +93,35 @@ class _WeaponCardState extends ConsumerState<ArmourCard> with SingleTickerProvid
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,8,0,0),
-            child: Text(
-                widget.armour.name,
-                style: const TextStyle(color: Colors.white)
+            child: Stack(
+              alignment: Alignment.topCenter,
+              fit: StackFit.loose,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                        widget.armour.name,
+                        style: const TextStyle(color: Colors.white)
+                    ),
+                  ),
+                ),
+                widget.showDice?
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        removeArmour(context);
+                      },
+                      child: const Icon(FontAwesomeIcons.minus, color: Colors.white),
+                    ),
+                  ),
+                ) :
+                Container()
+              ],
             ),
           ),
           const Padding(
@@ -161,27 +177,88 @@ class _WeaponCardState extends ConsumerState<ArmourCard> with SingleTickerProvid
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(15,15,15,0),
+            padding: const EdgeInsets.fromLTRB(15,20,15,0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text("Class: ", style: TextStyle(color: Colors.white)),
-                Text(armourClass, style: const TextStyle(color: Colors.white)),
-                const Expanded(child: VerticalDivider(thickness: 3)),
+                Expanded(child: Text("Class: $armourClass", style: const TextStyle(color: Colors.white, fontSize: 12))),
                 widget.showDice ?
                 InkWell(
-                  onTap: () => {
-                    widget.rollDice
+                  onTap: () {
+                    widget.rollDice?.call(widget.armour, widget.character);
                   },
                   child: const Icon(FontAwesomeIcons.diceD20, color: Colors.white),
                 ) :
-                Container()
+                InkWell(
+                  onTap: () {
+                    widget.addArmour?.call(widget.armour, widget.character);
+                    const snackBar = SnackBar(
+                      content: Text('Armour added'),
+                    );
+
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  child: const Icon(FontAwesomeIcons.squarePlus, color: Colors.white),
+                )
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  String getArmourClassString() {
+    String armourClass = "";
+
+    switch(Utilities.enumFromString(ArmourClass.values, widget.armour.armourClass)){
+      case ArmourClass.leather:
+        armourClass = "Leather Armour";
+        break;
+      case ArmourClass.mail:
+        armourClass = "Mail Armour";
+        break;
+      case ArmourClass.headgear:
+        armourClass = "Helm";
+        break;
+      case ArmourClass.shield:
+        armourClass = "Shield";
+        break;
+    }
+    return armourClass;
+  }
+
+  void removeArmour(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.blueGrey.shade900,
+            title: const Text('Confirm', style: TextStyle(color: Colors.white)),
+            content: const Text('Are you sure you want to remove the armour?', style: TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              TextButton(
+                  child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              TextButton(
+                  child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                  onPressed: () {
+                    widget.removeArmour?.call(widget.armour, widget.character);
+                    const snackBar = SnackBar(
+                      content: Text('Armour removed'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    Navigator.of(context).pop();
+                  })
+            ],
+          );
+        });
   }
 
   Widget _buildCardSide({
@@ -212,7 +289,7 @@ class _WeaponCardState extends ConsumerState<ArmourCard> with SingleTickerProvid
     );
   }
 
-  Container _imageCard() {
+  Widget _imageCard() {
     return Container(
       margin: const EdgeInsets.fromLTRB(60,0,60,0),
       width: 150,

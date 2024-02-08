@@ -11,13 +11,18 @@ import '../Models/Character.dart';
 import '../Models/Weapon.dart';
 
 class WeaponCard extends ConsumerStatefulWidget{
-  WeaponCard({required this.weapon,this.showDice = true, this.rollDice, super.key}){
-    rollDice = (d,c) => {};
+  WeaponCard({required this.weapon, required this.character, this.showDice = true, this.rollDice, this.addWeapon, this.removeWeapon, super.key}){
+    rollDice ??= (Weapon w,Character c) {};
+    addWeapon ??= (Weapon w, Character c) {};
+    removeWeapon ??= (Weapon w, Character c) {};
   }
 
   final Weapon weapon;
+  final Character character;
   final bool showDice;
   Function(Weapon, Character)? rollDice;
+  Function(Weapon, Character)? addWeapon;
+  Function(Weapon, Character)? removeWeapon;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _WeaponCardState();
@@ -95,10 +100,36 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-            child: Text(
-                widget.weapon.name,
-                style: const TextStyle(color: Colors.white)
+            padding: const EdgeInsets.fromLTRB(0,0,0,0),
+            child: Stack(
+              alignment: Alignment.topCenter,
+              fit: StackFit.loose,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                        widget.weapon.name,
+                        style: const TextStyle(color: Colors.white)
+                    ),
+                  ),
+                ),
+                widget.showDice?
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          removeWeapon(context);
+                            },
+                        child: const Icon(FontAwesomeIcons.minus, color: Colors.white),
+                      ),
+                    ),
+                  ) :
+                  Container()
+              ],
             ),
           ),
           const Padding(
@@ -162,17 +193,59 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
                 widget.showDice ?
                   InkWell(
                     onTap: () => {
-                      widget.rollDice
+                      widget.rollDice?.call(widget.weapon, widget.character)
                     },
                     child: const Icon(FontAwesomeIcons.diceD20, color: Colors.white),
                   ) :
-                  Container()
+                  InkWell(
+                    onTap: () {
+                      widget.addWeapon?.call(widget.weapon, widget.character);
+                      const snackBar = SnackBar(
+                        content: Text('Weapon added'),
+                      );
+
+                        // Find the ScaffoldMessenger in the widget tree
+                        // and use it to show a SnackBar.
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: const Icon(FontAwesomeIcons.squarePlus, color: Colors.white),
+                  )
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  void removeWeapon(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.blueGrey.shade900,
+            title: const Text('Confirm', style: TextStyle(color: Colors.white)),
+            content: const Text('Are you sure you want to remove the weapon?', style: TextStyle(color: Colors.white)),
+            actions: <Widget>[
+              TextButton(
+                  child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              TextButton(
+                  child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                  onPressed: () {
+                    widget.removeWeapon?.call(widget.weapon, widget.character);
+                    const snackBar = SnackBar(
+                      content: Text('Weapon removed'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    Navigator.of(context).pop();
+                  })
+            ],
+          );
+        });
   }
 
   Widget _buildCardSide({

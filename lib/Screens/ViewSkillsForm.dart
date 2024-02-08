@@ -10,7 +10,9 @@ import 'package:the_one_ring/Repositories/SkillsRepository.dart';
 import 'package:the_one_ring/StateNotifiers/SkillStateNotifier.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
 
+import '../Helpers/Dialogs.dart';
 import '../Helpers/Dice.dart';
+import '../Models/DiceResult.dart';
 
 
 // Create a provider for SkillsRepository.
@@ -144,7 +146,7 @@ class ViewSkillsForm extends ConsumerWidget {
               onTap: () {
                 DiceResult results = Dice.getDiceResultsSkill(skill, character);
 
-                Dice.showDiceResultsSKill(context, results, character, skill);
+                Dialogs.showDiceResultsSKillDialog(context, results, character, skill);
               },
               child: const Icon(FontAwesomeIcons.diceD20, color: Colors.blueGrey,)
           ),

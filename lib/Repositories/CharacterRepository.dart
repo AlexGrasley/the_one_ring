@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
 import 'package:the_one_ring/Models/Weapon.dart';
 import 'package:the_one_ring/Repositories/CombatProficienciesRepository.dart';
@@ -138,3 +139,5 @@ class CharacterRepository {
 
 
 }
+
+final characterRepositoryProvider = Provider((ref) => CharacterRepository.getInstance());
