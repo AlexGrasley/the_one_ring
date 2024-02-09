@@ -7,7 +7,6 @@ class VirtuesRepository
 {
   // Make _singleton private and static
   static final VirtuesRepository _instance = VirtuesRepository._internal();
-  late final Store _store;
   late final Box<Virtue> _virtuesBox;
   static bool hasBeenInitialized = false;
 
@@ -18,9 +17,6 @@ class VirtuesRepository
   {
     _virtuesBox = objectBox.virtuesBox;
   }
-
-  // In the constructor/init process, set the documents directory:
-  VirtuesRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
   static Future<VirtuesRepository> getInstance() async

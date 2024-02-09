@@ -8,7 +8,6 @@ class CombatProficienciesRepository
 {
   // Make _singleton private and static
   static final CombatProficienciesRepository _instance = CombatProficienciesRepository._internal();
-  late final Store _store;
   late final Box<CombatProficiencies> _combatProficienciesBox;
   static bool hasBeenInitialized = false;
 
@@ -19,9 +18,6 @@ class CombatProficienciesRepository
   {
     _combatProficienciesBox = objectBox.combatProficienciesBox;
   }
-
-  // In the constructor/init process, set the documents directory:
-  CombatProficienciesRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
   static Future<CombatProficienciesRepository> getInstance() async

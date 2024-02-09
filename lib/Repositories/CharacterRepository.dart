@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
 import 'package:the_one_ring/Models/Weapon.dart';
@@ -10,7 +9,6 @@ import '../Models/Character.dart';
 import '../Models/Skills.dart';
 import '../main.dart';
 import '../objectbox.g.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CharacterRepository
 {
@@ -20,12 +18,6 @@ class CharacterRepository
   static bool hasBeenInitialized = false;
 
   late Box<Character> _characterBox;
-
-  // Use path provider to get app document directory
-  Future<Directory> _getApplicationDocumentsDirectory() async
-  {
-    return getApplicationDocumentsDirectory();
-  }
 
   Future<void> _init() async
   {
@@ -64,7 +56,7 @@ class CharacterRepository
 
     }
 
-    int id = _characterBox.put(character);
+    _characterBox.put(character);
     return character;
   }
 

@@ -5,13 +5,10 @@ import '../Models/Character.dart';
 
 class MenuDrawer extends StatelessWidget
 {
-  MenuDrawer({super.key, this.character, this.deleteCharacter}){
-    character ??= Character();
-    deleteCharacter ??= (c) {};
-  }
+  const MenuDrawer({super.key, this.character, this.deleteCharacter});
 
-  Character? character;
-  Function(Character)? deleteCharacter;
+  final Character? character;
+  final Function(Character)? deleteCharacter;
 
   @override
   Widget build(BuildContext context)
@@ -80,13 +77,16 @@ class MenuDrawer extends StatelessWidget
                   child: const Text('Delete', style: TextStyle(color: Colors.red)),
                   onPressed: ()
                   {
-                    deleteCharacter?.call(character);
-                    SnackBar snackBar = SnackBar(
-                      content: Text('${character.name.isEmpty ? "character" : character.name} deleted'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if(deleteCharacter != null)
+                    {
+                      deleteCharacter?.call(character);
+                      SnackBar snackBar = SnackBar(
+                        content: Text('${character.name.isEmpty ? "character" : character.name} deleted'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-                    Navigator.pushNamedAndRemoveUntil(context, "/", (Route<dynamic> route) => false);
+                      Navigator.pushNamedAndRemoveUntil(context, "/", (Route<dynamic> route) => false);
+                    }
                   })
             ],
           );

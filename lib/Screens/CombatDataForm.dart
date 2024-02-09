@@ -88,7 +88,6 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm>
   @override
   Widget build(BuildContext context)
   {
-
     final combatProfs = ref.watch(combatProfsStateNotifierProvider(widget._character));
     final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(widget._character).notifier);
 

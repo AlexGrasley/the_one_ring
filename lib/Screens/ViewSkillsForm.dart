@@ -35,17 +35,15 @@ final skillStateNotifierProvider = StateNotifierProvider.autoDispose.family<Skil
 class ViewSkillsForm extends ConsumerWidget
 {
   final Character character;
-  late Future<List<Skill>?> skills;
-  SkillClass? currentSkillClass;
 
-  ViewSkillsForm(this.character, {super.key});
+  const ViewSkillsForm(this.character, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref)
   {
-
     // Have the repository provided here.
     final skills = ref.watch(skillStateNotifierProvider(character));
+    SkillClass? currentSkillClass;
 
     return SingleChildScrollView(
       child: Column(

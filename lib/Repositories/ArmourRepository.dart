@@ -7,7 +7,6 @@ class ArmourRepository
 {
   // Make _singleton private and static
   static final ArmourRepository _instance = ArmourRepository._internal();
-  late final Store _store;
   late final Box<Armour> _armourBox;
   static bool hasBeenInitialized = false;
 
@@ -18,9 +17,6 @@ class ArmourRepository
   {
     _armourBox = objectBox.armourBox;
   }
-
-  // In the constructor/init process, set the documents directory:
-  ArmourRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
   static Future<ArmourRepository> getInstance() async

@@ -7,7 +7,6 @@ class RewardsRepository
 {
   // Make _singleton private and static
   static final RewardsRepository _instance = RewardsRepository._internal();
-  late final Store _store;
   late final Box<Reward> _rewardsBox;
   static bool hasBeenInitialized = false;
 
@@ -18,9 +17,6 @@ class RewardsRepository
   {
     _rewardsBox = objectBox.rewardsBox;
   }
-
-  // In the constructor/init process, set the documents directory:
-  RewardsRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
   static Future<RewardsRepository> getInstance() async

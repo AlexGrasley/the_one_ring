@@ -1,4 +1,5 @@
 import 'package:the_one_ring/main.dart';
+
 import '../Models/Weapon.dart';
 import '../objectbox.g.dart';
 
@@ -6,7 +7,6 @@ class WeaponRepository
 {
   // Make _singleton private and static
   static final WeaponRepository _instance = WeaponRepository._internal();
-  late final Store _store;
   late final Box<Weapon> _weaponBox;
   static bool hasBeenInitialized = false;
 
@@ -17,9 +17,6 @@ class WeaponRepository
   {
     _weaponBox = objectBox.weaponsBox;
   }
-
-// In the constructor/init process, set the documents directory:
-  WeaponRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
   static Future<WeaponRepository> getInstance() async

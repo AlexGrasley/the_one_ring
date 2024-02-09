@@ -10,7 +10,6 @@ class SkillsRepository
 
   static bool hasBeenInitialized = false;
 
-  late Store _store;
   late Box<Skill> _skillsBox;
 
   Future<void> _init() async

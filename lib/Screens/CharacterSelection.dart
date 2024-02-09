@@ -31,7 +31,7 @@ class CharacterList extends ConsumerWidget
           body: RefreshIndicator(
             onRefresh: () async
             {
-              await ref.refresh(characterListProvider.future);
+              characters = await ref.refresh(characterListProvider.future);
             },
             child: ListView.builder(
               itemCount: characters.length,
@@ -52,11 +52,11 @@ class CharacterList extends ConsumerWidget
                       context,
                       '/viewCharacter',
                       arguments: characters[index])
-                    .then((value)
+                    .then((value) async
                     {
                       if(context.mounted)
                       {
-                        ref.refresh(characterListProvider);
+                        characters = await ref.refresh(characterListProvider.future);
                       }
                     }
                     )
@@ -81,11 +81,11 @@ class CharacterList extends ConsumerWidget
                   context,
                   '/updateCharacter',
                   arguments: character)
-                .then((value)
+                .then((value) async
                 {
                   if(context.mounted)
                   {
-                    ref.refresh(characterListProvider);
+                    characters = await ref.refresh(characterListProvider.future);
                   }
                 });
               }
