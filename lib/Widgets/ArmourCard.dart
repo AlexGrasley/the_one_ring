@@ -1,32 +1,31 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:the_one_ring/Helpers/HandDrawnDivider.dart';
-import 'package:the_one_ring/Screens/CombatDataForm.dart';
 
 import '../Helpers/Utilities.dart';
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
-import '../Models/Weapon.dart';
 
 class ArmourCard extends ConsumerStatefulWidget
 {
-  ArmourCard({required this.armour, required this.character, this.showDice = true, this.rollDice, this.addArmour, this.removeArmour, super.key})
-  {
-    rollDice ??= (Armour a, Character c) {};
-    addArmour ??= (Armour a, Character c) {};
-    removeArmour ??= (Armour a, Character c) {};
-  }
+  ArmourCard({
+    required this.armour,
+    required this.character,
+    this.showDice = true,
+    this.rollDice,
+    this.addArmour,
+    this.removeArmour,
+    super.key});
 
   final Armour armour;
   final Character character;
   final bool showDice;
-  Function(Armour, Character)? rollDice;
-  Function(Armour, Character)? addArmour;
-  Function(Armour, Character)? removeArmour;
+  final Function(Armour, Character)? rollDice;
+  final Function(Armour, Character)? addArmour;
+  final Function(Armour, Character)? removeArmour;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _WeaponCardState();
@@ -280,7 +279,6 @@ class _WeaponCardState extends ConsumerState<ArmourCard> with SingleTickerProvid
       builder: (BuildContext context, Widget? child)
       {
         final isUnder = (ValueKey(_flipped) == ValueKey(rotation == _frontRotation));
-        bool isOut = (rotation.value < (pi / 2));
 
         return IgnorePointer(
             ignoring: isUnder,

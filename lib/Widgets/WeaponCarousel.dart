@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -19,17 +18,14 @@ class WeaponCarousel extends StatelessWidget
     this.removeWeapon,
   })
   {
-    rollDice ??= (Weapon w, Character c) {};
-    addWeapon ??= (Weapon w, Character c) {};
-    removeWeapon ??= (Weapon w, Character c) {};
   }
 
   final List<Weapon> weapons;
   final Character character;
-  bool showDice;
-  Function(Weapon, Character)? rollDice;
-  Function(Weapon, Character)? addWeapon;
-  Function(Weapon, Character)? removeWeapon;
+  final bool showDice;
+  final Function(Weapon, Character)? rollDice;
+  final Function(Weapon, Character)? addWeapon;
+  final Function(Weapon, Character)? removeWeapon;
 
   @override
   Widget build(BuildContext context)

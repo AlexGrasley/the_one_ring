@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:objectbox/objectbox.dart';
 
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
@@ -8,7 +7,7 @@ import 'ArmourCard.dart';
 
 class ArmourCarousel extends StatelessWidget
 {
-  ArmourCarousel({
+  const ArmourCarousel({
     super.key,
     required this.armour,
     required this.character,
@@ -16,19 +15,14 @@ class ArmourCarousel extends StatelessWidget
     this.rollDice,
     this.addArmour,
     this.removeArmour,
-  })
-  {
-    rollDice ??= (Armour a, Character c) {};
-    addArmour ??= (Armour a, Character c) {};
-    removeArmour ??= (Armour a, Character c) {};
-  }
+  });
 
   final List<Armour> armour;
   final Character character;
-  bool showDice;
-  Function(Armour, Character)? rollDice;
-  Function(Armour, Character)? addArmour;
-  Function(Armour, Character)? removeArmour;
+  final bool showDice;
+  final Function(Armour, Character)? rollDice;
+  final Function(Armour, Character)? addArmour;
+  final Function(Armour, Character)? removeArmour;
 
   @override
   Widget build(BuildContext context)

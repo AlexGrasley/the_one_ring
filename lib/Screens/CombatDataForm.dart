@@ -1,9 +1,6 @@
-import 'dart:math';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:objectbox/src/relations/to_many.dart';
 import 'package:the_one_ring/Models/Armour.dart';
 import 'package:the_one_ring/Models/Character.dart';
 import 'package:the_one_ring/Models/CombatProficiencies.dart';
@@ -15,15 +12,12 @@ import 'package:the_one_ring/Repositories/WeaponRepository.dart';
 import 'package:the_one_ring/StateNotifiers/CharacterStateNotifier.dart';
 import 'package:the_one_ring/StateNotifiers/CombatProfStateNotifier.dart';
 import 'package:the_one_ring/Widgets/LabeledDivider.dart';
-import 'package:the_one_ring/Widgets/WeaponCard.dart';
 
 import '../Helpers/Dialogs.dart';
 import '../Helpers/Dice.dart';
 import '../Models/Weapon.dart';
 import '../StateNotifiers/ArmourStateNotifier.dart';
 import '../StateNotifiers/WeaponStateNotifier.dart';
-import '../Widgets/AddItemDialog.dart';
-import '../Widgets/ArmourCard.dart';
 import '../Widgets/ArmourCarousel.dart';
 import '../Widgets/CombatProficiencyRow.dart';
 import '../Widgets/WeaponCarousel.dart';
@@ -102,10 +96,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm>
     final characterFormNotifier = ref.watch(characterStateProvider(widget._character).notifier);
 
     final weapons = character.weapons;
-    final weaponsFormProvider = ref.read(weaponsStateNotifierProvider(widget._character).notifier);
-
     final armour = character.armour;
-    final armourFormProvider = ref.read(armourStateNotifierProvider(widget._character).notifier);
 
     void removeWeapon(Weapon w, Character c) async
     {
@@ -200,7 +191,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm>
               armour: armour,
               character: widget._character,
               showDice: true,
-              rollDice: Dice.getDiceResultsArmour,
+              rollDice: rollArmourDice,
               removeArmour: removeArmour,
             ),
             ],

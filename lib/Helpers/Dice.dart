@@ -1,16 +1,11 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
-
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
 import '../Models/D6Results.dart';
 import '../Models/DiceResult.dart';
 import '../Models/Skills.dart';
 import '../Models/Weapon.dart';
-import '../Widgets/DiamondShape.dart';
-import '../Widgets/SKillDiceResultsDisplay.dart';
 import 'Utilities.dart';
-import 'package:the_one_ring/Models/TargetNumberWithTitle.dart';
 
 class Dice {
 

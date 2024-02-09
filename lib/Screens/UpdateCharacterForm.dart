@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../Repositories/CharacterRepository.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
 import '../Models/Character.dart';
 import '../Widgets/BasicFields.dart';
