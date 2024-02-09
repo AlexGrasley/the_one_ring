@@ -4,7 +4,8 @@ import 'package:the_one_ring/Models/Character.dart';
 import 'Rewards.dart';
 
 @Entity()
-class Weapon {
+class Weapon
+{
   @Id()
   int id;
 
@@ -74,7 +75,8 @@ class Weapon {
     this.image = "",
     character,
     rewards,
-  }){
+  })
+  {
     character = ToOne<Character>();
     rewards = ToMany<Reward>();
   }
@@ -96,7 +98,8 @@ class Weapon {
     String? proficiencyType,
     String? weaponType,
     String? image,
-  }) {
+  })
+  {
     return Weapon(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -119,7 +122,8 @@ class Weapon {
 
 }
 
-enum WeaponProficiencyType{
+enum WeaponProficiencyType
+{
   brawling,
   swords,
   spears,
@@ -127,14 +131,22 @@ enum WeaponProficiencyType{
   bows
 }
 
-enum WeaponType {
+enum WeaponType
+{
   melee,
   ranged,
   meleeAndRanged,
 }
 
-enum Handedness {
-  oneHanded,
-  twoHanded,
-  both,
+enum Handedness
+{
+  oneHanded(description: "One Handed"),
+  twoHanded(description: "Two Handed"),
+  both(description: "One or Two Handed");
+
+  const Handedness({
+    required this.description
+  });
+
+  final String description;
 }

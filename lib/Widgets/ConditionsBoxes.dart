@@ -4,7 +4,8 @@ import '../Models/Character.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
 import 'TextFormInput.dart';
 
-class ConditionsBoxes extends StatelessWidget {
+class ConditionsBoxes extends StatelessWidget
+{
   const ConditionsBoxes({
     super.key,
     required this.context,
@@ -17,20 +18,25 @@ class ConditionsBoxes extends StatelessWidget {
   final CharacterStateNotifier characterFormNotifier;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Row(
-      children: [
+      children:
+      [
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              children: [
+              children:
+              [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children: [
+                    children:
+                    [
                       InkWell(
-                        onTap: () async {
+                        onTap: () async
+                        {
                           characterFormNotifier.updateWeary(!character.weary);
                         },
                         child: Container(
@@ -61,9 +67,11 @@ class ConditionsBoxes extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children: [
+                    children:
+                    [
                       InkWell(
-                        onTap: () async {
+                        onTap: () async
+                        {
                           characterFormNotifier.updateMiserable(!character.miserable);
                         },
                         child: Container(
@@ -94,9 +102,11 @@ class ConditionsBoxes extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children: [
+                    children:
+                    [
                       InkWell(
-                        onTap: () async {
+                        onTap: () async
+                        {
                           characterFormNotifier.updateWounded(!character.wounded);
                         },
                         child: Container(

@@ -8,7 +8,8 @@ import '../Widgets/ExperienceBoxes.dart';
 import '../Widgets/RatingBoxes.dart';
 import '../Widgets/StatBoxes.dart';
 
-class UpdateCharacterForm extends StatelessWidget {
+class UpdateCharacterForm extends StatelessWidget
+{
   final GlobalKey<FormState> formKey;
   final CharacterStateNotifier characterFormNotifier;
   final Character character;
@@ -21,11 +22,13 @@ class UpdateCharacterForm extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Form(
       key: formKey,
       child: SingleChildScrollView(
-        child: Column(children: [
+        child: Column(children:
+        [
           Card(
               shadowColor: Colors.blueGrey,
               color: Colors.transparent,
@@ -43,53 +46,9 @@ class UpdateCharacterForm extends StatelessWidget {
             child: ConditionsBoxes(context: context, character: character, characterFormNotifier: characterFormNotifier)
           ),
           RatingBoxes(context: context, character: character, characterFormNotifier: characterFormNotifier),
-          ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
-              foregroundColor: MaterialStatePropertyAll(Colors.white)
-            ),
-            onPressed: () async {
-              await saveCharacter(character);
-              if(context.mounted){
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Character Saved!",
-                              style: TextStyle(color: Colors.white, fontSize: 26),
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text("Close")
-                          )
-                        ],
-                      );
-                    }
-                );
-              }
-            },
-            child: const Text('Save Character'),
-          )
         ]),
       ),
     );
-  }
-
-  Future saveCharacter(Character character) async{
-    if (formKey.currentState!.validate()) {
-      final repository = await CharacterRepository.getInstance();
-
-      character = await repository.updateCharacter(character);
-    }
   }
 
 }

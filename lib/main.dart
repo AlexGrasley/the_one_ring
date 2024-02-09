@@ -6,9 +6,9 @@ import 'Models/Character.dart';
 import 'ObjectBox.dart';
 import 'Screens/CharacterSelection.dart';
 
-
 late ObjectBox objectBox;
-void main() async {
+void main() async
+{
   WidgetsFlutterBinding.ensureInitialized();
 
   objectBox = await ObjectBox.create();
@@ -17,13 +17,14 @@ void main() async {
       child: TheOneRing()));
 }
 
-
-class TheOneRing extends StatelessWidget {
+class TheOneRing extends StatelessWidget
+{
   const TheOneRing({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
 
     return MaterialApp(
       title: 'The One Ring',
@@ -36,13 +37,13 @@ class TheOneRing extends StatelessWidget {
         fontFamily: "MiddleEarth"
       ),
       home: const CharacterList(),
-      routes: {
-        '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character),
-        '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character)
+      routes:
+      {
+      '/viewCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character),
+      '/updateCharacter': (context) => CharacterView(ModalRoute.of(context)!.settings.arguments as Character)
       }
 
     );
   }
 }
-
 

@@ -2,7 +2,8 @@ import 'package:the_one_ring/main.dart';
 import '../Models/Weapon.dart';
 import '../objectbox.g.dart';
 
-class WeaponRepository {
+class WeaponRepository
+{
   // Make _singleton private and static
   static final WeaponRepository _instance = WeaponRepository._internal();
   late final Store _store;
@@ -12,7 +13,8 @@ class WeaponRepository {
 // In the constructor/init process, set the documents directory:
   WeaponRepository._internal();
 
-  Future<void> _init() async {
+  Future<void> _init() async
+  {
     _weaponBox = objectBox.weaponsBox;
   }
 
@@ -20,8 +22,10 @@ class WeaponRepository {
   WeaponRepository._privateConstructor();
 
   // Public factory constructor. Asynchronously creates and initializes an instance.
-  static Future<WeaponRepository> getInstance() async {
-    if(!hasBeenInitialized){
+  static Future<WeaponRepository> getInstance() async
+  {
+    if(!hasBeenInitialized)
+    {
       await _instance._init();
       hasBeenInitialized = true;
     }
@@ -30,12 +34,15 @@ class WeaponRepository {
   }
 
   // Public factory constructor. Returns the singleton instance.
-  factory WeaponRepository() {
+  factory WeaponRepository()
+  {
     return _instance;
   }
 
-  List<Weapon> getMasterWeaponsList(){
-    return List<Weapon>.from({
+  List<Weapon> getMasterWeaponsList()
+  {
+    return List<Weapon>.from(
+    {
       Weapon(
         name: "Dagger",
         damage: 2,
@@ -429,23 +436,28 @@ Special Damage: Heavy Blow, Pierce
 
   // CRUD operations.
 
-  int addArmour(Weapon weapon) {
+  int addArmour(Weapon weapon)
+  {
     return _weaponBox.put(weapon);
   }
 
-  List<Weapon> getAllWeapons() {
+  List<Weapon> getAllWeapons()
+  {
     return _weaponBox.getAll();
   }
 
-  Weapon? getWeapon(int id) {
+  Weapon? getWeapon(int id)
+  {
     return _weaponBox.get(id);
   }
 
-  bool removeWeapon(int id) {
+  bool removeWeapon(int id)
+  {
     return _weaponBox.remove(id);
   }
 
-  int updateWeapon(Weapon weapon) {
+  int updateWeapon(Weapon weapon)
+  {
     return _weaponBox.put(weapon);
   }
 }

@@ -2,14 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Models/Rewards.dart';
 import '../Models/Weapon.dart';
 
-class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
+class WeaponStateNotifier extends StateNotifier<List<Weapon>>
+{
   WeaponStateNotifier(super.weapons);
 
-  void updateWeapons(List<Weapon> weapons) {
+  void updateWeapons(List<Weapon> weapons)
+  {
     state = weapons;
   }
 
-  void updateDamage(int weaponId, int newDamage) {
+  void updateDamage(int weaponId, int newDamage)
+  {
     var stateCopy = List<Weapon>.from(state); // Make a copy of the state.
     var weaponIndex = stateCopy.indexWhere((element) => element.id == weaponId);
     var weapon = stateCopy[weaponIndex];
@@ -21,7 +24,8 @@ class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
     state = stateCopy;
   }
 
-  void updateInjury(int weaponId, int newInjury) {
+  void updateInjury(int weaponId, int newInjury)
+  {
     var stateCopy = List<Weapon>.from(state); // Make a copy of the state.
     var weaponIndex = stateCopy.indexWhere((element) => element.id == weaponId);
     var weapon = stateCopy[weaponIndex];
@@ -33,7 +37,8 @@ class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
     state = stateCopy;
   }
 
-  void updateLoad(int weaponId, int newLoad) {
+  void updateLoad(int weaponId, int newLoad)
+  {
     var stateCopy = List<Weapon>.from(state); // Make a copy of the state.
     var weaponIndex = stateCopy.indexWhere((element) => element.id == weaponId);
     var weapon = stateCopy[weaponIndex];
@@ -45,7 +50,8 @@ class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
     state = stateCopy;
   }
 
-  void updateNote(int weaponId, String newNote) {
+  void updateNote(int weaponId, String newNote)
+  {
     var stateCopy = List<Weapon>.from(state); // Make a copy of the state.
     var weaponIndex = stateCopy.indexWhere((element) => element.id == weaponId);
     var weapon = stateCopy[weaponIndex];
@@ -57,7 +63,8 @@ class WeaponStateNotifier extends StateNotifier<List<Weapon>> {
     state = stateCopy;
   }
 
-  void updateRewards(int weaponId, Reward newReward) {
+  void updateRewards(int weaponId, Reward newReward)
+  {
     var stateCopy = List<Weapon>.from(state); // Make a copy of the state.
     var weaponIndex = stateCopy.indexWhere((element) => element.id == weaponId);
     var weapon = stateCopy[weaponIndex];

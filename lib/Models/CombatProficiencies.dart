@@ -3,7 +3,8 @@ import 'package:objectbox/objectbox.dart';
 import 'Character.dart';
 
 @Entity()
-class CombatProficiencies {
+class CombatProficiencies
+{
   @Id()
   int id;
 
@@ -21,7 +22,8 @@ class CombatProficiencies {
     this.name = "",
     this.proficiency = 0,
     character
-  }){
+  })
+  {
     character = ToOne<Character>();
   }
 

@@ -2,13 +2,15 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-enum LabelPosition {
+enum LabelPosition
+{
   topRight,
   bottomLeft,
   bottomRight
 }
 
-class DiamondShapePainter extends CustomPainter {
+class DiamondShapePainter extends CustomPainter
+{
   String? innerLabel;
   String? outerLabel;
   LabelPosition? labelPosition;
@@ -28,11 +30,13 @@ class DiamondShapePainter extends CustomPainter {
   }
 
   @override
-  void paint(Canvas canvas, Size size){
+  void paint(Canvas canvas, Size size)
+  {
     canvas.drawPicture(picture!);
   }
 
-  ui.Picture _drawElements(Size size) {
+  ui.Picture _drawElements(Size size)
+  {
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(recorder);
 
@@ -86,7 +90,8 @@ class DiamondShapePainter extends CustomPainter {
     );// Slightly larger diamond for double-line effect
 
     // Draw `innerLabel` at center of diamond
-    if (innerLabel != null && innerLabel!.isNotEmpty) {
+    if (innerLabel != null && innerLabel!.isNotEmpty)
+    {
       var paragraphStyle = ui.ParagraphStyle(textAlign: TextAlign.center);
       var paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
         ..pushStyle(textStyle)
@@ -103,7 +108,8 @@ class DiamondShapePainter extends CustomPainter {
     );
 
     // Draw `outerLabel` at top right or bottom left
-    if (outerLabel != null && outerLabel!.isNotEmpty) {
+    if (outerLabel != null && outerLabel!.isNotEmpty)
+    {
       var paragraphStyle = ui.ParagraphStyle(textAlign: TextAlign.left);
       var paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
         ..pushStyle(textStyle)
@@ -134,7 +140,8 @@ class DiamondShapePainter extends CustomPainter {
     return recorder.endRecording();
   }
 
-  void _drawSegmentedLine(Canvas canvas, Offset p1, Offset p2) {
+  void _drawSegmentedLine(Canvas canvas, Offset p1, Offset p2)
+  {
     var count = 50; // Number of segments - increase for smoother gradient
     var stepX = (p2.dx - p1.dx) / count;
     var stepY = (p2.dy - p1.dy) / count;
@@ -151,7 +158,8 @@ class DiamondShapePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+  bool shouldRepaint(covariant CustomPainter oldDelegate)
+  {
     return true;
   }
 }

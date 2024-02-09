@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TextFormInput extends StatelessWidget {
+class TextFormInput extends StatelessWidget
+{
   final String initialValue;
   final String labelText;
   final bool isNumberEntry;
@@ -15,14 +16,15 @@ class TextFormInput extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return TextFormField(
       keyboardType: isNumberEntry? TextInputType.number : TextInputType.text,
       textAlign: TextAlign.center,
       initialValue: initialValue,
       style: const TextStyle(
-          color: Colors.white,
-          backgroundColor: Colors.transparent),
+        color: Colors.white,
+        backgroundColor: Colors.transparent),
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(

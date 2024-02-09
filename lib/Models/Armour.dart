@@ -4,7 +4,8 @@ import 'Character.dart';
 import 'Rewards.dart';
 
 @Entity()
-class Armour {
+class Armour
+{
   @Id()
   int id;
 
@@ -73,7 +74,8 @@ class Armour {
     String? image,
     bool? isUsableByNaugrim,
     bool? isUsableByHalfling,
-  }) {
+  })
+  {
     return Armour(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -92,9 +94,16 @@ class Armour {
 
 }
 
-enum ArmourClass {
-  leather,
-  mail,
-  headgear,
-  shield
+enum ArmourClass
+{
+  leather(description: "Leather Armour"),
+  mail(description: "Mail Armour"),
+  headgear(description: "Helm"),
+  shield(description: "Shield");
+
+  const ArmourClass({
+    required this.description
+  });
+
+  final String description;
 }

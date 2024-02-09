@@ -4,7 +4,8 @@ import '../Models/Character.dart';
 import '../StateNotifiers/CharacterStateNotifier.dart';
 import 'TextFormInput.dart';
 
-class BasicFields extends StatelessWidget {
+class BasicFields extends StatelessWidget
+{
   const BasicFields({
     super.key,
     required this.context,
@@ -17,11 +18,14 @@ class BasicFields extends StatelessWidget {
   final CharacterStateNotifier characterFormNotifier;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Column(
-        children: [
+        children:
+        [
           Row(
-            children: [
+            children:
+            [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -49,7 +53,8 @@ class BasicFields extends StatelessWidget {
             ],
           ),
           Row(
-            children: [
+            children:
+            [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -77,7 +82,8 @@ class BasicFields extends StatelessWidget {
             ],
           ),
           Row(
-            children: [
+            children:
+            [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -105,7 +111,8 @@ class BasicFields extends StatelessWidget {
             ],
           ),
           Row(
-            children: [
+            children:
+            [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

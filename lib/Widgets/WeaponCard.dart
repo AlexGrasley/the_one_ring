@@ -10,8 +10,10 @@ import '../Helpers/Utilities.dart';
 import '../Models/Character.dart';
 import '../Models/Weapon.dart';
 
-class WeaponCard extends ConsumerStatefulWidget{
-  WeaponCard({required this.weapon, required this.character, this.showDice = true, this.rollDice, this.addWeapon, this.removeWeapon, super.key}){
+class WeaponCard extends ConsumerStatefulWidget
+{
+  WeaponCard({required this.weapon, required this.character, this.showDice = true, this.rollDice, this.addWeapon, this.removeWeapon, super.key})
+  {
     rollDice ??= (Weapon w,Character c) {};
     addWeapon ??= (Weapon w, Character c) {};
     removeWeapon ??= (Weapon w, Character c) {};
@@ -28,8 +30,8 @@ class WeaponCard extends ConsumerStatefulWidget{
   ConsumerState<ConsumerStatefulWidget> createState() => _WeaponCardState();
 }
 
-class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProviderStateMixin{
-
+class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProviderStateMixin
+{
   bool _flipped = false;
   AnimationController? _controller;
   Animation<double>? _frontRotation;
@@ -37,7 +39,8 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
   Animation<double>? _scale;
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
 
     _controller = AnimationController(
@@ -69,42 +72,34 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
     ]).animate(_controller!);
   }
 
-  void _flipCard() {
+  void _flipCard()
+  {
     setState(() { _flipped = !_flipped; });
     _flipped ? _controller!.forward() : _controller!.reverse();
   }
 
   @override
-  Widget build(BuildContext context) {
-
-    var handed = "";
-    switch(Utilities.enumFromString(Handedness.values, widget.weapon.handedness)){
-      case Handedness.oneHanded:
-        handed = "One Handed";
-        break;
-      case Handedness.twoHanded:
-        handed = "Two Handed";
-        break;
-      case Handedness.both:
-        handed = "One or Two Handed";
-        break;
-    }
+  Widget build(BuildContext context)
+  {
+    var handed = Utilities.enumFromString(Handedness.values, widget.weapon.handedness).description;
 
     return Card(
-      color: Colors.blueGrey,
+      color: Colors.blueGrey.shade700,
       surfaceTintColor: Colors.black,
       shadowColor: Colors.blueGrey,
       elevation: 5,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children:
+        [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,0,0),
             child: Stack(
               alignment: Alignment.topCenter,
               fit: StackFit.loose,
-              children: [
+              children:
+              [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,8,0,0),
                   child: Align(
@@ -121,9 +116,10 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
-                        onTap: () {
+                        onTap: ()
+                        {
                           removeWeapon(context);
-                            },
+                        },
                         child: const Icon(FontAwesomeIcons.minus, color: Colors.white),
                       ),
                     ),
@@ -140,23 +136,27 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children:
+              [
                 Column(
-                  children: [
+                  children:
+                  [
                     const Text("Damage", style: TextStyle(color: Colors.white)),
                     Text(widget.weapon.damage.toString(), style: const TextStyle(color: Colors.white))
                   ],
                 ),
                 const VerticalDivider( width: 10),
                 Column(
-                  children: [
+                  children:
+                  [
                     const Text("Injury", style: TextStyle(color: Colors.white)),
                     Text(widget.weapon.injury.toString(), style: const TextStyle(color: Colors.white))
                   ],
                 ),
                 const VerticalDivider( width: 10),
                 Column(
-                  children: [
+                  children:
+                  [
                     const Text("Load", style: TextStyle(color: Colors.white)),
                     Text(widget.weapon.load.toString(), style: const TextStyle(color: Colors.white))
                   ],
@@ -167,11 +167,13 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
           InkWell(
             enableFeedback: false,
             splashColor: Colors.transparent,
-            onTap: () => {
+            onTap: () =>
+            {
               _flipCard()
             },
             child: Stack(
-                    children: [
+                    children:
+                    [
                       _buildCardSide(
                         rotation: _frontRotation!,
                         child: _imageCard(),
@@ -187,18 +189,21 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
             padding: const EdgeInsets.fromLTRB(15,15,15,0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children:
+              [
                 Text(handed, style: const TextStyle(color: Colors.white)),
                 const Expanded(child: VerticalDivider(thickness: 3)),
                 widget.showDice ?
                   InkWell(
-                    onTap: () => {
+                    onTap: () =>
+                    {
                       widget.rollDice?.call(widget.weapon, widget.character)
                     },
                     child: const Icon(FontAwesomeIcons.diceD20, color: Colors.white),
                   ) :
                   InkWell(
-                    onTap: () {
+                    onTap: ()
+                    {
                       widget.addWeapon?.call(widget.weapon, widget.character);
                       const snackBar = SnackBar(
                         content: Text('Weapon added'),
@@ -218,23 +223,28 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
     );
   }
 
-  void removeWeapon(BuildContext context){
+  void removeWeapon(BuildContext context)
+  {
     showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext context)
+        {
           return AlertDialog(
             backgroundColor: Colors.blueGrey.shade900,
             title: const Text('Confirm', style: TextStyle(color: Colors.white)),
             content: const Text('Are you sure you want to remove the weapon?', style: TextStyle(color: Colors.white)),
-            actions: <Widget>[
+            actions: <Widget>
+            [
               TextButton(
                   child: const Text('Cancel', style: TextStyle(color: Colors.white)),
-                  onPressed: () {
+                  onPressed: ()
+                  {
                     Navigator.of(context).pop();
                   }),
               TextButton(
                   child: const Text('Remove', style: TextStyle(color: Colors.red)),
-                  onPressed: () {
+                  onPressed: ()
+                  {
                     widget.removeWeapon?.call(widget.weapon, widget.character);
                     const snackBar = SnackBar(
                       content: Text('Weapon removed'),
@@ -251,10 +261,12 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
   Widget _buildCardSide({
     required Animation<double> rotation,
     required Widget child,
-  }) {
+  })
+  {
     return AnimatedBuilder(
       animation: _controller!,
-      builder: (BuildContext context, Widget? child) {
+      builder: (BuildContext context, Widget? child)
+      {
         final isUnder = (ValueKey(_flipped) == ValueKey(rotation == _frontRotation));
         bool isOut = (rotation.value < (pi / 2));
 
@@ -276,14 +288,16 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
     );
   }
 
-  Container _imageCard() {
+  Container _imageCard()
+  {
     return Container(
             margin: const EdgeInsets.fromLTRB(60,0,60,0),
             width: 150,
             height: 140,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              boxShadow: [
+              boxShadow:
+              [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
                   spreadRadius: 1,
@@ -301,14 +315,16 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
           );
   }
 
-  Widget _noteCard() {
+  Widget _noteCard()
+  {
     return Container(
       margin: const EdgeInsets.fromLTRB(60,0,60,0),
       width: 150,
       height: 140,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow:
+        [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
             spreadRadius: 1,
@@ -338,7 +354,8 @@ class _WeaponCardState extends ConsumerState<WeaponCard> with SingleTickerProvid
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
     _controller!.dispose();
     super.dispose();
   }

@@ -1,14 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Models/Skills.dart';
 
-class SkillStateNotifier extends StateNotifier<List<Skill>> {
+class SkillStateNotifier extends StateNotifier<List<Skill>>
+{
   SkillStateNotifier(super.skills);
 
-  void updateSkill(List<Skill> skills) {
+  void updateSkill(List<Skill> skills)
+  {
     state = skills;
   }
 
-  void updateFavored(int skillId, bool newIsFavored) {
+  void updateFavored(int skillId, bool newIsFavored)
+  {
     var stateCopy = List<Skill>.from(state); // Make a copy of the state.
     var skillIndex = stateCopy.indexWhere((element) => element.id == skillId);
     var skill = stateCopy[skillIndex];
@@ -19,7 +22,8 @@ class SkillStateNotifier extends StateNotifier<List<Skill>> {
     state = stateCopy;
   }
 
-  void updatePips(int skillId, int newPips) {
+  void updatePips(int skillId, int newPips)
+  {
     var stateCopy = List<Skill>.from(state); // Make a copy of the state.
     var skillIndex = stateCopy.indexWhere((element) => element.id == skillId);
     var skill = stateCopy[skillIndex];

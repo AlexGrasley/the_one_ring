@@ -1,6 +1,7 @@
 import '../Helpers/Dice.dart';
 
-class DiceResult{
+class DiceResult
+{
   final int d12;
   final int d6;
   final int greatSuccessCount;

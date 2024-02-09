@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:the_one_ring/Models/TargetNumberWithTitle.dart';
 
 import '../Models/Armour.dart';
 import '../Models/Character.dart';
@@ -15,6 +16,7 @@ import '../Widgets/ArmourCarousel.dart';
 import '../Widgets/DialogCloseButton.dart';
 import '../Widgets/SKillDiceResultsDisplay.dart';
 import '../Widgets/WeaponCarousel.dart';
+import '../Widgets/WeaponDiceResultsDisplay.dart';
 import 'Dice.dart';
 import 'Utilities.dart';
 
@@ -37,12 +39,15 @@ class Dialogs {
       characterStateNotifier.updateWeapons(character.weapons);
     }
 
-    if(context.mounted) {
+    if(context.mounted)
+    {
       await showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext context)
+        {
           return StatefulBuilder(  // adding StatefulBuilder
-            builder: (BuildContext context, StateSetter setState) {
+            builder: (BuildContext context, StateSetter setState)
+            {
               return AddItemDialog(
                 title: "Add a weapon",
                 content: Column(
@@ -76,19 +81,23 @@ class Dialogs {
     var repo = await ref.watch(armourRepositoryProvider);
     List<Armour> masterArmourList = repo.getMasterArmourList();
 
-    void saveArmour(Armour armour, Character character) async {
+    void saveArmour(Armour armour, Character character) async
+    {
       character.armour.add(armour);
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(character);
       characterStateNotifier.updateArmour(character.armour);
     }
 
-    if(context.mounted) {
+    if(context.mounted)
+    {
       await showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext context)
+        {
           return StatefulBuilder(  // adding StatefulBuilder
-            builder: (BuildContext context, StateSetter setState) {
+            builder: (BuildContext context, StateSetter setState)
+            {
               return AddItemDialog(
                   title: "Add Armour",
                   content: Column(
@@ -112,15 +121,57 @@ class Dialogs {
     }
   }
 
-  static void showDiceResultsSKillDialog(BuildContext context, DiceResult results, Character character, Skill skill) {
-
+  static void showDiceResultsSKillDialog(BuildContext context, DiceResult results, Character character, Skill skill)
+  {
     var targetNumber = Utilities.getSkillTargetNumber(character, skill);
     bool passed = results.rollResults == RollResults.success || results.rollResults == RollResults.greatSuccess;
     String rollStatus = Dice.getRollStatusString(results, character);
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context)
+      {
+        return SkillDiceResultsDisplay(
+            rollStatus: rollStatus,
+            targetNumber: targetNumber,
+            results: results,
+            passed: passed);
+      },
+    );
+  }
+
+  static void showDiceResultsWeaponDialog(BuildContext context, DiceResult results, Character character, Weapon weapon)
+  {
+    var targetNumber = TargetNumberWithTitle("Strength", character.strengthTn);
+    bool passed = results.rollResults == RollResults.success || results.rollResults == RollResults.greatSuccess;
+    String rollStatus = Dice.getRollStatusString(results, character);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context)
+      {
+        return WeaponDiceResultsDisplay(
+          rollStatus: rollStatus,
+          targetNumber: targetNumber,
+          results: results,
+          passed: passed,
+          weapon: weapon,
+        );
+      },
+    );
+  }
+
+  static void showDiceResultsArmourDialog(BuildContext context, DiceResult results, Character character, Armour armour)
+  {
+    //TODO: Implement proper targets for armour rolls.
+    var targetNumber = TargetNumberWithTitle("Strength", character.strengthTn);
+    bool passed = results.rollResults == RollResults.success || results.rollResults == RollResults.greatSuccess;
+    String rollStatus = Dice.getRollStatusString(results, character);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context)
+      {
         return SkillDiceResultsDisplay(
             rollStatus: rollStatus,
             targetNumber: targetNumber,

@@ -9,7 +9,8 @@ import 'Virtues.dart';
 import 'Weapon.dart';
 
 @Entity()
-class Character{
+class Character
+{
   @Id()
   int id;
 
@@ -232,7 +233,8 @@ class Character{
     ToMany<Weapon>? weapons,
     ToMany<Armour>? armour,
     ToMany<CombatProficiencies>? combatProficiencies,
-  }) {
+  })
+  {
     return Character(
       id: id ?? this.id,
       name: name ?? this.name,

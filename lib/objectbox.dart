@@ -9,7 +9,8 @@ import 'Models/Skills.dart';
 import 'Models/Virtues.dart';
 import 'objectbox.g.dart';
 
-class ObjectBox {
+class ObjectBox
+{
   /// The Store of this app.
   late final Store store;
   late final Box<Character> characterBox;
@@ -20,7 +21,8 @@ class ObjectBox {
   late final Box<Virtue> virtuesBox;
   late final Box<Weapon> weaponsBox;
 
-  ObjectBox._create(this.store){
+  ObjectBox._create(this.store)
+  {
     characterBox = Box<Character>(store);
     armourBox = Box<Armour>(store);
     combatProficienciesBox = Box<CombatProficiencies>(store);
@@ -30,9 +32,9 @@ class ObjectBox {
     weaponsBox = Box<Weapon>(store);
   }
 
-
   /// Create an instance of ObjectBox to use throughout the app.
-  static Future<ObjectBox> create() async {
+  static Future<ObjectBox> create() async
+  {
     final docsDir = await getApplicationDocumentsDirectory();
     // Using the initializer in `objectbox.g.dart`
     final store = await openStore(directory: p.join(docsDir.path, "obx-theOneRing"));

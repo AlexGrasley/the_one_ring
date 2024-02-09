@@ -3,7 +3,8 @@ import 'package:objectbox/objectbox.dart';
 import 'Character.dart';
 
 @Entity()
-class Skill {
+class Skill
+{
   @Id()
   int id;
 
@@ -40,7 +41,8 @@ class Skill {
     int? pips,
     bool? isFavored,
     String? skillClass,
-  }) {
+  })
+  {
     return Skill(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -52,9 +54,16 @@ class Skill {
   }
 }
 
-enum SkillClass {
-  strength,
-  heart,
-  wits
+enum SkillClass
+{
+  strength(description: "Strength"),
+  heart(description: "Heart"),
+  wits(description: "Wits");
+
+  const SkillClass({
+    required this.description
+  });
+
+  final String description;
 }
 

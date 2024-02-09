@@ -35,40 +35,47 @@ final armourRepositoryProvider = Provider((ref) => ArmourRepository.getInstance(
 
 final weaponRepositoryProvider = Provider((ref) => WeaponRepository.getInstance());
 
-final combatProfStateNotifierProviderFamily = FutureProvider.family<CombatProfStateNotifier, int>((ref, characterId) async {
+final combatProfStateNotifierProviderFamily = FutureProvider.family<CombatProfStateNotifier, int>((ref, characterId) async
+{
   final characterRepository = await ref.watch(characterRepositoryProvider);
   final combatProfs = characterRepository.getCharacterCombatProfs(characterId);
 
   return CombatProfStateNotifier(combatProfs ?? []);
 });
 
-final weaponsStateNotifierProviderFamily = FutureProvider.family<WeaponStateNotifier, int>((ref, characterId) async {
+final weaponsStateNotifierProviderFamily = FutureProvider.family<WeaponStateNotifier, int>((ref, characterId) async
+{
   final characterRepository = await ref.watch(characterRepositoryProvider);
   final weapons = characterRepository.getCharacterWeapons(characterId);
 
   return WeaponStateNotifier(weapons ?? []);
 });
 
-final armourStateNotifierProviderFamily = FutureProvider.family<ArmourStateNotifier, int>((ref, characterId) async {
+final armourStateNotifierProviderFamily = FutureProvider.family<ArmourStateNotifier, int>((ref, characterId) async
+{
   final characterRepository = await ref.watch(characterRepositoryProvider);
   final armour = characterRepository.getCharacterArmour(characterId);
 
   return ArmourStateNotifier(armour ?? []);
 });
 
-final combatProfsStateNotifierProvider = StateNotifierProvider.autoDispose.family<CombatProfStateNotifier, List<CombatProficiencies>, Character>((ref, character) {
+final combatProfsStateNotifierProvider = StateNotifierProvider.autoDispose.family<CombatProfStateNotifier, List<CombatProficiencies>, Character>((ref, character)
+{
   return CombatProfStateNotifier(character.combatProficiencies);
 });
 
-final weaponsStateNotifierProvider = StateNotifierProvider.autoDispose.family<WeaponStateNotifier, List<Weapon>, Character>((ref, character) {
+final weaponsStateNotifierProvider = StateNotifierProvider.autoDispose.family<WeaponStateNotifier, List<Weapon>, Character>((ref, character)
+{
   return WeaponStateNotifier(character.weapons);
 });
 
-final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<ArmourStateNotifier, List<Armour>, Character>((ref, character) {
+final armourStateNotifierProvider = StateNotifierProvider.autoDispose.family<ArmourStateNotifier, List<Armour>, Character>((ref, character)
+{
   return ArmourStateNotifier(character.armour);
 });
 
-class CombatDataForm extends ConsumerStatefulWidget {
+class CombatDataForm extends ConsumerStatefulWidget
+{
 
   const CombatDataForm(this._character, {super.key});
 
@@ -79,12 +86,14 @@ class CombatDataForm extends ConsumerStatefulWidget {
 }
 
 
-class _CombatDataFormState extends ConsumerState<CombatDataForm> {
+class _CombatDataFormState extends ConsumerState<CombatDataForm>
+{
   late Future<List<Skill>?> skills;
   SkillClass? currentSkillClass;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
 
     final combatProfs = ref.watch(combatProfsStateNotifierProvider(widget._character));
     final combatProfFormProvider = ref.read(combatProfsStateNotifierProvider(widget._character).notifier);
@@ -98,29 +107,48 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
     final armour = character.armour;
     final armourFormProvider = ref.read(armourStateNotifierProvider(widget._character).notifier);
 
-    void removeWeapon(Weapon w, Character c) async {
+    void removeWeapon(Weapon w, Character c) async
+    {
       c.weapons.remove(w);
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(c);
       characterFormNotifier.updateWeapons(c.weapons);
     }
 
-    void removeArmour(Armour a, Character c) async {
+    void removeArmour(Armour a, Character c) async
+    {
       c.armour.remove(a);
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(c);
       characterFormNotifier.updateArmour(c.armour);
     }
 
+    void rollWeaponDice(Weapon weapon, Character character)
+    {
+      var result = Dice.getDiceResultsWeapon(weapon, character);
+      Dialogs.showDiceResultsWeaponDialog(context, result, character, weapon);
+    }
+
+    void rollArmourDice(Armour armour, Character character)
+    {
+      var result = Dice.getDiceResultsArmour(armour, character);
+      Dialogs.showDiceResultsArmourDialog(context, result, character, armour);
+    }
+
     return SingleChildScrollView(
         child: Column(
           children: [
             LabeledDivider(
-              label: "Combat Proficiency",
+              label: 'Combat Proficiency',
               afterTextWidget: Container()
             ),
             Column(
-              children: combatProfs.asMap().entries.map<Widget>((entry) {
+              children: combatProfs
+                  .where((element) => element.name != WeaponProficiencyType.brawling.name)
+                  .toList()
+                  .asMap()
+                  .entries.map<Widget>((entry)
+              {
 
                 int index = entry.key;
                 CombatProficiencies combatProf = entry.value;
@@ -130,14 +158,13 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
                     ref: ref,
                     index: index,
                     combatProf: combatProf,
-                    combatProfFormProvider:
-                    combatProfFormProvider
+                    combatProfFormProvider: combatProfFormProvider
                 );
 
               }).toList(),
             ),
             LabeledDivider(
-                label: "Weapons",
+                label: 'Weapons',
               afterTextWidget: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
@@ -156,11 +183,11 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm> {
               weapons: weapons,
               character: widget._character,
               showDice: true,
-              rollDice: Dice.getDiceResultsWeapon,
+              rollDice: rollWeaponDice,
               removeWeapon: removeWeapon,
             ),
             LabeledDivider(
-                label: "Armour",
+                label: 'Armour',
                 afterTextWidget: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(

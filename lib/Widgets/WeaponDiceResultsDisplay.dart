@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import '../Helpers/Dice.dart';
 import '../Models/DiceResult.dart';
 import '../Models/TargetNumberWithTitle.dart';
+import '../Models/Weapon.dart';
 import 'DiamondShape.dart';
 
-class SkillDiceResultsDisplay extends StatelessWidget
+class WeaponDiceResultsDisplay extends StatelessWidget
 {
-  const SkillDiceResultsDisplay({
+  const WeaponDiceResultsDisplay({
     super.key,
     required this.rollStatus,
     required this.targetNumber,
     required this.results,
     required this.passed,
+    required this.weapon,
   });
 
   final String rollStatus;
   final TargetNumberWithTitle targetNumber;
   final DiceResult results;
   final bool passed;
+  final Weapon weapon;
 
   @override
   Widget build(BuildContext context)
@@ -79,5 +82,5 @@ class SkillDiceResultsDisplay extends StatelessWidget
             ),
           )
       );
-    }
+  }
 }

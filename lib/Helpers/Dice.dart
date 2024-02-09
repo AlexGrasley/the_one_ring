@@ -14,17 +14,19 @@ import 'package:the_one_ring/Models/TargetNumberWithTitle.dart';
 
 class Dice {
 
-  static DiceResult rollDice(int d6Count,int targetNumber, RollStatus rollStatus, {bool isMiserable = false}) {
-    var rng = Random();
+  static DiceResult rollDice(int d6Count,int targetNumber, RollStatus rollStatus, {bool isMiserable = false})
+  {
     int d12Result = _rollDTwelve(rollStatus);
     D6Results d6Result = _rollD6(d6Count);
     RollResults rollResults;
 
     //rolling a 12 is a Gandalf rune and an automatic success
-    if(d12Result == 12 && d6Result.greatSuccessCount > 0){
+    if(d12Result == 12 && d6Result.greatSuccessCount > 0)
+    {
       rollResults = RollResults.greatSuccess;
     }
-    else{
+    else
+    {
       //either a Gandalf run (12), or player exceeded target number.
       rollResults = d12Result == 12 || (d12Result + d6Result.total) > targetNumber ?
         RollResults.success :
@@ -32,7 +34,8 @@ class Dice {
     }
 
     //if player is miserable, then
-    if(isMiserable){
+    if(isMiserable)
+    {
       rollResults = d12Result == 0 ? rollResults = RollResults.failed : rollResults;
     }
 
@@ -45,7 +48,8 @@ class Dice {
     );
   }
 
-  static int _rollDTwelve(RollStatus rollStatus){
+  static int _rollDTwelve(RollStatus rollStatus)
+  {
     var rng = Random();
     int result = 0;
     int d12One = rng.nextInt(12) + 1;
@@ -55,7 +59,8 @@ class Dice {
     d12One = d12One == 11 ? 0 : d12One;
     d12Two = d12Two == 11 ? 0 : d12Two;
 
-    switch(rollStatus){
+    switch(rollStatus)
+    {
       case RollStatus.standard:
         result = d12One;
         break;
@@ -70,12 +75,14 @@ class Dice {
     return result;
   }
 
-  static D6Results _rollD6(int diceCount){
+  static D6Results _rollD6(int diceCount)
+  {
     var rng = Random();
     int greatSuccessCount = 0;
     int d6Total = 0;
 
-    for(var i = 0; i < diceCount; i++){
+    for(var i = 0; i < diceCount; i++)
+    {
       var result = rng.nextInt(6) + 1;
       if (result == 6){
         greatSuccessCount++;
@@ -86,13 +93,16 @@ class Dice {
     return D6Results(total: d6Total, greatSuccessCount: greatSuccessCount);
   }
 
-  static DiceResult getDiceResultsSkill(Skill skill, Character character) {
+  static DiceResult getDiceResultsSkill(Skill skill, Character character)
+  {
     var rollStatus = RollStatus.standard;
 
-    if(character.shadow + character.shadowScars == character.currentHope){
+    if(character.shadow + character.shadowScars == character.currentHope)
+    {
       rollStatus = RollStatus.illFavored;
     }
-    else if(skill.isFavored){
+    else if(skill.isFavored)
+    {
       rollStatus = RollStatus.favored;
     }
 
@@ -105,15 +115,18 @@ class Dice {
     return results;
   }
 
-  static DiceResult getDiceResultsWeapon(Weapon weapon, Character character){
+  static DiceResult getDiceResultsWeapon(Weapon weapon, Character character)
+  {
     var rollStatus = RollStatus.standard;
 
-    if(character.shadow + character.shadowScars == character.currentHope){
+    if(character.shadow + character.shadowScars == character.currentHope)
+    {
       rollStatus = RollStatus.illFavored;
     }
 
     var weaponProficiencyType =
       Utilities.enumFromString(WeaponProficiencyType.values, weapon.proficiencyType);
+
     var characterWeaponProficiency = character.combatProficiencies
         .firstWhere((element) => element.name == weaponProficiencyType.name);
 
@@ -126,24 +139,15 @@ class Dice {
     return results;
   }
 
-  static DiceResult getDiceResultsArmour(Armour armour, Character character){
+  static DiceResult getDiceResultsArmour(Armour armour, Character character)
+  {
     //TODO Implement
     return DiceResult(d12: 0, d6: 0, greatSuccessCount: 0, rollStatus: RollStatus.standard, rollResults: RollResults.failed);
   }
 
-    static String getRollStatusString(DiceResult results, Character character) {
-    String rollStatus;
-
-    switch(results.rollStatus){
-      case RollStatus.standard:
-        rollStatus = "";
-        break;
-      case RollStatus.favored:
-        rollStatus = "Favored";
-        break;
-      case RollStatus.illFavored:
-        rollStatus = "Ill Favored";
-    }
+  static String getRollStatusString(DiceResult results, Character character)
+  {
+    String rollStatus = results.rollStatus.description;
 
     rollStatus += character.miserable ? " ${rollStatus.isEmpty ? "" : "-"} Miserable" : "";
     return rollStatus;
@@ -151,15 +155,28 @@ class Dice {
 
 }
 
+enum RollStatus
+{
+  standard(description: ""),
+  favored(description: "Favored"),
+  illFavored(description: "Ill Favored");
 
-enum RollStatus {
-  standard,
-  favored,
-  illFavored,
+  const RollStatus({
+    required this.description
+  });
+
+  final String description;
 }
 
-enum RollResults {
-  failed,
-  success,
-  greatSuccess,
+enum RollResults
+{
+  failed(description: "Failed"),
+  success(description: "Success"),
+  greatSuccess(description: "Great Success!");
+
+  const RollResults({
+    required this.description
+  });
+
+  final String description;
 }

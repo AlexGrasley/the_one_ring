@@ -1,4 +1,5 @@
-class TargetNumberWithTitle {
+class TargetNumberWithTitle
+{
   final String name;
   final int targetNumber;
 

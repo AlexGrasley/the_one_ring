@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AddItemDialog extends StatelessWidget {
+class AddItemDialog extends StatelessWidget
+{
   const AddItemDialog({
     super.key,
     required this.title,
@@ -11,7 +12,8 @@ class AddItemDialog extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Dialog.fullscreen(
       insetAnimationDuration: const Duration(milliseconds: 1000),
       insetAnimationCurve: Curves.easeInCubic,

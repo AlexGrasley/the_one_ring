@@ -7,7 +7,8 @@ import '../Models/CombatProficiencies.dart';
 import '../Screens/CombatDataForm.dart';
 import '../StateNotifiers/CombatProfStateNotifier.dart';
 
-class CombatProficiencyRow extends StatelessWidget {
+class CombatProficiencyRow extends StatelessWidget
+{
   const CombatProficiencyRow({
     super.key,
     required this.context,
@@ -24,20 +25,23 @@ class CombatProficiencyRow extends StatelessWidget {
   final CombatProfStateNotifier combatProfFormProvider;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Container(
       padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children:
+        [
           Expanded( // Add Expanded widget here
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                  children:
+                  [
                     Text(
                       combatProf.name,
                       style: const TextStyle(color: Colors.blueGrey),// use TextDecoration.underline to underline the text
@@ -53,7 +57,8 @@ class CombatProficiencyRow extends StatelessWidget {
           Expanded( // Wrap Row with Expanded to make the boxes take the remaining space in the row
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center, // Align boxes to the right
-              children: List.generate(6, (combatProfIndex) {
+              children: List.generate(6, (combatProfIndex)
+              {
                 return Transform.rotate( // add Transform.rotate widget
                   angle: pi / 4, // rotate 45 degrees
                   child: InkWell(

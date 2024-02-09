@@ -6,7 +6,8 @@ import '../Models/Armour.dart';
 import '../Models/Character.dart';
 import 'ArmourCard.dart';
 
-class ArmourCarousel extends StatelessWidget {
+class ArmourCarousel extends StatelessWidget
+{
   ArmourCarousel({
     super.key,
     required this.armour,
@@ -15,7 +16,8 @@ class ArmourCarousel extends StatelessWidget {
     this.rollDice,
     this.addArmour,
     this.removeArmour,
-  }){
+  })
+  {
     rollDice ??= (Armour a, Character c) {};
     addArmour ??= (Armour a, Character c) {};
     removeArmour ??= (Armour a, Character c) {};
@@ -29,7 +31,8 @@ class ArmourCarousel extends StatelessWidget {
   Function(Armour, Character)? removeArmour;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return CarouselSlider(
       options:  CarouselOptions(
         autoPlay: false,
@@ -39,8 +42,10 @@ class ArmourCarousel extends StatelessWidget {
         enlargeCenterPage: true,
         enlargeFactor: 0.15,
       ),
-      items: armour.map((entry) {
-        return Builder(builder: (BuildContext context){
+      items: armour.map((entry)
+      {
+        return Builder(builder: (BuildContext context)
+        {
           return ArmourCard(
             armour: entry,
             character: character,

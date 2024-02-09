@@ -5,7 +5,8 @@ import 'Character.dart';
 import 'Weapon.dart';
 
 @Entity()
-class Reward {
+class Reward
+{
   @Id()
   int id;
 
@@ -44,7 +45,8 @@ class Reward {
     ToOne<Armour>? armour,
     ToOne<Weapon>? weapon,
     String? note,
-  }) {
+  })
+  {
     return Reward(
       id: id ?? this.id,
       name: name ?? this.name,

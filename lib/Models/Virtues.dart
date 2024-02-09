@@ -3,7 +3,8 @@ import 'package:objectbox/objectbox.dart';
 import 'Character.dart';
 
 @Entity()
-class Virtue {
+class Virtue
+{
   @Id()
   int id;
 
@@ -30,7 +31,8 @@ class Virtue {
     String? name,
     ToOne<Character>? character,
     String? note,
-  }) {
+  })
+  {
     return Virtue(
         id: id ?? this.id,
         name: name ?? this.name,

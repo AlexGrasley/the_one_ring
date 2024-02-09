@@ -7,7 +7,8 @@ import '../Models/Character.dart';
 import '../Models/Weapon.dart';
 import 'WeaponCard.dart';
 
-class WeaponCarousel extends StatelessWidget {
+class WeaponCarousel extends StatelessWidget
+{
   WeaponCarousel({
     super.key,
     required this.weapons,
@@ -16,7 +17,8 @@ class WeaponCarousel extends StatelessWidget {
     this.rollDice,
     this.addWeapon,
     this.removeWeapon,
-  }){
+  })
+  {
     rollDice ??= (Weapon w, Character c) {};
     addWeapon ??= (Weapon w, Character c) {};
     removeWeapon ??= (Weapon w, Character c) {};
@@ -30,7 +32,8 @@ class WeaponCarousel extends StatelessWidget {
   Function(Weapon, Character)? removeWeapon;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return CarouselSlider(
       options:  CarouselOptions(
         autoPlay: false,
@@ -40,8 +43,10 @@ class WeaponCarousel extends StatelessWidget {
         enlargeCenterPage: true,
         enlargeFactor: 0.2,
       ),
-      items: weapons.map((entry) {
-        return Builder(builder: (BuildContext context){
+      items: weapons.map((entry)
+      {
+        return Builder(builder: (BuildContext context)
+        {
           return WeaponCard(
               weapon: entry,
               character: character,

@@ -1,4 +1,5 @@
-class D6Results{
+class D6Results
+{
   final int total;
   final int greatSuccessCount;
 

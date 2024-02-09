@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:the_one_ring/Helpers/HandDrawnDivider.dart';
 
-class LabeledDivider extends StatelessWidget {
+class LabeledDivider extends StatelessWidget
+{
   final String label;
   final Widget afterTextWidget;
 
   const LabeledDivider({super.key, required this.label, required this.afterTextWidget});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return Column(
-      children: [
+      children:
+      [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: <Widget>
+          [
             const Expanded(
               child: HandDrawnDivider(
                 color: Colors.blueGrey,

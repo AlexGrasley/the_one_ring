@@ -2,14 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_one_ring/Models/Armour.dart';
 import '../Models/Rewards.dart';
 
-class ArmourStateNotifier extends StateNotifier<List<Armour>> {
+class ArmourStateNotifier extends StateNotifier<List<Armour>>
+{
   ArmourStateNotifier(super.armour);
 
-  void updateWeapons(List<Armour> armour) {
+  void updateWeapons(List<Armour> armour)
+  {
     state = armour;
   }
 
-  void updateProtection(int armourId, int newProtection) {
+  void updateProtection(int armourId, int newProtection)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
@@ -21,7 +24,8 @@ class ArmourStateNotifier extends StateNotifier<List<Armour>> {
     state = stateCopy;
   }
 
-  void updateLoad(int armourId, int newLoad) {
+  void updateLoad(int armourId, int newLoad)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
@@ -33,7 +37,8 @@ class ArmourStateNotifier extends StateNotifier<List<Armour>> {
     state = stateCopy;
   }
 
-  void updateParry(int armourId, int newParry) {
+  void updateParry(int armourId, int newParry)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
@@ -45,7 +50,8 @@ class ArmourStateNotifier extends StateNotifier<List<Armour>> {
     state = stateCopy;
   }
 
-  void updateNote(int armourId, String newNote) {
+  void updateNote(int armourId, String newNote)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
@@ -57,7 +63,8 @@ class ArmourStateNotifier extends StateNotifier<List<Armour>> {
     state = stateCopy;
   }
 
-  void updateName(int armourId, String newName) {
+  void updateName(int armourId, String newName)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
@@ -69,7 +76,8 @@ class ArmourStateNotifier extends StateNotifier<List<Armour>> {
     state = stateCopy;
   }
 
-  void updateRewards(int armourId, Reward newReward) {
+  void updateRewards(int armourId, Reward newReward)
+  {
     var stateCopy = List<Armour>.from(state); // Make a copy of the state.
     var armourIndex = stateCopy.indexWhere((element) => element.id == armourId);
     var armour = stateCopy[armourIndex];
