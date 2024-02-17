@@ -34,9 +34,11 @@ class Dialogs {
 
     void saveWeapon(Weapon weapon, Character character) async {
       character.weapons.add(weapon);
+      character.load += weapon.load;
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(character);
       characterStateNotifier.updateWeapons(character.weapons);
+      characterStateNotifier.updateLoad(character.load);
     }
 
     if(context.mounted)
@@ -84,9 +86,11 @@ class Dialogs {
     void saveArmour(Armour armour, Character character) async
     {
       character.armour.add(armour);
+      character.load += armour.load;
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(character);
       characterStateNotifier.updateArmour(character.armour);
+      characterStateNotifier.updateLoad(character.load);
     }
 
     if(context.mounted)

@@ -100,6 +100,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm>
     void removeWeapon(Weapon w, Character c) async
     {
       c.weapons.remove(w);
+      c.load -= w.load;
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(c);
       characterFormNotifier.updateWeapons(c.weapons);
@@ -108,6 +109,7 @@ class _CombatDataFormState extends ConsumerState<CombatDataForm>
     void removeArmour(Armour a, Character c) async
     {
       c.armour.remove(a);
+      c.load -= a.load;
       var repo = await ref.watch(characterRepositoryProvider);
       repo.updateCharacter(c);
       characterFormNotifier.updateArmour(c.armour);
